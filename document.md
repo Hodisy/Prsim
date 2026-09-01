@@ -208,6 +208,27 @@ The action can be framed around the intended outcome:
 [Order for today]
 ```
 
+### A hero is a decision surface, not necessarily a banner
+
+The first screen should use the interface pattern that resolves the primary decision most efficiently. A PRSIM hero may therefore be:
+
+- a **price ladder** with one cheaper alternative, a recommended option, and more expensive trade-offs;
+- a **verified airline card** beside the product image, showing the airline logo, cabin limit, product dimensions, verification status, and relevant caveat;
+- a **gift-readiness panel** combining delivery before the occasion, extended exchange, gift wrapping, and a small relevant bundle;
+- a **deadline control panel** showing stock, cutoff time, delivery confidence, and immediate checkout;
+- a **decision summary** explaining why one option is recommended and what the buyer gives up by choosing another.
+
+The hero should not merely describe the product. It should perform the buyer’s most urgent comparison, compatibility check, preparation task, or risk assessment.
+
+### Contextual and editorial proof
+
+Proof can also change form according to the decision:
+
+- highly contextual comments can be annotated by shared airline, destination, equipment, budget, or use case;
+- travel-oriented sections can become short journal entries with a photograph, paragraph, quotation, and a product fact demonstrated by the story;
+- inferred context should remain visible and correctable through a compact “change context” control;
+- complete conditions and material limitations must remain accessible even when the first screen is highly selective.
+
 ---
 
 ## The same bag, five different decisions

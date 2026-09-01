@@ -505,6 +505,149 @@
     .rating-number { width:150px; height:72px; background:#171717; }
     .rating-caption { width:110px; height:10px; background:#aaa; margin-bottom:8px; }
 
+    /* Decision-first heroes */
+    .decision-context {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 7px 10px;
+      border: 1px solid #aaa;
+      border-radius: 999px;
+      color: #555;
+      background: #fff;
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .decision-context::before { content:""; width:7px; height:7px; border-radius:50%; background:#111; }
+    .decision-context .edit-context { padding-left:8px; border-left:1px solid #bbb; color:#111; }
+
+    .hero-airline-decision {
+      min-height: 620px;
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+    .airline-decision-visual { min-height:620px; border:0; border-right:1px solid var(--line); }
+    .airline-decision-panel {
+      padding: 58px 48px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      background:#fafafa;
+    }
+    .airline-card-top { display:flex; justify-content:space-between; align-items:center; gap:14px; margin:24px 0 18px; }
+    .airline-wordmark {
+      min-width: 136px;
+      height: 42px;
+      padding: 0 16px;
+      border: 2px solid #111;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .14em;
+    }
+    .verified-pill { display:inline-flex; align-items:center; gap:7px; font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .verified-pill::before { content:"✓"; width:23px; height:23px; display:grid; place-items:center; border:2px solid #111; border-radius:50%; }
+    .airline-question { display:grid; gap:9px; margin:0 0 22px; }
+    .airline-question span { height:34px; background:#171717; }
+    .airline-question span:last-child { width:72%; }
+    .dimension-proof { border:2px solid #111; background:#fff; }
+    .dimension-proof-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border-bottom:1px solid #999; font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .dimension-proof-grid { display:grid; grid-template-columns:1fr 1fr; }
+    .dimension-proof-value { padding:18px 14px; border-right:1px solid #aaa; }
+    .dimension-proof-value:last-child { border-right:0; }
+    .dimension-proof-value small { display:block; color:#777; font-size:8px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:7px; }
+    .dimension-proof-value strong { font-size:15px; letter-spacing:-.03em; }
+    .decision-caveat { margin-top:12px; padding-left:12px; border-left:2px solid #111; color:#666; font-size:10px; line-height:1.45; }
+
+    .hero-price-ladder {
+      min-height: 570px;
+      padding: 62px 48px 50px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 270px;
+      gap:30px;
+      align-items:stretch;
+      border-bottom:1px solid var(--line);
+      position:relative;
+      background:#f7f7f7;
+    }
+    .price-ladder-main { min-width:0; display:flex; flex-direction:column; justify-content:center; }
+    .price-ladder-title { display:grid; gap:9px; width:min(610px,90%); margin:22px 0 28px; }
+    .price-ladder-title span { height:34px; background:#171717; }
+    .price-ladder-title span:last-child { width:68%; }
+    .price-options-wrap { padding:12px 8px 12px 0; overflow-x:auto; }
+    .price-options { display:grid; grid-template-columns:repeat(4,minmax(142px,1fr)); gap:10px; min-width:640px; align-items:stretch; }
+    .price-option { min-height:250px; border:1px solid #999; background:#fff; padding:12px; position:relative; display:flex; flex-direction:column; }
+    .price-option.selected { border:3px solid #111; transform:translateY(-7px); padding:10px; }
+    .price-option.selected::before { content:"MEILLEUR CHOIX"; position:absolute; top:-13px; left:50%; transform:translateX(-50%); padding:5px 8px; background:#111; color:#fff; white-space:nowrap; font-size:7px; font-weight:800; letter-spacing:.1em; }
+    .price-option-rank { color:#777; font-size:8px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; margin-bottom:9px; }
+    .price-option-visual { height:96px; border:1px solid #aaa; background:#eee; position:relative; }
+    .price-option-visual::before, .price-option-visual::after { content:""; position:absolute; left:-5%; top:50%; width:110%; height:1px; background:#bbb; }
+    .price-option-visual::before { transform:rotate(25deg); }
+    .price-option-visual::after { transform:rotate(-25deg); }
+    .price-option-price { font-size:21px; font-weight:850; margin:14px 0 10px; }
+    .price-option-lines { display:grid; gap:7px; }
+    .price-option-lines span { height:6px; background:#c5c5c5; }
+    .price-option-lines span:last-child { width:70%; }
+    .price-decision { border:2px solid #111; background:#fff; padding:26px 22px; display:flex; flex-direction:column; justify-content:center; }
+    .price-decision-tag { font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:16px; }
+    .price-decision-price { font-size:38px; font-weight:850; letter-spacing:-.06em; margin-bottom:10px; }
+    .price-decision-checks { display:grid; gap:11px; margin:20px 0 4px; }
+    .price-decision-check { display:flex; align-items:center; gap:9px; color:#555; font-size:9px; text-transform:uppercase; letter-spacing:.05em; }
+    .price-decision-check::before { content:"✓"; width:19px; height:19px; display:grid; place-items:center; border:1px solid #111; border-radius:50%; color:#111; font-weight:900; }
+    .price-decision .cta { width:100%; min-width:0; }
+
+    .hero-gift-decision {
+      min-height:630px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      border-bottom:1px solid var(--line);
+      position:relative;
+    }
+    .gift-decision-visual { min-height:630px; border:0; border-right:1px solid var(--line); }
+    .gift-decision-panel { padding:58px 48px; display:flex; flex-direction:column; justify-content:center; }
+    .gift-decision-title { display:grid; gap:9px; margin:22px 0 22px; }
+    .gift-decision-title span { height:35px; background:#171717; }
+    .gift-decision-title span:last-child { width:66%; }
+    .gift-readiness-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .gift-readiness-card { min-height:94px; padding:15px; border:1px solid #999; background:#f7f7f7; }
+    .gift-readiness-icon { width:25px; height:25px; border:2px solid #111; border-radius:50%; margin-bottom:13px; position:relative; }
+    .gift-readiness-icon::after { content:"✓"; position:absolute; left:5px; top:1px; font-size:13px; font-weight:900; }
+    .gift-readiness-card strong { display:block; font-size:10px; text-transform:uppercase; letter-spacing:.06em; }
+    .gift-readiness-card small { display:block; color:#777; margin-top:5px; font-size:9px; }
+    .gift-bundle { border:2px solid #111; margin-top:12px; padding:14px; display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; }
+    .gift-bundle-title { font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; margin-bottom:9px; }
+    .gift-bundle-items { display:flex; gap:7px; }
+    .gift-bundle-item { width:38px; height:38px; border:1px solid #999; background:#eee; }
+    .gift-bundle-add { width:34px; height:34px; border:2px solid #111; border-radius:50%; display:grid; place-items:center; font-size:20px; }
+
+    /* Editorial and contextual proof */
+    .travel-journal { max-width:960px; margin:0 auto; }
+    .journal-lead { display:grid; grid-template-columns:1.12fr .88fr; gap:0; border:1px solid #999; background:#fff; }
+    .journal-lead .media { min-height:470px; border:0; border-right:1px solid #999; }
+    .journal-copy { padding:44px 34px; display:flex; flex-direction:column; justify-content:center; }
+    .journal-kicker { font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#666; margin-bottom:18px; }
+    .journal-copy .section-title { height:26px; }
+    .journal-quote { margin:28px 0 0; padding:20px 0 0 20px; border-top:1px solid #aaa; border-left:3px solid #111; font:italic 18px/1.35 Georgia,serif; }
+    .journal-meta { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #999; border-top:0; }
+    .journal-meta-card { min-height:105px; padding:20px; border-right:1px solid #aaa; background:#f7f7f7; }
+    .journal-meta-card:last-child { border-right:0; }
+    .journal-meta-card strong { display:block; font-size:16px; margin-bottom:10px; }
+    .journal-meta-card span { display:block; width:75%; height:7px; background:#bbb; }
+
+    .context-comments { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .context-comment { min-height:210px; padding:20px; border:1px solid #999; background:#fff; display:flex; flex-direction:column; }
+    .comment-tag { display:inline-flex; width:fit-content; padding:6px 8px; border:1px solid #777; border-radius:999px; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; margin-bottom:20px; }
+    .comment-quote-mark { font:38px/1 Georgia,serif; margin-bottom:4px; }
+    .comment-source { margin-top:auto; padding-top:18px; display:flex; align-items:center; gap:9px; color:#666; font-size:9px; text-transform:uppercase; letter-spacing:.05em; }
+    .comment-source::before { content:""; width:28px; height:28px; border:1px solid #777; border-radius:50%; background:#eee; }
+
     .sticky-cta {
       position: sticky;
       bottom: 0;
@@ -638,6 +781,10 @@
     .canvas.mobile .hero-premium,
     .canvas.mobile .hero-technical,
     .canvas.mobile .hero-social,
+    .canvas.mobile .hero-airline-decision,
+    .canvas.mobile .hero-price-ladder,
+    .canvas.mobile .hero-gift-decision,
+    .canvas.mobile .journal-lead,
     .canvas.mobile .grid-2,
     .canvas.mobile .packing-shell,
     .canvas.mobile .before-after {
@@ -657,6 +804,29 @@
     .canvas.mobile .hero-premium { padding:48px 22px 30px; gap:28px; }
     .canvas.mobile .hero-premium .media { min-height:330px; order:-1; }
     .canvas.mobile .hero-technical { padding:46px 20px 30px; }
+    .canvas.mobile .airline-decision-visual,
+    .canvas.mobile .gift-decision-visual { min-height:360px; border:0; border-bottom:1px solid var(--line); }
+    .canvas.mobile .airline-decision-panel,
+    .canvas.mobile .gift-decision-panel { padding:48px 20px 36px; }
+    .canvas.mobile .airline-decision-panel,
+    .canvas.mobile .gift-decision-panel { order:-1; }
+    .canvas.mobile .airline-card-top { align-items:flex-start; flex-direction:column; }
+    .canvas.mobile .dimension-proof-grid { grid-template-columns:1fr; }
+    .canvas.mobile .dimension-proof-value { border-right:0; border-bottom:1px solid #aaa; }
+    .canvas.mobile .dimension-proof-value:last-child { border-bottom:0; }
+    .canvas.mobile .hero-price-ladder { padding:48px 20px 36px; gap:20px; }
+    .canvas.mobile .price-ladder-title { width:100%; }
+    .canvas.mobile .price-options { grid-template-columns:repeat(4,150px); min-width:630px; }
+    .canvas.mobile .price-option { min-height:230px; }
+    .canvas.mobile .price-decision { padding:22px 18px; }
+    .canvas.mobile .gift-readiness-grid { grid-template-columns:1fr; }
+    .canvas.mobile .gift-bundle { grid-template-columns:1fr auto; }
+    .canvas.mobile .journal-lead .media { min-width:0; width:100%; min-height:330px; aspect-ratio:auto; border:0; border-bottom:1px solid #999; }
+    .canvas.mobile .journal-copy { padding:34px 22px; }
+    .canvas.mobile .journal-meta,
+    .canvas.mobile .context-comments { grid-template-columns:1fr; }
+    .canvas.mobile .journal-meta-card { border-right:0; border-bottom:1px solid #aaa; }
+    .canvas.mobile .journal-meta-card:last-child { border-bottom:0; }
     .canvas.mobile .hero-deadline { min-height:0; }
     .canvas.mobile .deadline-side { min-height:330px; }
     .canvas.mobile .wf-section { padding:54px 20px 42px; }
@@ -808,6 +978,68 @@
       return `<section class="hero-social">${media('Produit + utilisateurs','tall')}<div class="social-copy">${wfLabel(label)}<div class="rating-giant"><div class="rating-number"></div><div class="rating-caption"></div></div>${lines(['w90','w70','w60'])}${button(cta)}</div></section>`;
     }
 
+    function heroAirlineVerified(label='H12 — Compagnie vérifiée', airline='RYANAIR', dimensions='40 × 20 × 25 CM', cta='Voyager sans supplément') {
+      return `<section class="hero-airline-decision">
+        ${wfLabel(label)}
+        ${media('Produit dans le gabarit cabine','airline-decision-visual')}
+        <div class="airline-decision-panel">
+          <div class="decision-context">Compagnie détectée <span class="edit-context">modifier</span></div>
+          <div class="airline-card-top"><div class="airline-wordmark">${airline}</div><div class="verified-pill">Vérifié</div></div>
+          <div class="airline-question"><span></span><span></span></div>
+          <div class="dimension-proof">
+            <div class="dimension-proof-head"><span>Compatibilité cabine</span><span>mise à jour récente</span></div>
+            <div class="dimension-proof-grid">
+              <div class="dimension-proof-value"><small>Limite compagnie</small><strong>${dimensions}</strong></div>
+              <div class="dimension-proof-value"><small>Dimensions du sac</small><strong>${dimensions}</strong></div>
+            </div>
+          </div>
+          <div class="decision-caveat">Compatible sous le siège dans la configuration présentée. Accès aux conditions complètes conservé.</div>
+          ${button(cta)}
+        </div>
+      </section>`;
+    }
+
+    function heroPriceLadder(label='H11 — Échelle de prix', cta='Choisir le meilleur rapport qualité / prix') {
+      const options = [
+        {rank:'Le moins cher',price:'69 €'},
+        {rank:'Recommandé',price:'89 €'},
+        {rank:'Plus léger',price:'109 €'},
+        {rank:'Premium',price:'139 €'}
+      ];
+      return `<section class="hero-price-ladder">
+        ${wfLabel(label)}
+        <div class="price-ladder-main">
+          <div class="decision-context">Priorité : rapport qualité / prix <span class="edit-context">modifier</span></div>
+          <div class="price-ladder-title"><span></span><span></span></div>
+          <div class="price-options-wrap"><div class="price-options">${options.map((option,i)=>`<article class="price-option ${i===1?'selected':''}"><div class="price-option-rank">${option.rank}</div><div class="price-option-visual"></div><div class="price-option-price">${option.price}</div><div class="price-option-lines"><span></span><span></span></div></article>`).join('')}</div></div>
+        </div>
+        <aside class="price-decision">
+          <div class="price-decision-tag">Notre choix pour ce voyage</div>
+          <div class="price-decision-price">89 €</div>
+          ${lines(['w100','w80'])}
+          <div class="price-decision-checks"><div class="price-decision-check">Cabine compatible</div><div class="price-decision-check">Protection pluie</div><div class="price-decision-check">Garantie 5 ans</div></div>
+          ${button(cta)}
+        </aside>
+      </section>`;
+    }
+
+    function heroGiftReady(label='H13 — Cadeau prêt à offrir', occasion='ANNIVERSAIRE', cta='Préparer ce cadeau', visual='Cadeau + voyage') {
+      return `<section class="hero-gift-decision">
+        ${wfLabel(label)}
+        ${media(visual,'gift-decision-visual')}
+        <div class="gift-decision-panel">
+          <div class="decision-context">Achat : ${occasion} <span class="edit-context">modifier</span></div>
+          <div class="gift-decision-title"><span></span><span></span></div>
+          <div class="gift-readiness-grid">
+            <div class="gift-readiness-card"><div class="gift-readiness-icon"></div><strong>Livré avant le jour J</strong><small>Date estimée confirmée</small></div>
+            <div class="gift-readiness-card"><div class="gift-readiness-icon"></div><strong>Échange 60 jours</strong><small>La couleur peut être changée</small></div>
+          </div>
+          <div class="gift-bundle"><div><div class="gift-bundle-title">Compléter le cadeau</div><div class="gift-bundle-items"><div class="gift-bundle-item"></div><div class="gift-bundle-item"></div><div class="gift-bundle-item"></div></div></div><div class="gift-bundle-add">+</div></div>
+          ${button(cta)}
+        </div>
+      </section>`;
+    }
+
     function sectionSplit(label='S1 — Split argument', visual='Visuel argument', reverse=false, withCta=false) {
       return `<section class="wf-section">${wfLabel(label)}<div class="grid-2">${reverse?`<div><div class="section-kicker"></div><div class="section-title"></div><div class="section-subtitle"></div>${lines(['w100','w90','w70'])}${withCta?button('CTA secondaire'):''}</div>${media(visual,'medium')}`:`${media(visual,'medium')}<div><div class="section-kicker"></div><div class="section-title"></div><div class="section-subtitle"></div>${lines(['w100','w90','w70'])}${withCta?button('CTA secondaire'):''}</div>`}</div></section>`;
     }
@@ -856,6 +1088,21 @@
 
     function sectionStory(label='S16 — Mini récit voyage', context='Photo destination') {
       return `<section class="wf-section soft">${wfLabel(label)}${media(context,'landscape')}<div style="max-width:760px;margin:28px auto 0"><div class="section-title"></div><div class="section-subtitle"></div>${lines(['w100','w90','w80','w60'])}</div></section>`;
+    }
+
+    function sectionTravelJournal(label='S21 — Carnet de voyage', context='Photo de voyage', quote='Deux bus, une nuit en auberge, et le passeport toujours accessible.') {
+      return `<section class="wf-section soft">${wfLabel(label)}<div class="travel-journal">
+        <article class="journal-lead">
+          ${media(context,'landscape')}
+          <div class="journal-copy"><div class="journal-kicker">Chapitre 01 · Sur la route</div><div class="section-title"></div><div class="section-subtitle"></div>${lines(['w100','w90','w80','w60'])}<blockquote class="journal-quote">« ${quote} »</blockquote></div>
+        </article>
+        <div class="journal-meta"><div class="journal-meta-card"><strong>12 jours</strong><span></span></div><div class="journal-meta-card"><strong>4 transports</strong><span></span></div><div class="journal-meta-card"><strong>1 sac</strong><span></span></div></div>
+      </div></section>`;
+    }
+
+    function sectionContextComments(label='S22 — Commentaires contextuels', tags=['Même compagnie','Même usage','Point de vigilance']) {
+      const cards = tags.map(tag=>`<article class="context-comment"><div class="comment-tag">${tag}</div><div class="comment-quote-mark">“</div>${lines(['w100','w90','w70'])}<div class="comment-source">Profil vérifié</div></article>`).join('');
+      return `<section class="wf-section">${wfLabel(label)}<div class="section-title"></div><div class="section-subtitle"></div><div class="context-comments">${cards}</div></section>`;
     }
 
     function sectionBeforeAfter(label='S5 — Avant / après') {
@@ -925,7 +1172,12 @@
       const ugc = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;height:100%">${Array.from({length:6},()=>'<div class="mini-media"></div>').join('')}</div>`;
       const packing = `<div class="mini-grid2"><div class="mini-media"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">${Array.from({length:6},()=>'<div style="border:1px solid #aaa;background:#eee"></div>').join('')}</div></div>`;
       const obstruction = `<div class="mini-copy" style="height:100%;text-align:center"><div class="mini-line dark" style="height:14px;width:85%;margin:auto"></div><div class="mini-line dark" style="height:14px;width:55%;margin:auto"></div><div style="width:55px;height:30px;border:2px solid #111;margin:14px auto"></div><div class="mini-btn" style="width:40%;margin:auto"></div></div>`;
-      return ({split,center,cards,table,review,timeline,metrics,ugc,packing,obstruction})[type] || split;
+      const price = `<div style="display:grid;grid-template-columns:1fr 48px;gap:5px;height:100%"><div class="mini-cards" style="grid-template-columns:repeat(4,1fr)">${Array.from({length:4},(_,i)=>`<div class="mini-card ${i===1?'featured':''}"></div>`).join('')}</div><div style="border:2px solid #111;padding:5px;display:grid;align-content:center;gap:5px"><div class="mini-line dark"></div><div class="mini-line"></div><div class="mini-btn" style="width:100%"></div></div></div>`;
+      const airline = `<div class="mini-grid2"><div class="mini-media"></div><div style="padding:5px;display:grid;align-content:center;gap:6px"><div style="height:18px;width:70%;border:2px solid #111"></div><div class="mini-line dark"></div><div style="border:2px solid #111;height:54px"></div><div class="mini-btn"></div></div></div>`;
+      const gift = `<div class="mini-grid2"><div class="mini-media"></div><div style="padding:5px;display:grid;align-content:center;gap:5px"><div class="mini-line dark"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px"><div class="mini-card"></div><div class="mini-card"></div></div><div style="border:2px solid #111;height:30px"></div><div class="mini-btn"></div></div></div>`;
+      const journal = `<div class="mini-grid2"><div class="mini-media"></div><div class="mini-copy"><div class="mini-line dark"></div><div class="mini-line"></div><div class="mini-line"></div><div style="border-left:3px solid #111;height:42px;margin-top:8px"></div></div></div>`;
+      const comments = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;height:100%">${Array.from({length:3},()=>'<div class="mini-review"><div style="height:10px;width:70%;border:1px solid #777;border-radius:10px"></div><div class="mini-line"></div><div class="mini-line"></div><div class="mini-avatar"></div></div>').join('')}</div>`;
+      return ({split,center,cards,table,review,timeline,metrics,ugc,packing,obstruction,price,airline,gift,journal,comments})[type] || split;
     }
 
     function patternCard(name,type) {
@@ -936,12 +1188,13 @@
       const heroes = [
         ['H1 · Product classic','split'],['H2 · Single argument','center'],['H3 · Context split','split'],['H4 · Compatibility','split'],
         ['H5 · Deadline','split'],['H6 · Price first','center'],['H7 · Premium','split'],['H8 · Gift','split'],
-        ['H9 · Technical','table'],['H10 · Social proof','review']
+        ['H9 · Technical','table'],['H10 · Social proof','review'],['H11 · Price ladder','price'],['H12 · Airline verified','airline'],['H13 · Gift ready','gift']
       ];
       const sections = [
         ['S1 · Feature spotlight','split'],['S2 · Media split','split'],['S3 · Three proofs','metrics'],['S4 · Numeric proof','metrics'],
         ['S5 · Before / after','split'],['S6 · Airline card','table'],['S7 · Airline table','table'],['S8 · Product grid','cards'],
-        ['S9 · Use-case cards','cards'],['S10 · Packing visual','packing'],['S11 · Test metrics','metrics'],['S16 · Travel story','split']
+        ['S9 · Use-case cards','cards'],['S10 · Packing visual','packing'],['S11 · Test metrics','metrics'],['S16 · Travel story','split'],
+        ['S21 · Travel journal','journal'],['S22 · Context comments','comments']
       ];
       const proof = [
         ['S12 · Single review','review'],['S13 · Review trio','cards'],['S14 · Gift reviews','review'],['S15 · UGC wall','ugc'],
@@ -958,14 +1211,14 @@
       library: () => libraryPage(),
       classic: () => classicPage(),
       p1: () => wrap(
-        heroCompat('H4 — Compatibilité','Produit + gabarit Ryanair','CTA économie bagage') +
+        heroAirlineVerified('H12 — Compagnie vérifiée','RYANAIR','40 × 20 × 25 CM','Voyager sans supplément') +
         sectionProductGrid('S8 — Ancrage prix / coût bagage',2,4) +
         sectionSplit('S1 — Protection pluie','Sac sous la pluie',false) +
-        sectionReview('S13 — Avis jeunes voyageurs',3),
+        sectionContextComments('S22 — Commentaires Ryanair',['Même compagnie','Pluie à Dublin','Premier vol']),
         {stickyLabel:'CTA économie bagage'}
       ),
       p2: () => wrap(
-        heroSplit('H8 — Hero cadeau','Cadeau + départ Japon',false,'CTA offrir') +
+        heroGiftReady('H13 — Cadeau prêt à offrir','ANNIVERSAIRE','Préparer ce cadeau','Cadeau + départ Japon') +
         sectionTimeline('S17 — Livraison avant anniversaire') +
         sectionPacking('S10 — Packing Japon',6) +
         sectionGiftReviews('S14 — Avis acheteurs cadeau'),
@@ -982,7 +1235,7 @@
         heroSplit('H3 — Hero contexte','Andes / route',false,'CTA partir') +
         sectionPacking('S10 — Capacité long voyage',9) +
         sectionMetrics('S11 — Tests de résistance',3) +
-        sectionStory('S16 — Récit Amérique du Sud','Photo Rio / Andes'),
+        sectionTravelJournal('S21 — Carnet Amérique du Sud','Photo Rio / Andes','Deux bus, une nuit en auberge, et le passeport toujours accessible.'),
         {stickyLabel:'CTA voyage long'}
       ),
       p5: () => wrap(
@@ -993,10 +1246,10 @@
         {stickyLabel:'CTA confort'}
       ),
       p6: () => wrap(
-        heroCompat('H6 — Prix + compatibilité','Produit + easyJet','CTA budget') +
+        heroPriceLadder('H11 — Meilleur rapport qualité / prix','Choisir le modèle recommandé') +
+        sectionAirlineCard('S6 — Compatibilité easyJet vérifiée') +
         sectionBeforeAfter('S5 — Supplément bagage vs un sac') +
-        sectionUGC('S15 — UGC vertical',true,3) +
-        sectionReview('S13 — Validation 18–25 ans',3),
+        sectionContextComments('S22 — Commentaires petit budget',['Même budget','Vol easyJet','Usage Erasmus']),
         {stickyLabel:'CTA petit budget'}
       ),
       p7: () => wrap(
@@ -1007,7 +1260,7 @@
         {stickyLabel:'CTA sans compromis'}
       ),
       p8: () => wrap(
-        heroSplit('H8 — Cadeau contextualisé','Cycliste en voyage',false,'CTA offrir') +
+        heroGiftReady('H13 — Cadeau contextualisé','CADEAU CYCLISTE','Offrir sans risque','Cycliste en voyage') +
         sectionSplit('S1 — Stabilité vélo','Sac porté à vélo',false) +
         sectionSplit('S1 — Résistance pluie','Cycliste sous la pluie',true) +
         sectionGiftReviews('S14 — Avis cadeau cycliste'),
@@ -1017,7 +1270,7 @@
         heroSplit('H3 — Protection matériel','Islande / pluie',true,'CTA protéger') +
         sectionMetrics('S11 — Test pluie / charge / chocs',3) +
         sectionPacking('S10 — Matériel photo organisé',6) +
-        sectionReview('S12 — Avis photographe',1),
+        sectionContextComments('S22 — Notes de photographes',['Même matériel','Pluie islandaise','Point de vigilance']),
         {stickyLabel:'CTA protection'}
       ),
       p10: () => wrap(
@@ -1053,7 +1306,7 @@
         heroSplit('H3 — Protection laptop','Laptop + Asie',true,'CTA protéger setup') +
         sectionSplit('S2 — Coupe de protection','Coupe technique du sac',false) +
         sectionMetrics('S11 — Pluie tropicale / impact / charge',3) +
-        sectionStory('S16 — Digital nomad en Asie','Coworking Bali'),
+        sectionTravelJournal('S21 — Journal de travail nomade','Coworking Bali','Mon bureau est resté organisé entre l’aéroport, le scooter et le coworking.'),
         {stickyLabel:'CTA protéger le bureau'}
       ),
       p15: () => wrap(
@@ -1068,20 +1321,20 @@
     const views = [
       {key:'library', index:'−1', label:'Bibliothèque', title:'Bibliothèque de layouts', sub:'Heroes, sections, preuves et CTA réutilisables.', sequence:['Heroes','Arguments','Preuves','CTA']},
       {key:'classic', index:'0', label:'Site classique', title:'PDP Shopify classique', sub:'Page exhaustive, pensée pour couvrir tous les acheteurs.', sequence:['Hero produit','Bénéfices','Features','Usage','Dimensions','Matériaux','Compagnies','Comparaison','UGC','Avis','FAQ','CTA']},
-      {key:'p1', index:'1', label:'Ryan', title:'Ryan — 18 ans · Ryanair · Dublin', sub:'Petit budget, pluie, supplément bagage.', sequence:['Hero compatibilité','Ancrage coût','Pluie','Avis jeunes','CTA']},
-      {key:'p2', index:'2', label:'Sophie', title:'Sophie — cadeau pour son fils · Japon', sub:'Anniversaire, date de livraison, bon choix cadeau.', sequence:['Hero cadeau','Timeline','Packing Japon','Avis cadeau','CTA']},
+      {key:'p1', index:'1', label:'Ryan', title:'Ryan — 18 ans · Ryanair · Dublin', sub:'Petit budget, pluie, supplément bagage.', sequence:['Compagnie vérifiée','Ancrage coût','Pluie','Commentaires ciblés','CTA']},
+      {key:'p2', index:'2', label:'Sophie', title:'Sophie — cadeau pour son fils · Japon', sub:'Anniversaire, date de livraison, bon choix cadeau.', sequence:['Cadeau prêt','Timeline','Packing Japon','Avis cadeau','CTA']},
       {key:'p3', index:'3', label:'Thomas', title:'Thomas — consultant · Eurostar', sub:'Organisation, vitesse, apparence premium.', sequence:['Hero premium','Organisation','Parcours train','Avis métier','CTA']},
-      {key:'p4', index:'4', label:'Lucia', title:'Lucia — backpacking · Amérique du Sud', sub:'Long voyage, capacité, résistance.', sequence:['Hero contexte','Packing','Tests','Récit voyage','CTA']},
+      {key:'p4', index:'4', label:'Lucia', title:'Lucia — backpacking · Amérique du Sud', sub:'Long voyage, capacité, résistance.', sequence:['Hero contexte','Packing','Tests','Carnet de voyage','CTA']},
       {key:'p5', index:'5', label:'Marc', title:'Marc — 63 ans · Italie en train', sub:'Poids, confort et simplicité.', sequence:['Hero poids','Confort','Train','Avis senior','CTA']},
-      {key:'p6', index:'6', label:'Emma', title:'Emma — Erasmus · easyJet', sub:'Budget serré, format cabine, validation sociale.', sequence:['Hero prix','Avant/après','UGC vertical','Avis jeunes','CTA']},
+      {key:'p6', index:'6', label:'Emma', title:'Emma — Erasmus · easyJet', sub:'Budget serré, format cabine, validation sociale.', sequence:['Comparateur prix','Compatibilité','Économie','Commentaires ciblés','CTA']},
       {key:'p7', index:'7', label:'Alexandre', title:'Alexandre — entrepreneur · Tokyo', sub:'Premium, efficacité et durabilité.', sequence:['Hero luxe','Organisation','Matériaux','Parcours','CTA']},
-      {key:'p8', index:'8', label:'Chloé', title:'Chloé — cadeau pour un cycliste', sub:'Adéquation cadeau, vélo, pluie.', sequence:['Hero cadeau','Vélo','Pluie','Avis cadeau','CTA']},
-      {key:'p9', index:'9', label:'Nicolas', title:'Nicolas — photographe · Islande', sub:'Protection du matériel et météo.', sequence:['Hero protection','Tests','Packing photo','Avis photographe','CTA']},
+      {key:'p8', index:'8', label:'Chloé', title:'Chloé — cadeau pour un cycliste', sub:'Adéquation cadeau, vélo, pluie.', sequence:['Cadeau prêt','Vélo','Pluie','Avis cadeau','CTA']},
+      {key:'p9', index:'9', label:'Nicolas', title:'Nicolas — photographe · Islande', sub:'Protection du matériel et météo.', sequence:['Hero protection','Tests','Packing photo','Notes ciblées','CTA']},
       {key:'p10', index:'10', label:'Amina', title:'Amina — voyage avec deux enfants', sub:'Accès rapide, mains libres, sous-siège.', sequence:['Hero accès','Hotspots','Sous-siège','Avis parent','CTA']},
       {key:'p11', index:'11', label:'Paul', title:'Paul — ingénieur · acheteur analytique', sub:'Specs, comparaison et preuve objective.', sequence:['Hero technique','Tableau','Tests','Avis expert','CTA']},
       {key:'p12', index:'12', label:'Léa', title:'Léa — Instagram · Barcelone', sub:'Style, projection et couleur.', sequence:['Hero lifestyle','Galerie','Packing week-end','UGC','CTA']},
       {key:'p13', index:'13', label:'Daniel', title:'Daniel — 68 ans · voyage aux États-Unis', sub:'Confiance, garantie et compatibilité.', sequence:['Hero confiance','Réassurance','Garantie','Compagnies','Avis 55+','CTA']},
-      {key:'p14', index:'14', label:'Maya', title:'Maya — digital nomad · Asie', sub:'Laptop, pluie tropicale et usage long.', sequence:['Hero laptop','Protection','Tests météo','Récit nomade','CTA']},
+      {key:'p14', index:'14', label:'Maya', title:'Maya — digital nomad · Asie', sub:'Laptop, pluie tropicale et usage long.', sequence:['Hero laptop','Protection','Tests météo','Journal nomade','CTA']},
       {key:'p15', index:'15', label:'Kevin', title:'Kevin — départ demain', sub:'Disponibilité immédiate. Rien d’autre.', sequence:['Hero deadline','3 faits','Timeline','CTA']}
     ];
 
