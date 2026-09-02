@@ -1,5 +1,11 @@
 # Hugo — Japan editorial demo
 
+## On-screen card
+
+- Display: HUGO, 23
+- Tag: AMATEUR TRAVEL PHOTOGRAPHER
+- Portrait: portrait.png
+
 ## Known context
 
 - First name: Hugo
@@ -15,4 +21,3 @@
 For a request about the current trip, provide only the Japan destination, trip duration, age group, cream color, walking use, and visual preference that is relevant to `prepare_shopping_experience`.
 
 Keep the recommendation concrete. The prepared page may carry the emotional projection; the conversational reply should remain short and should not spoil which Japan scenes were selected.
-

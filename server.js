@@ -17,21 +17,6 @@ const socialColorLabels = Object.freeze({
   "liberty-burgundy": { fr: "Liberty bordeaux", en: "Liberty burgundy" },
 });
 
-const socialCardNames = Object.freeze({
-  p1: Object.freeze({
-    black: "s1-black.jpg",
-    cream: "s1-cream.jpg",
-    "liberty-blue": "s1-liberty-blue.jpg",
-    "liberty-burgundy": "s1-liberty-burgundy.jpg",
-  }),
-  p2: Object.freeze({
-    black: "s2-black.jpg",
-    cream: "s2-cream.jpg",
-    "liberty-blue": "s2-liberty-blue.jpg",
-    "liberty-burgundy": "s2-liberty-burgundy.jpg",
-  }),
-});
-
 const escapeAttribute = (value = "") => String(value)
   .replaceAll("&", "&amp;")
   .replaceAll('"', "&quot;")
@@ -80,8 +65,9 @@ function socialExperience(route, origin) {
   const image = hero.colorAssets?.[colorway]
     || hero.asset
     || `./assets/products/72h-${colorway}/01-hero-three-quarter.png`;
-  const dedicatedSocialCard = !route.heroPurpose && route.variantId === "base"
-    ? socialCardNames[route.scenarioKey]?.[colorway]
+  const scenarioNumber = String(route.scenarioKey || "").match(/^p(\d+)$/)?.[1];
+  const dedicatedSocialCard = scenarioNumber && !route.heroPurpose && route.variantId === "base"
+    ? `s${scenarioNumber}-${colorway}.jpg`
     : null;
   const socialImage = dedicatedSocialCard
     ? `./assets/social/${dedicatedSocialCard}`

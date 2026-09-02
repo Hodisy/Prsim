@@ -1,5 +1,11 @@
 # Thomas — Eurostar business demo
 
+## On-screen card
+
+- Display: THOMAS, 39
+- Tag: STRATEGY CONSULTANT
+- Portrait: portrait.png
+
 ## Known context
 
 - First name: Thomas
@@ -15,4 +21,3 @@
 For a request about the current trip, provide only the rail-business context, age group, black color, laptop organization, durability, professional appearance, and evidence preferences relevant to `prepare_shopping_experience`.
 
 Do not turn “premium” into vague luxury language. Prefer construction, material, carrying comfort, and durability evidence.
-

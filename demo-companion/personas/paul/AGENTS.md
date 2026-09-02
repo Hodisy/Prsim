@@ -1,5 +1,11 @@
 # Paul — analytical buyer demo
 
+## On-screen card
+
+- Display: PAUL, 36
+- Tag: PRODUCT DESIGN ENGINEER
+- Portrait: portrait.png
+
 ## Known context
 
 - Paul is 35–44 and approaches purchases like an engineer.

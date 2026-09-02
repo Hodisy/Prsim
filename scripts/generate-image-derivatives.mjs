@@ -1,6 +1,7 @@
 import { readdir, mkdir, stat } from "node:fs/promises";
 import { dirname, extname, join, relative } from "node:path";
 import { spawn } from "node:child_process";
+import { profiles } from "../src/data/profiles.js";
 
 const projectRoot = new URL("../", import.meta.url).pathname;
 const assetsRoot = join(projectRoot, "assets");
@@ -10,6 +11,8 @@ const outputRoot = join(assetsRoot, "derivatives");
 // and 1280/2560 for full-width desktop imagery.
 const widths = [96, 192, 480, 960, 1280, 1920, 2560];
 const sourceExtensions = new Set([".png", ".jpg", ".jpeg", ".avif"]);
+const socialRoot = join(assetsRoot, "social");
+const colorways = ["black", "cream", "liberty-blue", "liberty-burgundy"];
 
 async function walk(folder) {
   const entries = await readdir(folder, { withFileTypes: true });
@@ -44,6 +47,32 @@ function runMagick(source, destination, width) {
   });
 }
 
+function runSocialCard(source, destination) {
+  const productOnly = /\/(?:products|sketch|materials)\//.test(source);
+  const geometry = productOnly
+    ? ["-resize", "1200x630", "-background", "#f7f5f1", "-gravity", "center", "-extent", "1200x630"]
+    : ["-resize", "1200x630^", "-gravity", "center", "-extent", "1200x630"];
+  return new Promise((resolve, reject) => {
+    const child = spawn("magick", [
+      source,
+      "-auto-orient",
+      ...geometry,
+      "-strip",
+      "-sampling-factor", "4:2:0",
+      "-quality", "82",
+      destination,
+    ], { stdio: "inherit" });
+    child.on("error", reject);
+    child.on("exit", (code) => code === 0 ? resolve() : reject(new Error(`magick exited with ${code}`)));
+  });
+}
+
+function scenarioHeroSource(profile, colorway) {
+  return profile.hero.colorAssets?.[colorway]
+    || profile.hero.asset
+    || `./assets/products/72h-${colorway}/01-hero-three-quarter.png`;
+}
+
 const sources = await walk(assetsRoot);
 const jobs = [];
 for (const source of sources) {
@@ -67,4 +96,37 @@ await Promise.all(Array.from({ length: concurrency }, async () => {
   }
 }));
 
-console.log(`Generated ${jobs.length} responsive image derivatives from ${sources.length} masters.`);
+await mkdir(socialRoot, { recursive: true });
+const socialJobs = [];
+for (let index = 1; profiles[`p${index}`]; index += 1) {
+  const profile = profiles[`p${index}`];
+  for (const colorway of colorways) {
+    const source = join(projectRoot, scenarioHeroSource(profile, colorway).replace(/^\.\//, ""));
+    const destination = join(socialRoot, `s${index}-${colorway}.jpg`);
+    const sourceStat = await stat(source);
+    let current = false;
+    try { current = (await stat(destination)).mtimeMs >= sourceStat.mtimeMs; }
+    catch { /* Missing social card. */ }
+    if (!current) socialJobs.push({ source, destination });
+  }
+}
+
+const defaultSocialSource = join(assetsRoot, "products/72h-black/01-hero-three-quarter.png");
+const defaultSocialDestination = join(socialRoot, "port70-default.jpg");
+try {
+  const sourceStat = await stat(defaultSocialSource);
+  const destinationStat = await stat(defaultSocialDestination);
+  if (destinationStat.mtimeMs < sourceStat.mtimeMs) socialJobs.push({ source: defaultSocialSource, destination: defaultSocialDestination });
+} catch {
+  socialJobs.push({ source: defaultSocialSource, destination: defaultSocialDestination });
+}
+
+cursor = 0;
+await Promise.all(Array.from({ length: concurrency }, async () => {
+  while (cursor < socialJobs.length) {
+    const job = socialJobs[cursor++];
+    await runSocialCard(job.source, job.destination);
+  }
+}));
+
+console.log(`Generated ${jobs.length} responsive derivatives from ${sources.length} masters and ${socialJobs.length} social cards.`);

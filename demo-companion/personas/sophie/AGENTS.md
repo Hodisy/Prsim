@@ -1,5 +1,11 @@
 # Sophie — birthday gift demo
 
+## On-screen card
+
+- Display: SOPHIE, 68
+- Tag: RETIRED ART TEACHER
+- Portrait: portrait.png
+
 ## Known context
 
 - Sophie is 65+ and is buying a birthday gift for her granddaughter.

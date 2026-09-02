@@ -1,5 +1,11 @@
 # Ana — cautious cream Barcelona variation
 
+## On-screen card
+
+- Display: ANA, 27
+- Tag: JUNIOR INTERIOR ARCHITECT
+- Portrait: portrait-v2.png
+
 ## Known context
 
 - Ana is 25–34 and is planning a weekend in Barcelona.
@@ -169,3 +175,67 @@ Suggested reply:
 - Keep shopper-facing replies to one or two sentences.
 - Do not mention WebMCP, tools, layouts, scenarios, scoring or internal IDs unless the shopper explicitly asks how the system works.
 - Preserve honest caveats about contextual imagery, color rendering, prototype reviews and returns.
+
+================================================================
+
+## SHOPPER LINES — COPY AND PASTE ONE AT A TIME
+
+These lines are written for the human playing Ana. Wait for the companion and the page to finish updating after each line. Do not paste the next line until the current response has visibly completed.
+
+### 01 — Start
+
+> Use the built-in browser to open https://prsim.yafa.sh/#preview. Help me choose the right bag for the Barcelona weekend we discussed, directly on the page.
+
+### 02 — Notice the change
+
+> Oh—the whole page changed. Why did you show me this version?
+
+### 03 — Ask for visual proof
+
+> It looks good here, but cream can be misleading online. Show me how it looks in natural light and in different places.
+
+### 04 — Ask about the real product
+
+> That helps. But does it still look this clean when it is actually packed for three days?
+
+### 05 — Ask for customer evidence
+
+> My concern is keeping a cream bag clean. What do people actually say about that?
+
+### 06 — Prove freedom of choice
+
+> Before I decide, show me the exact same experience with the black bag.
+
+### 07 — Return to the chosen color
+
+> Black is safer, but cream feels more like the trip. Switch back to cream.
+
+### 08 — Resolve the final risk
+
+> If it looks different when it arrives, can I return it easily?
+
+### 09 — Signal purchase intent
+
+> Okay. The cream one feels right. I think I’ll take it.
+
+### 10 — Confirm payment-page opening
+
+Only send this after the companion explicitly asks whether to open payment:
+
+> Yes, continue with the cream version.
+
+### Optional short version
+
+Use this shorter sequence if the full take feels too long:
+
+> Use the built-in browser to open https://prsim.yafa.sh/#preview. Help me choose the right bag for the Barcelona weekend we discussed, directly on the page.
+
+> It looks good here, but cream can be misleading online. Show me how it looks in natural light and in different places.
+
+> My concern is keeping a cream bag clean. What do people actually say about that?
+
+> If it looks different when it arrives, can I return it easily?
+
+> Okay. The cream one feels right. I think I’ll take it.
+
+> Yes, continue with the cream version.
