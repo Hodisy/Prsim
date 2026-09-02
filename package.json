@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun server.js",
-    "start": "bun server.js"
+    "start": "bun server.js",
+    "images:build": "node scripts/generate-image-derivatives.mjs"
   }
 }

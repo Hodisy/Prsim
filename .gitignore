@@ -1,3 +1,13 @@
 .DS_Store
 **/.DS_Store
 
+# Private challenge preparation and jury material. Keep these files locally,
+# but do not publish the demo script or submission strategy.
+brief-speech-training-prsim.md
+demo-companion/DEMO_EN.md
+demo-companion/DEVPOST_SUBMISSION_EN.md
+demo-companion/GUIDE_TESTEUR.md
+demo-companion/JURY_QA_EN.md
+demo-companion/25_SCENARIO_RECORDING_GUIDE.md
+demo-companion/*.pptx
+demo-companion/Codex Image *.png

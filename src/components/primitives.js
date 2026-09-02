@@ -5,6 +5,28 @@ export const esc = (value = "") => String(value)
   .replaceAll('"', "&quot;")
   .replaceAll("'", "&#039;");
 
+const responsiveWidths = [96, 192, 480, 960, 1280, 1920, 2560];
+
+export function responsiveImageSourceSet(src = "") {
+  const match = String(src).match(/^(?:\.\/|\/)?assets\/(.+)\.(?:png|jpe?g|avif)$/i);
+  if (!match) return "";
+  const base = `./assets/derivatives/${match[1]}`;
+  return responsiveWidths.map((width) => `${base}.w${width}.webp ${width}w`).join(", ");
+}
+
+export function responsiveImageAttributes(src, { sizes = "100vw", priority = false } = {}) {
+  const srcset = responsiveImageSourceSet(src);
+  return `${srcset ? ` srcset="${esc(srcset)}" sizes="${esc(sizes)}"` : ""} loading="${priority ? "eager" : "lazy"}"${priority ? ' fetchpriority="high"' : ""} decoding="async"`;
+}
+
+export function setResponsiveImageSource(image, src) {
+  if (!image || !src) return;
+  image.src = src;
+  const srcset = responsiveImageSourceSet(src);
+  if (srcset) image.srcset = srcset;
+  else image.removeAttribute("srcset");
+}
+
 const durationLabel = (seconds = 21600) => {
   const value = Math.max(0, Number(seconds));
   const hours = String(Math.floor(value / 3600)).padStart(2, "0");
@@ -32,7 +54,7 @@ export const materialOptions = [
   { name: "Liberty bordeaux", colorway: "liberty-burgundy", detail: "Motif · bordeaux", src: "./assets/materials/liberty-burgundy.png" },
 ];
 
-const colorButtons = (variant) => materialOptions.map((option, index) => `<button class="color-option ${index === 0 ? "active" : ""}" type="button" data-color-option data-color-name="${esc(option.name)}" data-colorway="${option.colorway}" aria-label="${esc(option.detail)}" aria-pressed="${index === 0}">${variant === "swatches" ? `<img src="${option.src}" alt="" />` : `<span>${esc(option.name)}</span>${variant === "menu" ? `<small>${esc(option.detail)}</small>` : ""}`}</button>`).join("");
+const colorButtons = (variant) => materialOptions.map((option, index) => `<button class="color-option ${index === 0 ? "active" : ""}" type="button" data-color-option data-color-name="${esc(option.name)}" data-colorway="${option.colorway}" aria-label="${esc(option.detail)}" aria-pressed="${index === 0}">${variant === "swatches" ? `<img src="${option.src}" alt=""${responsiveImageAttributes(option.src, { sizes: "44px" })} />` : `<span>${esc(option.name)}</span>${variant === "menu" ? `<small>${esc(option.detail)}</small>` : ""}`}</button>`).join("");
 
 export const materialChoice = ({ compact = false, variant = "swatches" } = {}) => variant === "menu" ? `
   <details class="material-choice compact variant-menu">
@@ -91,11 +113,16 @@ export const mediaSlot = (label = "Asset produit", className = "", explicitSrc =
   const view = src.split("/").at(-1);
   const productView = explicitSrc ? "" : ` data-product-view="${view}"`;
   const colorCaption = explicitSrc ? "" : " data-color-caption";
+  const priority = /(^|\s)hero-media(?:\s|$)/.test(className);
+  const imageAttributes = responsiveImageAttributes(src, {
+    priority,
+    sizes: priority ? "(max-width: 720px) 100vw, 62vw" : "(max-width: 720px) 100vw, 54vw",
+  });
   return `
     <div class="media-slot ${esc(className)}">
       <div class="wf-only media-wire" aria-hidden="true"><span>${esc(label)}</span></div>
       <div class="ui-only media-ui">
-        <img class="product-media-image"${productView}${colorAssets ? ` data-color-assets="${esc(JSON.stringify(colorAssets))}"` : ""} src="${src}" alt="${esc(label)}" loading="lazy" />
+        <img class="product-media-image"${productView}${colorAssets ? ` data-color-assets="${esc(JSON.stringify(colorAssets))}"` : ""} src="${src}" alt="${esc(label)}"${imageAttributes} />
         <span class="asset-caption"${colorCaption}>${esc(explicitCaption || (explicitSrc ? "EN VOYAGE / 32 L" : "NOIR / TOILE TECHNIQUE / 32 L"))}</span>
       </div>
     </div>`;
@@ -205,7 +232,7 @@ export const stickyBar = (profile) => {
   return `
   <div class="sticky-shop-bar">
     <div class="sticky-product">
-      <span class="sticky-thumb"><img class="ui-only" data-product-view="01-hero-three-quarter.png" src="${productImages.hero}" alt="" /></span>
+      <span class="sticky-thumb"><img class="ui-only" data-product-view="01-hero-three-quarter.png" src="${productImages.hero}" alt=""${responsiveImageAttributes(productImages.hero, { sizes: "48px" })} /></span>
       <span><strong class="ui-only">${esc(profile.productName || `Passage 32 · ${productColorNames[profile.colorway] || productColorNames.black}`)}</strong><i class="wf-only"></i><small class="ui-only">${profile.key === "p2" ? "Carte offerte · échange ou bon d’achat 30 jours" : "Livraison offerte · retours 30 jours"}</small></span>
     </div>
     <div class="sticky-buy">

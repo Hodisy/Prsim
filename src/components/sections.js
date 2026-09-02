@@ -1,4 +1,4 @@
-import { dualAction, esc, icon, layoutLabel, mediaSlot, productImages, rating, trustpilot, wireLines } from "./primitives.js";
+import { dualAction, esc, icon, layoutLabel, mediaSlot, productImages, rating, responsiveImageAttributes, trustpilot, wireLines } from "./primitives.js";
 import { reviewSourceLabels } from "../data/reviews.js";
 import { comparisonProducts } from "../data/comparison-products.js";
 
@@ -93,7 +93,7 @@ const routineSelector = (node) => {
   return shell(node, "section-routine-selector", `
     <div class="routine-stage">
       <div class="wf-only media-wire"><span>Moment sélectionnable</span></div>
-      <div class="ui-only media-ui"><img data-routine-image src="${esc(first.image)}" alt="${esc(first.alt || first.label)}" loading="lazy" /><span class="asset-caption" data-routine-caption>${esc(first.caption)}</span></div>
+      <div class="ui-only media-ui"><img data-routine-image src="${esc(first.image)}" alt="${esc(first.alt || first.label)}"${responsiveImageAttributes(first.image, { sizes: "(max-width: 720px) 100vw, 54vw" })} /><span class="asset-caption" data-routine-caption>${esc(first.caption)}</span></div>
     </div>
     <div class="routine-band">
       <div class="wf-only routine-wire">${wireLines([66, 92, 72])}</div>
@@ -113,7 +113,7 @@ const loadoutSwitch = (node) => {
   return shell(node, "section-loadout-switch", `
     <div class="loadout-stage">
       <div class="wf-only media-wire"><span>Chargement sélectionnable</span></div>
-      <div class="ui-only media-ui"><img data-loadout-image src="${esc(first.image)}" alt="${esc(first.alt || first.label)}" loading="lazy" /><span class="asset-caption" data-loadout-caption>${esc(first.caption)}</span></div>
+      <div class="ui-only media-ui"><img data-loadout-image src="${esc(first.image)}" alt="${esc(first.alt || first.label)}"${responsiveImageAttributes(first.image, { sizes: "(max-width: 720px) 100vw, 54vw" })} /><span class="asset-caption" data-loadout-caption>${esc(first.caption)}</span></div>
     </div>
     <aside class="loadout-panel">
       <div class="wf-only">${wireLines([52, 88, 74])}<div class="wf-ratio-toggle"><i></i><i></i></div><span class="wf-paragraph"></span></div>
@@ -138,7 +138,7 @@ const sceneSelector = (node) => {
   return shell(node, "section-scene-selector", `
     <div class="scene-stage">
       <div class="wf-only media-wire"><span>Image principale sélectionnable</span></div>
-      <div class="ui-only media-ui"><img class="scene-stage-image" data-scene-image${colorAssetsAttr(first.colorAssets)} src="${esc(first.image)}" alt="${esc(first.alt || first.place)}" loading="lazy" /><span class="asset-caption" data-scene-caption>${esc(first.caption || first.place)}</span></div>
+      <div class="ui-only media-ui"><img class="scene-stage-image" data-scene-image${colorAssetsAttr(first.colorAssets)} src="${esc(first.image)}" alt="${esc(first.alt || first.place)}"${responsiveImageAttributes(first.image, { sizes: "(max-width: 720px) 100vw, 54vw" })} /><span class="asset-caption" data-scene-caption>${esc(first.caption || first.place)}</span></div>
     </div>
     <aside class="scene-panel" data-scene-selector>
       <div class="wf-only">${wireLines([48, 92, 72])}<span class="wf-paragraph"></span><div class="wf-scene-controls"><i></i><i></i><i></i></div>${dualAction(node.cta || "Acheter")}</div>
@@ -168,13 +168,13 @@ const photoProof = (node) => {
       <div class="ui-only photo-ratio-toggle" role="group" aria-label="Choisir le cadrage"><button type="button" class="active" data-photo-ratio="portrait" aria-pressed="true">Portrait 4:5</button><button type="button" data-photo-ratio="story" aria-pressed="false">Story 9:16</button></div>
     </div>
     <div class="photo-proof-grid" data-photo-proof-grid data-ratio="portrait">
-      ${proofs.map((proof) => `<figure class="photo-proof-card"><div class="wf-only media-wire"><span>${esc(proof.label)}</span></div><img class="ui-only"${colorAssetsAttr(proof.colorAssets)} src="${esc(proof.image)}" alt="${esc(proof.alt || proof.label)}" loading="lazy" /><figcaption class="ui-only"><strong>${esc(proof.label)}</strong><span>${esc(proof.note)}</span></figcaption></figure>`).join("")}
+      ${proofs.map((proof) => `<figure class="photo-proof-card"><div class="wf-only media-wire"><span>${esc(proof.label)}</span></div><img class="ui-only"${colorAssetsAttr(proof.colorAssets)} src="${esc(proof.image)}" alt="${esc(proof.alt || proof.label)}"${responsiveImageAttributes(proof.image, { sizes: "(max-width: 720px) 88vw, 31vw" })} /><figcaption class="ui-only"><strong>${esc(proof.label)}</strong><span>${esc(proof.note)}</span></figcaption></figure>`).join("")}
     </div>`);
 };
 
 const productGrid = (node) => {
   return shell(node, "section-products", `${heading(node, true)}<div class="product-grid">${comparisonProducts.map(({ name, price, size, note, image, recommended }) => `
-    <article class="product-tile ${recommended ? "featured" : ""}"><span class="wf-only wf-product-box"></span><div class="ui-only product-asset-small"><img src="${image}" alt="${esc(name)} · ${esc(size)}" loading="lazy" /></div><span class="ui-only card-note">${esc(note)}</span><strong class="ui-only">${esc(name)}</strong><span class="ui-only">${esc(size)}</span><b class="ui-only">${esc(price)}</b><div class="wf-only">${wireLines([72, 48])}</div></article>`).join("")}</div>`);
+    <article class="product-tile ${recommended ? "featured" : ""}"><span class="wf-only wf-product-box"></span><div class="ui-only product-asset-small"><img src="${image}" alt="${esc(name)} · ${esc(size)}"${responsiveImageAttributes(image, { sizes: "(max-width: 720px) 44vw, 260px" })} /></div><span class="ui-only card-note">${esc(note)}</span><strong class="ui-only">${esc(name)}</strong><span class="ui-only">${esc(size)}</span><b class="ui-only">${esc(price)}</b><div class="wf-only">${wireLines([72, 48])}</div></article>`).join("")}</div>`);
 };
 
 const airportStory = (node) => shell(node, "section-airport-story", `
@@ -200,7 +200,7 @@ const packing = (node) => {
     <div class="packing-items">${items.map((item, index) => {
       const normalized = typeof item === "string" ? { label: item } : item;
       const asset = normalized.asset
-        ? `<img class="packing-icon" src="${esc(normalized.asset)}" alt="" loading="lazy" />`
+        ? `<img class="packing-icon" src="${esc(normalized.asset)}" alt="" loading="lazy" decoding="async" />`
         : '<span class="packing-icon packing-icon-placeholder" aria-hidden="true"></span>';
       return `<div class="packing-item"><span class="wf-only"></span><div class="ui-only packing-item-top"><strong>${String(index + 1).padStart(2, "0")}</strong>${asset}</div><div class="ui-only packing-item-copy"><b>${esc(normalized.label || `Élément ${index + 1}`)}</b><small>${esc(normalized.specification || "Information à renseigner")}</small></div></div>`;
     }).join("")}</div>
@@ -228,7 +228,7 @@ const commuteProof = (node, profile) => {
     ${heading(node)}
     <p class="ui-only commute-proof-intro">${esc(node.body || "Le sac s’insère dans le trajet sans devenir un équipement de déplacement de plus.")}</p>
     <div class="commute-proof-images">
-      ${scenes.map((scene) => `<figure class="commute-proof-image"><div class="wf-only media-wire"><span>${esc(scene.label)}</span></div><img class="ui-only" src="${esc(scene.image)}" alt="${esc(scene.alt || scene.label)}" loading="lazy" /><figcaption class="ui-only"><strong>${esc(scene.caption)}</strong><span>${esc(scene.time)}</span></figcaption></figure>`).join("")}
+      ${scenes.map((scene) => `<figure class="commute-proof-image"><div class="wf-only media-wire"><span>${esc(scene.label)}</span></div><img class="ui-only" src="${esc(scene.image)}" alt="${esc(scene.alt || scene.label)}"${responsiveImageAttributes(scene.image, { sizes: "(max-width: 720px) 88vw, 44vw" })} /><figcaption class="ui-only"><strong>${esc(scene.caption)}</strong><span>${esc(scene.time)}</span></figcaption></figure>`).join("")}
     </div>
     <div class="commute-proof-rail">
       ${proofs.slice(0, 3).map((proof, index) => `<article><span class="wf-only wf-feature-icon"></span><div class="ui-only"><strong>${esc(proof)}</strong><p>${esc((node.proofNotes || [])[index] || "Une donnée rendue visible dans le trajet réel.")}</p></div></article>`).join("")}
@@ -317,7 +317,7 @@ const mosaic = (node) => {
   const images = node.images || defaults;
   return shell(node, "section-mosaic", `${heading(node, true)}<div class="mosaic-grid">${images.map((item) => `<figure class="mosaic-media">
     <div class="wf-only media-wire"><span>${esc(item.label)}</span></div>
-    <div class="ui-only mosaic-visual"><img class="product-media-image"${item.view ? ` data-product-view="${esc(item.view)}"` : ""}${colorAssetsAttr(item.colorAssets)} src="${esc(item.image)}" alt="${esc(item.alt || item.label)}" loading="lazy" /></div>
+    <div class="ui-only mosaic-visual"><img class="product-media-image"${item.view ? ` data-product-view="${esc(item.view)}"` : ""}${colorAssetsAttr(item.colorAssets)} src="${esc(item.image)}" alt="${esc(item.alt || item.label)}"${responsiveImageAttributes(item.image, { sizes: "(max-width: 720px) 88vw, 42vw" })} /></div>
     <figcaption class="ui-only"><strong>${esc(item.label)}</strong><span>${esc(item.caption || "PORT 70 / EN MOUVEMENT")}</span></figcaption>
   </figure>`).join("")}</div>`);
 };

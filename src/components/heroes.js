@@ -1,4 +1,4 @@
-import { copySlot, dualAction, esc, heroBundleOffer, heroTrustRail, layoutLabel, materialChoice, mediaSlot, nextOrderPromo, productImages, rating, trustpilot, wireLines } from "./primitives.js";
+import { copySlot, dualAction, esc, heroBundleOffer, heroTrustRail, layoutLabel, materialChoice, mediaSlot, nextOrderPromo, productImages, rating, responsiveImageAttributes, trustpilot, wireLines } from "./primitives.js";
 import { comparisonProducts } from "../data/comparison-products.js";
 
 const primaryReview = (profile) => profile.reviews?.[0] || { body: profile.quote || "", author: profile.author || "" };
@@ -22,7 +22,7 @@ const classicHero = (node, profile) => shell(node, "hero-classic", `
       [productImages.front, "Vue de face"],
       [productImages.rear, "Vue arrière"],
       [productImages.interior, "Vue intérieure"],
-    ].map(([src, label], index) => `<button type="button" class="${index === 0 ? "active" : ""}" data-gallery-image data-gallery-src="${src}" aria-label="${label}" aria-pressed="${index === 0}"><span class="wf-only"></span><img class="ui-only gallery-thumb-image" data-product-view="${src.split("/").at(-1)}" src="${src}" alt="" /></button>`).join("")}</div>
+    ].map(([src, label], index) => `<button type="button" class="${index === 0 ? "active" : ""}" data-gallery-image data-gallery-src="${src}" aria-label="${label}" aria-pressed="${index === 0}"><span class="wf-only"></span><img class="ui-only gallery-thumb-image" data-product-view="${src.split("/").at(-1)}" src="${src}" alt=""${responsiveImageAttributes(src, { sizes: "68px" })} /></button>`).join("")}</div>
     ${mediaSlot(node.media || "Galerie produit", "hero-media")}
   </div>
   <div class="classic-summary">
@@ -51,7 +51,7 @@ const priceHero = (node) => {
           <button type="button" class="price-card ${recommended ? "selected" : ""}" data-model="${name}" data-model-price="${price}" aria-pressed="${Boolean(recommended)}">
             <span class="wf-only wf-product-box"></span>
             <span class="ui-only card-note">${note}</span>
-            <span class="ui-only product-asset-small"><img data-color-assets="${esc(JSON.stringify(colorAssets))}" src="${image}" alt="${esc(note)} · sac ${size}" loading="lazy" /></span>
+            <span class="ui-only product-asset-small"><img data-color-assets="${esc(JSON.stringify(colorAssets))}" src="${image}" alt="${esc(note)} · sac ${size}"${responsiveImageAttributes(image, { sizes: "(max-width: 720px) 42vw, 220px" })} /></span>
             <strong class="ui-only">${name}</strong><span class="ui-only">${size}</span><b class="ui-only">${price}</b>
           </button>`).join("")}
       </div>
@@ -263,7 +263,7 @@ const sketchHero = (node) => {
       ${purchaseAction(node)}
     </div>
     <div class="sketch-gallery" aria-label="Étude du Passage 32 sous trois angles">
-      ${studies.map(([src, label], index) => `<figure class="sketch-card ${index === 0 ? "sketch-card-primary" : ""}"><span>0${index + 1}</span><img src="${src}" alt="Passage 32, vue ${label.toLocaleLowerCase("fr")}" /><figcaption>${label}</figcaption></figure>`).join("")}
+      ${studies.map(([src, label], index) => `<figure class="sketch-card ${index === 0 ? "sketch-card-primary" : ""}"><span>0${index + 1}</span><img src="${src}" alt="Passage 32, vue ${label.toLocaleLowerCase("fr")}"${responsiveImageAttributes(src, { priority: index === 0, sizes: "(max-width: 720px) 88vw, 42vw" })} /><figcaption>${label}</figcaption></figure>`).join("")}
     </div>`);
 };
 

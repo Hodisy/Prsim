@@ -1,5 +1,5 @@
 import { assetManifest, baseSignatureCount, forestDimensions, gapCandidates, localVariationCombinationCount, potentialScenarioCount, scenarioSeeds } from "../data/scenario-system.js";
-import { esc } from "../components/primitives.js";
+import { esc, responsiveImageAttributes } from "../components/primitives.js";
 import { systemPipeline } from "../components/system-pipeline.js";
 import { assetUsageForAssembly, contentUsageForAssembly, resolveLayoutInstance } from "../core/assembly.js";
 import { editableFieldsFor } from "../data/layout-registry.js";
@@ -174,7 +174,7 @@ show_customer_evidence({
 function assetCard(asset, index) {
   return `
     <article class="asset-row" data-asset-type="${asset.type}">
-      <div class="asset-thumb"><img src="${asset.path}" alt="" loading="lazy"></div>
+      <div class="asset-thumb"><img src="${asset.path}" alt=""${responsiveImageAttributes(asset.path, { sizes: "180px" })}></div>
       <div class="asset-identity"><i class="registry-order">A${String(index + 1).padStart(3, "0")}</i><strong>${asset.id}</strong><span>${asset.path.replace("./assets/", "")}</span></div>
       <span class="asset-type">${asset.type}</span>
       <span class="asset-role">${asset.role}</span>
@@ -458,7 +458,7 @@ function renderAssemblyInstance(instance, index) {
         </section>
         <section>
           <header><strong>Images liées</strong><span>${assets.length}</span></header>
-          <div class="assembly-instance-assets">${assets.length ? assets.map((usage) => `<figure><img src="${esc(usage.asset.path)}" alt=""><figcaption><b>${esc(usage.slot)}</b><span>${esc(usage.assetId)}</span></figcaption></figure>`).join("") : "<p>Aucune image liée à cette instance.</p>"}</div>
+          <div class="assembly-instance-assets">${assets.length ? assets.map((usage) => `<figure><img src="${esc(usage.asset.path)}" alt=""${responsiveImageAttributes(usage.asset.path, { sizes: "160px" })}><figcaption><b>${esc(usage.slot)}</b><span>${esc(usage.assetId)}</span></figcaption></figure>`).join("") : "<p>Aucune image liée à cette instance.</p>"}</div>
         </section>
         <section>
           <header><strong>Avis liés</strong><span>${reviews.length}</span></header>
@@ -477,7 +477,7 @@ function renderGroupedAssemblyContent(instances, assets, reviews) {
       <header><strong>01 · Contenu groupé</strong><span>${copy.length + assets.length + reviews.length}</span></header>
       <div class="assembly-grouped-grid">
         <section><header><strong>Copy</strong><span>${copy.length}</span></header><div class="assembly-copy-list">${copy.length ? copy.map((entry) => `<article><span>${esc(entry.instance.templateId)} · ${esc(entry.field.label)}</span><p>${esc(entry.value)}</p></article>`).join("") : "<p>Aucun copy injecté.</p>"}</div></section>
-        <section><header><strong>Assets</strong><span>${assets.length}</span></header><div class="assembly-asset-list">${assets.length ? assets.map((usage) => `<figure><img src="${esc(usage.asset.path)}" alt=""><figcaption><b>${esc(usage.assetId)}</b><small>${esc(usage.templateId)} · ${esc(usage.slot)}</small></figcaption></figure>`).join("") : "<p>Aucun asset lié.</p>"}</div></section>
+        <section><header><strong>Assets</strong><span>${assets.length}</span></header><div class="assembly-asset-list">${assets.length ? assets.map((usage) => `<figure><img src="${esc(usage.asset.path)}" alt=""${responsiveImageAttributes(usage.asset.path, { sizes: "180px" })}><figcaption><b>${esc(usage.assetId)}</b><small>${esc(usage.templateId)} · ${esc(usage.slot)}</small></figcaption></figure>`).join("") : "<p>Aucun asset lié.</p>"}</div></section>
         <section><header><strong>Avis</strong><span>${reviews.length}</span></header><div class="assembly-review-list">${reviews.length ? reviews.map((usage) => `<article><span>${esc(usage.templateId)} · ${esc(usage.reviewId)}</span><blockquote>« ${esc(usage.review?.body || "Référence introuvable")} »</blockquote><small>${esc(reviewSourceLabels[usage.review?.source] || usage.review?.source || "inconnu")}</small></article>`).join("") : "<p>Aucun avis lié.</p>"}</div></section>
       </div>
     </section>`;

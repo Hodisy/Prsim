@@ -1,4 +1,4 @@
-import { esc, productImages, shopHeader } from "../components/primitives.js";
+import { esc, productImages, responsiveImageAttributes, shopHeader } from "../components/primitives.js";
 
 let clockInstance = 0;
 
@@ -298,7 +298,7 @@ export function renderPaymentPage(purchase) {
         </section>
         <section class="payment-checkout" aria-label="Récapitulatif et paiement">
           <div class="payment-checkout-top"><p>VOTRE PANIER</p><span>PAIEMENT SÉCURISÉ</span></div>
-          <div class="payment-product"><div class="payment-product-image"><img src="${esc(purchase?.image || productImages.hero)}" alt="${esc(product)} · ${esc(color)}" /></div><div class="payment-product-copy"><h3>${esc(product)}</h3><p>${esc(color)} · ${esc(bundle)}</p><strong>${esc(price)}</strong></div></div>
+          <div class="payment-product"><div class="payment-product-image"><img src="${esc(purchase?.image || productImages.hero)}" alt="${esc(product)} · ${esc(color)}"${responsiveImageAttributes(purchase?.image || productImages.hero, { priority: true, sizes: "100px" })} /></div><div class="payment-product-copy"><h3>${esc(product)}</h3><p>${esc(color)} · ${esc(bundle)}</p><strong>${esc(price)}</strong></div></div>
           <dl class="payment-totals"><div><dt>Sous-total</dt><dd>${esc(price)}</dd></div><div><dt>Livraison</dt><dd class="payment-free">Offerte</dd></div><div class="payment-total"><dt>Total</dt><dd>${esc(price)}</dd></div></dl>
           <form class="payment-form" data-payment-form>
             <div class="payment-form-head"><span>Coordonnées de paiement</span><small>Prototype sécurisé</small></div>

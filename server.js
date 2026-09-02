@@ -17,6 +17,21 @@ const socialColorLabels = Object.freeze({
   "liberty-burgundy": { fr: "Liberty bordeaux", en: "Liberty burgundy" },
 });
 
+const socialCardNames = Object.freeze({
+  p1: Object.freeze({
+    black: "s1-black.jpg",
+    cream: "s1-cream.jpg",
+    "liberty-blue": "s1-liberty-blue.jpg",
+    "liberty-burgundy": "s1-liberty-burgundy.jpg",
+  }),
+  p2: Object.freeze({
+    black: "s2-black.jpg",
+    cream: "s2-cream.jpg",
+    "liberty-blue": "s2-liberty-blue.jpg",
+    "liberty-burgundy": "s2-liberty-burgundy.jpg",
+  }),
+});
+
 const escapeAttribute = (value = "") => String(value)
   .replaceAll("&", "&amp;")
   .replaceAll('"', "&quot;")
@@ -26,6 +41,32 @@ const escapeAttribute = (value = "") => String(value)
 function absoluteAssetUrl(path, origin) {
   const cleanPath = String(path || "").replace(/^\.\//, "/");
   return new URL(cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`, origin).href;
+}
+
+function firstForwardedValue(value = "") {
+  if (!value) return "";
+  return String(value).split(",")[0].trim();
+}
+
+function imageContentType(path = "") {
+  if (/\.jpe?g(?:$|\?)/i.test(path)) return "image/jpeg";
+  if (/\.webp(?:$|\?)/i.test(path)) return "image/webp";
+  if (/\.avif(?:$|\?)/i.test(path)) return "image/avif";
+  if (/\.svg(?:$|\?)/i.test(path)) return "image/svg+xml";
+  return "image/png";
+}
+
+function publicOriginFor(request, url) {
+  const configuredOrigin = String(Bun.env.PRSIM_PUBLIC_ORIGIN || "").replace(/\/$/, "");
+  if (configuredOrigin) return configuredOrigin;
+  const host = firstForwardedValue(request.headers.get("x-forwarded-host"))
+    || request.headers.get("host")
+    || url.host;
+  const localHost = /^(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(host);
+  let protocol = firstForwardedValue(request.headers.get("x-forwarded-proto"))
+    || url.protocol.replace(":", "");
+  if (protocol === "http" && !localHost) protocol = "https";
+  return `${protocol}://${host}`;
 }
 
 function socialExperience(route, origin) {
@@ -39,6 +80,14 @@ function socialExperience(route, origin) {
   const image = hero.colorAssets?.[colorway]
     || hero.asset
     || `./assets/products/72h-${colorway}/01-hero-three-quarter.png`;
+  const dedicatedSocialCard = !route.heroPurpose && route.variantId === "base"
+    ? socialCardNames[route.scenarioKey]?.[colorway]
+    : null;
+  const socialImage = dedicatedSocialCard
+    ? `./assets/social/${dedicatedSocialCard}`
+    : route.scenarioKey === "classic"
+      ? "./assets/social/port70-default.jpg"
+      : image;
   const heading = translateText(hero.title || profile.title || "PORT 70", language);
   const body = translateText(hero.body || profile.sub || "Adaptive shopping experience by PORT 70.", language);
   const colorLabel = socialColorLabels[colorway]?.[language] || colorway;
@@ -52,7 +101,10 @@ function socialExperience(route, origin) {
     language,
     title: `PORT 70 | ${heading}`,
     description,
-    image: absoluteAssetUrl(image, origin),
+    image: absoluteAssetUrl(socialImage, origin),
+    imageType: imageContentType(socialImage),
+    imageWidth: dedicatedSocialCard || route.scenarioKey === "classic" ? 1200 : null,
+    imageHeight: dedicatedSocialCard || route.scenarioKey === "classic" ? 630 : null,
     imageAlt: `${translateText(hero.media || heading, language)} · ${socialColorLabels[colorway]?.[language] || colorway}`,
     canonical: new URL(experiencePath(route.code), origin).href,
   };
@@ -69,11 +121,17 @@ async function renderExperienceHtml(route, origin) {
     <meta property="og:title" content="${escapeAttribute(social.title)}" />
     <meta property="og:description" content="${escapeAttribute(social.description)}" />
     <meta property="og:image" content="${escapeAttribute(social.image)}" />
+    <meta property="og:image:secure_url" content="${escapeAttribute(social.image)}" />
+    <meta property="og:image:type" content="${social.imageType}" />
+    ${social.imageWidth ? `<meta property="og:image:width" content="${social.imageWidth}" />` : ""}
+    ${social.imageHeight ? `<meta property="og:image:height" content="${social.imageHeight}" />` : ""}
     <meta property="og:image:alt" content="${escapeAttribute(social.imageAlt)}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeAttribute(social.title)}" />
     <meta name="twitter:description" content="${escapeAttribute(social.description)}" />
-    <meta name="twitter:image" content="${escapeAttribute(social.image)}" />`;
+    <meta name="twitter:image" content="${escapeAttribute(social.image)}" />
+    <meta name="twitter:image:alt" content="${escapeAttribute(social.imageAlt)}" />
+    <link rel="preload" as="image" href="${escapeAttribute(social.image)}" fetchpriority="high" />`;
   return (await entryFile.text())
     .replace('<html lang="en">', `<html lang="${social.language}">`)
     .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${escapeAttribute(social.description)}" />`)
@@ -86,18 +144,27 @@ const server = Bun.serve({
   port,
   async fetch(request) {
     const url = new URL(request.url);
+    const publicOrigin = publicOriginFor(request, url);
     const isExperiencePage = url.pathname === "/"
       || url.pathname === `/${entry}`
       || /^\/s\d/i.test(url.pathname);
 
     if (isExperiencePage) {
       const route = parseExperiencePath(url.pathname, { hasScenario });
-      if (!route.valid) return Response.redirect(`${url.origin}/#preview`, 302);
+      if (!route.valid) {
+        const classicRoute = parseExperiencePath("/", { hasScenario });
+        return new Response(await renderExperienceHtml(classicRoute, publicOrigin), {
+          headers: {
+            "Cache-Control": "no-store",
+            "Content-Type": "text/html; charset=utf-8",
+          },
+        });
+      }
       const canonicalPath = experiencePath(route.code);
       if (url.pathname !== "/" && url.pathname !== `/${entry}` && canonicalPath !== url.pathname) {
-        return Response.redirect(`${url.origin}${canonicalPath}`, 302);
+        return Response.redirect(`${publicOrigin}${canonicalPath}`, 302);
       }
-      return new Response(await renderExperienceHtml(route, url.origin), {
+      return new Response(await renderExperienceHtml(route, publicOrigin), {
         headers: {
           "Cache-Control": "no-store",
           "Content-Type": "text/html; charset=utf-8",
@@ -114,11 +181,25 @@ const server = Bun.serve({
 
     const file = Bun.file(join(root, relativePath));
     if (!(await file.exists())) {
+      if (!/(?:^|\/)[^/]+\.[^/]+$/.test(relativePath)) {
+        const classicRoute = parseExperiencePath("/", { hasScenario });
+        return new Response(await renderExperienceHtml(classicRoute, publicOrigin), {
+          headers: {
+            "Cache-Control": "no-store",
+            "Content-Type": "text/html; charset=utf-8",
+          },
+        });
+      }
       return new Response("Not found", { status: 404 });
     }
 
+    const isImage = relativePath.startsWith("assets/") && /\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(relativePath);
     return new Response(file, {
-      headers: { "Cache-Control": "no-store" },
+      headers: {
+        "Cache-Control": isImage
+          ? "public, max-age=2592000, stale-while-revalidate=86400"
+          : "public, max-age=300, stale-while-revalidate=86400",
+      },
     });
   },
 });

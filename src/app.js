@@ -16,6 +16,7 @@ import { scenarioSeeds } from "./data/scenario-system.js";
 import { findBlockByPurpose, inferBlockForNode, instantiateBlock } from "./data/block-registry.js";
 import { selectCustomerEvidence } from "./data/reviews.js";
 import { experiencePath, parseExperienceCode, parseExperiencePath, serializeExperienceCode } from "./core/experience-route.js";
+import { setResponsiveImageSource } from "./components/primitives.js";
 
 const elements = {
   tabs: document.querySelector("#tabs"),
@@ -180,7 +181,7 @@ function applyProfileColorway(profile, override) {
       const sources = JSON.parse(image.dataset.colorAssets);
       const nextSource = sources[colorway] || sources.black || sources.cream;
       if (nextSource && image.getAttribute("src") !== nextSource) {
-        image.src = nextSource;
+        setResponsiveImageSource(image, nextSource);
         image.animate?.([{ opacity: .45 }, { opacity: 1 }], { duration: 260, easing: "ease-out" });
       }
     } catch { /* A malformed optional map must not block product selection. */ }
@@ -191,7 +192,7 @@ function applyProfileColorway(profile, override) {
     const view = colorway === "black" || coreColorwayViews.has(requestedView)
       ? requestedView
       : colorwayFallbackViews[requestedView] || "01-hero-three-quarter.png";
-    image.src = `./assets/products/72h-${colorway}/${view}`;
+    setResponsiveImageSource(image, `./assets/products/72h-${colorway}/${view}`);
   });
 
   elements.canvas.querySelectorAll("[data-gallery-image]").forEach((button) => {
@@ -237,8 +238,7 @@ function applyLibrarySketchAssets() {
   const images = [...page.querySelectorAll(".pattern-viewport img")]
     .filter((image) => !image.closest(".color-option"));
   images.forEach((image, index) => {
-    image.src = sketchStudyAssets[index % sketchStudyAssets.length];
-    image.removeAttribute("srcset");
+    setResponsiveImageSource(image, sketchStudyAssets[index % sketchStudyAssets.length]);
     image.removeAttribute("data-color-assets");
   });
 
@@ -256,8 +256,7 @@ function applySketchExperience() {
 
   const images = [...page.querySelectorAll("img")].filter((image) => !image.closest(".color-option"));
   images.forEach((image, index) => {
-    image.src = sketchStudyAssets[index % sketchStudyAssets.length];
-    image.removeAttribute("srcset");
+    setResponsiveImageSource(image, sketchStudyAssets[index % sketchStudyAssets.length]);
   });
 
   const sourceAttributes = ["data-gallery-src", "data-scene-src", "data-routine-src", "data-loadout-src"];
@@ -1549,7 +1548,7 @@ document.addEventListener("click", (event) => {
     });
     const mainImage = gallery.querySelector(".product-media-image");
     if (mainImage) {
-      mainImage.src = galleryImage.dataset.gallerySrc;
+      setResponsiveImageSource(mainImage, galleryImage.dataset.gallerySrc);
       mainImage.dataset.productView = galleryImage.querySelector("[data-product-view]")?.dataset.productView || mainImage.dataset.productView;
     }
     return;
@@ -1620,7 +1619,7 @@ document.addEventListener("click", (event) => {
     } else {
       delete image.dataset.colorAssets;
     }
-    image.src = sceneSource;
+    setResponsiveImageSource(image, sceneSource);
     image.alt = sceneChoice.dataset.sceneAlt;
     section.querySelector("[data-scene-caption]").textContent = sceneChoice.dataset.sceneCaption;
     selector.querySelector("[data-scene-note]").textContent = sceneChoice.dataset.sceneNote;
@@ -1638,7 +1637,7 @@ document.addEventListener("click", (event) => {
     });
     const image = section.querySelector("[data-routine-image]");
     image.classList.add("changing");
-    image.src = routineChoice.dataset.routineSrc;
+    setResponsiveImageSource(image, routineChoice.dataset.routineSrc);
     image.alt = routineChoice.dataset.routineAlt;
     section.querySelector("[data-routine-caption]").textContent = routineChoice.dataset.routineCaption;
     section.querySelector("[data-routine-note]").textContent = routineChoice.dataset.routineNote;
@@ -1656,7 +1655,7 @@ document.addEventListener("click", (event) => {
     });
     const image = section.querySelector("[data-loadout-image]");
     image.classList.add("changing");
-    image.src = loadoutChoice.dataset.loadoutSrc;
+    setResponsiveImageSource(image, loadoutChoice.dataset.loadoutSrc);
     image.alt = loadoutChoice.dataset.loadoutAlt;
     section.querySelector("[data-loadout-caption]").textContent = loadoutChoice.dataset.loadoutCaption;
     section.querySelector("h4[data-loadout-title]").textContent = loadoutChoice.dataset.loadoutTitle;
