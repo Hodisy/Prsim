@@ -198,6 +198,13 @@
 }
 .scenario-inspector { position: sticky; top: 20px; padding: 24px; color: #fff; background: #111; }
 .scenario-inspector > span { color: #888; font: 700 9px ui-monospace, monospace; }
+.scenario-shortcut { display: grid; gap: 6px; margin: -6px 0 16px; padding: 11px 12px; color: #ddd; background: #181818; border: 1px solid #333; }
+.scenario-shortcut small { color: #777; font: 700 8px/1 ui-monospace, monospace; letter-spacing: .08em; }
+.scenario-shortcut strong { font: 700 14px/1 ui-monospace, monospace; }
+.scenario-shortcut span { color: #8e8e89; font: 500 8px/1.45 ui-monospace, monospace; overflow-wrap: anywhere; }
+.scenario-shortcut details { padding-top: 5px; border-top: 1px solid #303030; }
+.scenario-shortcut summary { color: #aaa; cursor: pointer; font: 650 8px/1.4 ui-monospace, monospace; text-transform: uppercase; }
+.scenario-shortcut details p { margin: 6px 0 0; color: #777; font: 500 8px/1.5 ui-monospace, monospace; }
 .scenario-inspector h3 { margin: 10px 0 20px; font: 500 31px/1.05 Georgia, serif; }
 .scenario-inspector dl { margin: 0 0 20px; }
 .scenario-inspector dl div { display: flex; justify-content: space-between; gap: 15px; padding: 8px 0; border-bottom: 1px solid #333; font-size: 10px; }

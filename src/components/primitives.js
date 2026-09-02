@@ -72,6 +72,7 @@ export const icon = (name) => {
     truck: '<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
     gift: '<path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7H8.5a2.5 2.5 0 1 1 2.2-3.7L12 7Zm0 0h3.5a2.5 2.5 0 1 0-2.2-3.7L12 7Z"/>',
     shield: '<path d="M12 3 4.5 6v5.5c0 4.5 3.2 7.7 7.5 9.5 4.3-1.8 7.5-5 7.5-9.5V6L12 3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
+    share: '<path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M6 11v8h12v-8"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
     arrow: '<path d="M5 12h14M14 7l5 5-5 5"/>',
   };
@@ -178,7 +179,11 @@ export const shopHeader = () => `
     </nav>
     <div class="shop-actions">
       <span class="wf-only wf-icons"><i></i><i></i></span>
-      <span class="ui-only" aria-hidden="true">${icon("search")} ${icon("bag")}<b>0</b></span>
+      <span class="ui-only">
+        <button class="shop-share-action" type="button" data-share-experience aria-label="Partager cette expérience" title="Partager">${icon("share")}</button>
+        ${icon("search")} ${icon("bag")}<b>0</b>
+        <span class="shop-share-feedback" data-share-feedback role="status" aria-live="polite"></span>
+      </span>
     </div>
   </header>`;
 

@@ -133,12 +133,14 @@ body.profile-preview .stage { min-height: calc(100vh - var(--appbar-height) - va
 /* The payment is reviewed as its own, full-height screen rather than a card in the preview canvas. */
 body.payment-preview .workspace { padding: 0; }
 body.payment-preview .appbar,
-body.payment-preview .tabs-wrap,
+body.payment-preview .tabs-wrap { display: none; }
+body.payment-preview.preview-chrome-visible .appbar,
+body.payment-preview.preview-chrome-visible .tabs-wrap { display: flex; }
 body.payment-preview .workspace-head,
-body.payment-preview .sequence { display: none !important; }
+body.payment-preview .sequence { display: none; }
 body.payment-preview .stage { height: 100vh; min-height: 0; padding: 0; border: 0; border-radius: 0; }
+body.payment-preview.preview-chrome-visible .stage { height: calc(100vh - var(--appbar-height) - var(--tabs-height)); }
 body.payment-preview .canvas { height: 100%; min-height: 0; }
-body.payment-preview .shop-prsim-trigger { display: none !important; }
 
 .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: square; stroke-linejoin: miter; }
 
@@ -199,7 +201,8 @@ body.preview-home.preview-chrome-visible .stage { min-height: calc(100vh - var(-
 
 .shop-brand-lockup { display: grid; align-content: center; justify-items: start; gap: 4px; }
 .shop-prsim-trigger { display: none; }
-body.preview-home .shop-prsim-trigger {
+body.preview-home .shop-prsim-trigger,
+body.payment-preview .shop-prsim-trigger {
   display: inline-flex;
   align-items: center;
   padding: 0;
@@ -212,6 +215,12 @@ body.preview-home .shop-prsim-trigger {
   text-transform: uppercase;
 }
 .shop-prsim-trigger:hover, .shop-prsim-trigger:focus-visible { color: #111; }
+.shop-share-action { width: 24px; height: 28px; display: inline-grid; place-items: center; padding: 0; color: inherit; background: transparent; border: 0; cursor: pointer; }
+.shop-share-action .icon { width: 19px; height: 19px; }
+.shop-share-action:hover, .shop-share-action:focus-visible { opacity: .55; }
+.shop-actions > .ui-only { position: relative; }
+.shop-share-feedback { position: absolute; top: calc(100% + 9px); right: 0; z-index: 20; width: max-content; max-width: 190px; padding: 7px 9px; color: #fff; background: #111; font: 650 8px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; text-transform: uppercase; pointer-events: none; opacity: 0; transform: translateY(-3px); transition: opacity .18s ease, transform .18s ease; }
+.shop-share-feedback.is-visible { opacity: 1; transform: translateY(0); }
 
 @media (max-width: 620px) {
   body.preview-home .canvas.mobile { width: 100vw; }

@@ -1,4 +1,4 @@
-import { assemblies, profiles, views } from "./data/profiles.js";
+import { assemblies, profiles, resolveProfileVariant, views } from "./data/profiles.js";
 import { renderBrandPage } from "./pages/brand.js";
 import { renderLibraryPage } from "./pages/library.js";
 import { formatElapsed, renderPaymentPage, startPaymentExperience } from "./pages/payment.js";
@@ -14,6 +14,8 @@ import { languageName, localizeElement, normalizeLanguage, translateText } from 
 import { navigationAnchors } from "./core/navigation-anchors.js";
 import { scenarioSeeds } from "./data/scenario-system.js";
 import { findBlockByPurpose, inferBlockForNode, instantiateBlock } from "./data/block-registry.js";
+import { selectCustomerEvidence } from "./data/reviews.js";
+import { experiencePath, parseExperienceCode, parseExperiencePath, serializeExperienceCode } from "./core/experience-route.js";
 
 const elements = {
   tabs: document.querySelector("#tabs"),
@@ -51,7 +53,7 @@ const emptyExperienceMutations = () => ({ heroPurpose: null, operations: [], cus
 const state = {
   mode: safeStorage.get("prsim-preview-mode", "ui"),
   viewport: safeStorage.get("prsim-preview-viewport", compactViewportQuery.matches ? "mobile" : "desktop"),
-  language: normalizeLanguage(safeStorage.get("prsim-language", "fr")),
+  language: normalizeLanguage(safeStorage.get("prsim-language", "en")),
   classicColorway: safeStorage.get("prsim-classic-colorway", "black"),
   view: "preview",
   transition: 0,
@@ -71,8 +73,10 @@ const state = {
   brandEditing: false,
   brandDraft: null,
   previewScenario: "classic",
+  previewVariant: "base",
   previewResolution: null,
   experienceMutations: emptyExperienceMutations(),
+  bundleOverride: null,
   selectionSource: "default",
   lastNavigation: null,
   previewHeaderVisible: false,
@@ -80,6 +84,8 @@ const state = {
   toolRegistration: null,
   toolRegistrationDeferred: false,
   analytics: storedAnalytics(),
+  appliedRoutePath: null,
+  inboundRoute: null,
 };
 
 const sessionStartedAt = performance.now();
@@ -266,9 +272,166 @@ function applySketchExperience() {
   });
 }
 
+const directViewKeys = new Set(views.filter((view) => !profiles[view.key]).map((view) => view.key));
+const hasScenario = (key) => Boolean(profiles[key] && assemblies[key]);
+const profileProducts = Object.freeze({ p1: "passage-24", p4: "passage-36", p9: "passage-42", p14: "passage-36" });
+const evidenceBlockPurpose = Object.freeze({
+  overall: "customer_rating",
+  similar_use: "customer_context",
+  long_term: "customer_long_term",
+  balanced: "customer_balanced",
+  color: "customer_color",
+  durability: "customer_long_term",
+  weather: "customer_context",
+  comfort: "customer_context",
+  cabin: "customer_context",
+  organization: "customer_context",
+  gift: "customer_context",
+  returns: "customer_balanced",
+  value: "customer_balanced",
+});
+
+const profileDefaultProduct = (key) => profileProducts[key] || "passage-32";
+const profileDefaultBundle = (profile) => Boolean(profile?.hero?.bundle && profile.hero.bundle.selected !== false);
+
+function routeEvidence(route, colorway) {
+  if (!route.evidence) return null;
+  const evidence = selectCustomerEvidence({
+    concern: "",
+    focus: route.evidence.focus,
+    source: route.evidence.source,
+    profileKey: route.scenarioKey,
+    color: colorway,
+  });
+  return {
+    concern: "",
+    source: route.evidence.source,
+    evidence,
+    blockPurpose: evidenceBlockPurpose[evidence.focus] || "customer_context",
+  };
+}
+
+function applyInboundExperienceRoute(route) {
+  const profile = resolveProfileVariant(route.scenarioKey, route.variantId) || profiles[route.scenarioKey];
+  resetPrsimToolState();
+  state.previewScenario = route.scenarioKey;
+  state.previewVariant = route.variantId;
+  const routePrepared = Boolean(route.localVariations?.length || route.heroPurpose || route.operations?.length || route.evidence);
+  state.previewResolution = routePrepared ? { localVariations: route.localVariations || [], sharedRoute: true } : null;
+  state.previewSketch = false;
+  state.selectedScenario = route.scenarioKey;
+  state.selectionSource = "shared_experience_path";
+  state.lastNavigation = null;
+  state.toolColorway = route.colorway || profile.colorway || "black";
+  state.toolProductId = route.productId || profileDefaultProduct(route.scenarioKey);
+  state.bundleOverride = route.bundleEnabled;
+  state.experienceMutations = {
+    heroPurpose: route.heroPurpose,
+    operations: route.operations || [],
+    customerEvidence: routeEvidence(route, state.toolColorway),
+  };
+  selectVariant(state.toolProductId, state.toolColorway);
+  const bundleEnabled = route.bundleEnabled ?? profileDefaultBundle(profile);
+  setCommerceBundle(route.scenarioKey === "p2" ? "gift_pack" : "organization_pack", bundleEnabled);
+  state.language = normalizeLanguage(route.language || "en");
+  safeStorage.set("prsim-language", state.language);
+  state.inboundRoute = {
+    scenario: route.scenarioKey,
+    variant: route.variantId,
+    code: route.code,
+  };
+  if (location.hash === "#payment" && !state.purchase) {
+    const product = getProduct(state.toolProductId);
+    const basePrice = Number.parseInt(profile.price, 10) || product.price_eur;
+    const bundlePrice = bundleEnabled ? (route.scenarioKey === "p2" ? 12 : 20) : 0;
+    state.purchase = {
+      productId: product.id,
+      productLabel: product.title,
+      colorway: state.toolColorway,
+      colorLabel: colorwayNames[state.toolColorway] || state.toolColorway,
+      bundleEnabled,
+      price: `${basePrice + bundlePrice} €`,
+      image: `./assets/products/72h-${state.toolColorway}/01-hero-three-quarter.png`,
+      source: "shared_experience_path",
+      sourceLabel: "un lien partagé",
+    };
+  }
+}
+
+function currentExperienceCode() {
+  if (state.previewScenario === "classic") return "";
+  const profile = resolveProfileVariant(state.previewScenario, state.previewVariant) || profiles[state.previewScenario];
+  return serializeExperienceCode({
+    scenarioKey: state.previewScenario,
+    variantId: state.previewVariant,
+    language: state.language,
+    colorway: state.toolColorway || profile.colorway || "black",
+    defaultColorway: profile.colorway || "black",
+    bundleEnabled: state.bundleOverride,
+    defaultBundleEnabled: profileDefaultBundle(profile),
+    productId: state.toolProductId || profileDefaultProduct(state.previewScenario),
+    defaultProductId: profileDefaultProduct(state.previewScenario),
+    heroPurpose: state.experienceMutations.heroPurpose,
+    localVariations: state.previewResolution?.localVariations || [],
+    operations: state.experienceMutations.operations,
+    evidence: state.experienceMutations.customerEvidence && {
+      focus: state.experienceMutations.customerEvidence.evidence?.focus,
+      source: state.experienceMutations.customerEvidence.source,
+    },
+  });
+}
+
+function syncExperienceUrl({ view = state.view, push = false } = {}) {
+  const code = currentExperienceCode();
+  const path = experiencePath(code);
+  const hash = directViewKeys.has(view) ? `#${view}` : "#preview";
+  const search = isAdminMode() ? "?admin=1" : "";
+  const url = `${path}${search}${hash}`;
+  if (`${location.pathname}${location.search}${location.hash}` !== url) {
+    history[push ? "pushState" : "replaceState"](null, "", url);
+  }
+  state.appliedRoutePath = path;
+  return `${location.origin}${path}${hash}`;
+}
+
+function applyPathRoute() {
+  let route = parseExperiencePath(location.pathname, { hasScenario });
+  if (!route.valid) {
+    resetPreviewExperience({ preserveProductChoices: false });
+    state.previewHeaderVisible = false;
+    const search = isAdminMode() ? "?admin=1" : "";
+    history.replaceState(null, "", `/${search}#preview`);
+    state.appliedRoutePath = "/";
+    return;
+  }
+  const canonicalPath = experiencePath(route.code);
+  if (canonicalPath !== location.pathname) {
+    history.replaceState(null, "", `${canonicalPath}${location.search}${location.hash || "#preview"}`);
+  }
+  if (state.appliedRoutePath === canonicalPath) return;
+  state.appliedRoutePath = canonicalPath;
+  if (route.scenarioKey === "classic") {
+    resetPreviewExperience({ preserveProductChoices: false });
+    state.inboundRoute = null;
+  } else {
+    applyInboundExperienceRoute(route);
+  }
+}
+
 function keyFromHash() {
-  const key = location.hash.replace(/^#/, "");
-  return views.some((view) => view.key === key) ? key : "preview";
+  const hashValue = location.hash.replace(/^#/, "").trim();
+  if (/^s\d/i.test(hashValue)) {
+    const legacy = parseExperienceCode(hashValue, { hasScenario });
+    if (legacy.valid && legacy.scenarioKey !== "classic") {
+      history.replaceState(null, "", `${experiencePath(legacy.code)}${location.search}#preview`);
+      state.appliedRoutePath = null;
+    }
+  }
+  applyPathRoute();
+  const view = location.hash.replace(/^#/, "");
+  if (directViewKeys.has(view)) return view;
+  history.replaceState(null, "", `${location.pathname}${location.search}#preview`);
+  return "preview";
 }
 
 function isAdminMode() {
@@ -294,13 +457,14 @@ function syncLanguageControl() {
 }
 
 function syncPreviewChrome() {
-  const headerVisible = state.view === "preview" && state.previewHeaderVisible;
+  const isPreviewExperience = state.view === "preview" || state.view === "payment";
+  const headerVisible = isPreviewExperience && state.previewHeaderVisible;
   document.body.classList.toggle("preview-chrome-visible", headerVisible);
   document.querySelectorAll("[data-preview-menu-toggle]").forEach((button) => {
     button.setAttribute("aria-expanded", String(headerVisible));
   });
   document.querySelectorAll("[data-preview-header-hide]").forEach((button) => {
-    button.disabled = state.view !== "preview";
+    button.disabled = !isPreviewExperience;
   });
 }
 
@@ -338,7 +502,8 @@ function scrollProfileIntoView() {
 }
 
 function previewProfile() {
-  const base = structuredClone(profiles[state.previewScenario] || profiles.classic);
+  const routedProfile = resolveProfileVariant(state.previewScenario, state.previewVariant);
+  const base = structuredClone(routedProfile || profiles[state.previewScenario] || profiles.classic);
   const variations = state.previewResolution?.localVariations || [];
   const claimedIndexes = new Set();
   const replaceableIndex = (preferredVariants = []) => {
@@ -381,12 +546,28 @@ function previewProfile() {
     if (variation.slot === "offer") base.hero.promotion = structuredClone(profiles.classic.hero.promotion);
   });
 
+  if (state.bundleOverride !== null) {
+    if (!base.hero.bundle && state.bundleOverride) {
+      const basePrice = Number.parseInt(base.price, 10) || 149;
+      base.hero.bundle = {
+        ...structuredClone(profiles.classic.hero.bundle),
+        basePrice,
+        totalPrice: basePrice + 20,
+        baseCta: base.hero.cta,
+        cta: `Acheter avec le pack · ${basePrice + 20} €`,
+      };
+    }
+    if (base.hero.bundle) base.hero.bundle.selected = state.bundleOverride;
+  }
+
   const mutations = state.experienceMutations;
   if (mutations.heroPurpose) {
     const definition = findBlockByPurpose("hero", mutations.heroPurpose);
     const nextHero = instantiateBlock(definition, profiles);
+    const preservedBundle = base.hero.bundle;
     base.hero = {
       ...nextHero,
+      bundle: preservedBundle || nextHero.bundle || null,
       colorSelector: base.hero.colorSelector || nextHero.colorSelector || "swatches",
     };
   }
@@ -401,6 +582,25 @@ function previewProfile() {
       });
 
     mutations.operations.forEach((mutation) => {
+      const requestedPosition = Number(mutation.position);
+      const requestedIndex = Number.isInteger(requestedPosition)
+        ? Math.max(0, requestedPosition - 1)
+        : -1;
+      const positionedIndex = requestedIndex >= 0 && bodySections.length
+        ? Math.max(0, Math.min(requestedPosition - 1, Math.max(0, bodySections.length - 1)))
+        : -1;
+      const insertionIndex = requestedIndex >= 0 ? Math.min(requestedIndex, bodySections.length) : -1;
+
+      if (mutation.operation === "remove" && positionedIndex >= 0) {
+        bodySections.splice(positionedIndex, 1);
+        return;
+      }
+      if (mutation.operation === "prioritize" && positionedIndex >= 0) {
+        const [section] = bodySections.splice(positionedIndex, 1);
+        if (section) bodySections.unshift(section);
+        return;
+      }
+
       const definition = findBlockByPurpose("content", mutation.purpose);
       const existingIndex = bodySections.findIndex((section) => section.blockPurpose === definition.purpose);
       const fresh = instantiateBlock(definition, profiles);
@@ -411,10 +611,15 @@ function previewProfile() {
       }
 
       if (mutation.operation === "replace") {
-        const requestedIndex = bodySections.findIndex((section) => section.blockPurpose === mutation.replacePurpose);
-        const targetIndex = requestedIndex >= 0 ? requestedIndex : Math.max(0, bodySections.length - 1);
+        const semanticIndex = bodySections.findIndex((section) => section.blockPurpose === mutation.replacePurpose);
+        const targetIndex = positionedIndex >= 0
+          ? positionedIndex
+          : semanticIndex >= 0 ? semanticIndex : Math.max(0, bodySections.length - 1);
         if (bodySections.length) bodySections.splice(targetIndex, 1, fresh);
         else bodySections.push(fresh);
+      } else if (insertionIndex >= 0) {
+        if (existingIndex >= 0) bodySections.splice(existingIndex, 1);
+        bodySections.splice(Math.min(insertionIndex, bodySections.length), 0, fresh);
       } else if (existingIndex >= 0) {
         const [existing] = bodySections.splice(existingIndex, 1);
         bodySections.unshift(existing);
@@ -601,6 +806,9 @@ function renderCurrentView({ scroll = true } = {}) {
     syncPreviewChrome();
     localizeElement(document.body, state.language);
     syncLanguageControl();
+    if (state.view === "preview") document.title = `PORT 70 | ${translateText(previewProfile().hero.title, state.language)}`;
+    else if (state.view === "payment") document.title = `PORT 70 | ${translateText("Paiement direct", state.language)}`;
+    else document.title = `PRSIM | ${translateText(view.label, state.language)}`;
     const activeTab = document.querySelector(`[data-view="${state.view}"]`);
     activeTab?.scrollIntoView({ block: "nearest", inline: "center" });
     if (isShopView) requestAnimationFrame(scrollProfileIntoView);
@@ -643,6 +851,7 @@ function setLanguage(language, { render = true } = {}) {
   const nextLanguage = normalizeLanguage(language);
   state.language = nextLanguage;
   safeStorage.set("prsim-language", nextLanguage);
+  if (["preview", "payment"].includes(state.view) && state.previewScenario !== "classic") syncExperienceUrl();
   renderTabs();
   if (render) renderCurrentView({ scroll: false });
   else syncLanguageControl();
@@ -655,8 +864,12 @@ function setLanguage(language, { render = true } = {}) {
 }
 
 function setView(key) {
-  if (!views.some((view) => view.key === key)) return;
+  if (!directViewKeys.has(key)) return;
   state.previewHeaderVisible = key === "preview";
+  if (key === "preview" && state.previewScenario !== "classic") {
+    syncExperienceUrl({ view: key, push: state.view !== "preview" });
+    return renderCurrentView();
+  }
   if (location.hash === `#${key}`) renderCurrentView();
   else location.hash = key;
 }
@@ -672,8 +885,7 @@ function currentPurchaseSelection(overrides = {}) {
   const commerce = getCommerceState();
   const page = elements.canvas.querySelector(".shop-page");
   const selectedModel = page?.querySelector("[data-selected-model]")?.textContent?.trim();
-  const profileProducts = { p1: "passage-24", p4: "passage-36", p9: "passage-42", p14: "passage-36" };
-  const productId = overrides.product_id || state.toolProductId || profileProducts[state.view] || commerce.product_id || "passage-32";
+  const productId = overrides.product_id || state.toolProductId || profileProducts[state.previewScenario] || commerce.product_id || "passage-32";
   const product = getProduct(productId);
   const colorway = overrides.color || state.toolColorway || commerce.color || activeShopProfile()?.colorway || "black";
   const bundleToggle = page?.querySelector("[data-bundle-toggle]");
@@ -706,6 +918,43 @@ function openPayment(source = "human_cta", overrides = {}) {
   };
   setView("payment");
   return { opened: true, payment_url: `${location.origin}${location.pathname}#payment`, conversion_time_ms: elapsedMs, conversion_type: state.purchase.conversionType, selection };
+}
+
+let shareFeedbackTimer = null;
+
+function showShareFeedback(message) {
+  const feedback = elements.canvas.querySelector("[data-share-feedback]");
+  if (!feedback) return;
+  feedback.textContent = translateText(message, state.language);
+  feedback.classList.add("is-visible");
+  if (shareFeedbackTimer) window.clearTimeout(shareFeedbackTimer);
+  shareFeedbackTimer = window.setTimeout(() => feedback.classList.remove("is-visible"), 1800);
+}
+
+async function shareCurrentExperience() {
+  const profile = previewProfile();
+  const code = currentExperienceCode();
+  const url = `${location.origin}${experiencePath(code)}#preview`;
+  const title = `PORT 70 | ${translateText(profile.hero.title, state.language)}`;
+  const text = translateText(profile.hero.body || profile.sub || "", state.language);
+  const payload = { title, text, url };
+  if (navigator.share) {
+    try {
+      await navigator.share(payload);
+      showShareFeedback("Expérience partagée");
+      return { shared: true, url };
+    } catch (error) {
+      if (error?.name === "AbortError") return { shared: false, canceled: true, url };
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    showShareFeedback("Lien copié");
+    return { shared: true, copied: true, url };
+  } catch {
+    showShareFeedback(url);
+    return { shared: false, url };
+  }
 }
 
 function navigateToSection(section) {
@@ -741,14 +990,17 @@ function navigateToSection(section) {
 function resetPreviewExperience({ preserveProductChoices = true } = {}) {
   resetPrsimToolState();
   state.previewScenario = "classic";
+  state.previewVariant = "base";
   state.previewResolution = null;
   state.experienceMutations = emptyExperienceMutations();
+  state.bundleOverride = null;
   state.previewSketch = false;
   state.selectionSource = "default";
   state.lastNavigation = null;
   if (!preserveProductChoices) {
     state.toolColorway = null;
     state.toolProductId = null;
+    setCommerceBundle("organization_pack", false);
   }
 }
 
@@ -757,15 +1009,17 @@ function selectScenarioForPreview(key) {
   resetPrsimToolState();
   state.selectedScenario = key;
   state.previewScenario = key;
+  state.previewVariant = "base";
   state.previewResolution = null;
   state.experienceMutations = emptyExperienceMutations();
+  state.bundleOverride = null;
   state.previewSketch = false;
   state.selectionSource = "scenario_picker";
   state.lastNavigation = null;
   state.toolColorway = profiles[key].colorway || "black";
-  const profileProducts = { p1: "passage-24", p4: "passage-36", p9: "passage-42", p14: "passage-36" };
-  state.toolProductId = profileProducts[key] || "passage-32";
+  state.toolProductId = profileDefaultProduct(key);
   selectVariant(state.toolProductId, state.toolColorway);
+  setCommerceBundle(key === "p2" ? "gift_pack" : "organization_pack", profileDefaultBundle(profiles[key]));
 }
 
 function stepScenarioForPreview(step = 1) {
@@ -796,13 +1050,19 @@ function applyToolVariant(variant) {
     if (state.view === "preview" && state.previewSketch) applySketchExperience();
     syncClassicColorSelector(variant.color);
   }
+  if (["preview", "payment"].includes(state.view) && state.previewScenario !== "classic") syncExperienceUrl();
 }
 
 function applyToolBundle(bundle) {
+  state.bundleOverride = Boolean(bundle.enabled);
   const toggle = elements.canvas.querySelector("[data-bundle-toggle]");
-  if (!toggle) return;
-  toggle.checked = bundle.enabled;
-  syncBundleOffer(toggle);
+  if (toggle) {
+    toggle.checked = bundle.enabled;
+    syncBundleOffer(toggle);
+  } else if (state.view === "preview") {
+    renderCurrentView({ scroll: false });
+  }
+  if (["preview", "payment"].includes(state.view) && state.previewScenario !== "classic") syncExperienceUrl();
 }
 
 function tickSessionClock() {
@@ -920,17 +1180,20 @@ function syncToolRegistration() {
       onSelectScenario: ({ scenario_key }) => {
         if (!profiles[scenario_key] || scenario_key === "classic") return { selected: false, reason: "unknown_scenario" };
         selectScenarioForPreview(scenario_key);
+        syncExperienceUrl();
         deferRender();
         return { selected: true, scenario_key, preview_active: scenario_key };
       },
       onBrowseScenarios: ({ direction }) => {
         if (direction === "random") selectRandomScenarioForPreview();
         else stepScenarioForPreview(direction === "previous" ? -1 : 1);
+        syncExperienceUrl();
         deferRender();
         return { selected: true, scenario_key: state.previewScenario, direction };
       },
       onResetScenario: ({ preserve_product_choices }) => {
         resetPreviewExperience({ preserveProductChoices: preserve_product_choices });
+        syncExperienceUrl();
         deferRender();
         return { reset: true, preview_active: "classic", preserve_product_choices };
       },
@@ -943,8 +1206,10 @@ function syncToolRegistration() {
     onExperiencePrepared(resolution) {
       if (!resolution.easterEgg) recordWantAnalytics(resolution);
       state.previewScenario = resolution.renderScenarioKey || resolution.scenario.key;
+      state.previewVariant = "base";
       state.previewResolution = resolution;
       state.experienceMutations = emptyExperienceMutations();
+      state.bundleOverride = null;
       state.selectedScenario = resolution.renderScenarioKey || resolution.scenario.key;
       state.selectionSource = resolution.easterEgg ? "easter_egg" : "prepare_shopping_experience";
       state.lastNavigation = null;
@@ -957,12 +1222,13 @@ function syncToolRegistration() {
       state.toolColorway = requestedColor && requestedColor !== "no_preference"
         ? requestedColor.replaceAll("_", "-")
         : recommendedColor || null;
-      const profileProducts = { p1: "passage-24", p4: "passage-36", p9: "passage-42", p14: "passage-36" };
-      state.toolProductId = profileProducts[state.previewScenario] || "passage-32";
+      state.toolProductId = profileDefaultProduct(state.previewScenario);
       const activeProfile = profiles[state.previewScenario] || profiles.classic;
       const selectedColor = state.toolColorway || activeProfile.colorway || "black";
       const selectedVariant = selectVariant(state.toolProductId, selectedColor);
+      setCommerceBundle(state.previewScenario === "p2" ? "gift_pack" : "organization_pack", profileDefaultBundle(activeProfile));
       const selectedProduct = getProduct(state.toolProductId);
+      syncExperienceUrl({ view: "preview" });
       state.toolRegistrationDeferred = true;
       renderCurrentView({ scroll: false });
       window.setTimeout(() => {
@@ -989,6 +1255,7 @@ function syncToolRegistration() {
     },
     onExperienceReset({ preserve_product_choices }) {
       resetPreviewExperience({ preserveProductChoices: preserve_product_choices });
+      syncExperienceUrl({ view: "preview" });
       state.toolRegistrationDeferred = true;
       renderCurrentView({ scroll: false });
       window.setTimeout(() => {
@@ -1000,6 +1267,7 @@ function syncToolRegistration() {
       const block = findBlockByPurpose("hero", goal);
       state.experienceMutations.heroPurpose = block.purpose;
       state.selectionSource = "experience_block_update";
+      syncExperienceUrl();
       renderCurrentView({ scroll: false });
       return {
         applied: true,
@@ -1009,11 +1277,12 @@ function syncToolRegistration() {
         active_block_count: previewProfile().sections.filter((section) => section.id !== "CTA").length,
       };
     },
-    onBlocksUpdated({ operation = "auto", purpose, replace_purpose, placement = "best", request }) {
+    onBlocksUpdated({ operation = "auto", purpose, replace_purpose, placement = "best", position, request }) {
       const block = findBlockByPurpose("content", purpose);
       const before = previewProfile().sections.filter((section) => section.id !== "CTA").map((section) => inferBlockForNode(section).purpose);
-      state.experienceMutations.operations.push({ operation, purpose: block.purpose, replacePurpose: replace_purpose, placement });
+      state.experienceMutations.operations.push({ operation, purpose: block.purpose, replacePurpose: replace_purpose, placement, position });
       state.selectionSource = "experience_block_update";
+      syncExperienceUrl();
       renderCurrentView({ scroll: false });
       const after = previewProfile().sections.filter((section) => section.id !== "CTA").map((section) => section.blockPurpose || inferBlockForNode(section).purpose);
       return {
@@ -1035,6 +1304,7 @@ function syncToolRegistration() {
         blockPurpose: block.purpose,
       };
       state.selectionSource = "customer_evidence";
+      syncExperienceUrl();
       const nextProfile = previewProfile();
       const evidenceNode = nextProfile.sections.find((section) => section.variant === "customer-evidence");
       const placement = evidenceNode?.evidencePlacement || "after_hero";
@@ -1079,6 +1349,12 @@ function syncToolRegistration() {
 }
 
 document.addEventListener("click", (event) => {
+  const shareExperience = event.target.closest("[data-share-experience]");
+  if (shareExperience) {
+    shareCurrentExperience();
+    return;
+  }
+
   const menuToggle = event.target.closest("[data-preview-menu-toggle]");
   if (menuToggle) {
     state.previewHeaderVisible = true;
@@ -1142,24 +1418,28 @@ document.addEventListener("click", (event) => {
   const scenarioSelect = event.target.closest("[data-scenario-select]");
   if (scenarioSelect) {
     selectScenarioForPreview(scenarioSelect.dataset.scenarioSelect);
+    syncExperienceUrl();
     return renderCurrentView({ scroll: false });
   }
 
   const scenarioReset = event.target.closest("[data-scenario-reset]");
   if (scenarioReset) {
     resetPreviewExperience({ preserveProductChoices: false });
+    syncExperienceUrl();
     return renderCurrentView({ scroll: false });
   }
 
   const scenarioStep = event.target.closest("[data-scenario-step]");
   if (scenarioStep) {
     stepScenarioForPreview(Number(scenarioStep.dataset.scenarioStep) || 1);
+    syncExperienceUrl();
     return renderCurrentView({ scroll: false });
   }
 
   const scenarioRandom = event.target.closest("[data-scenario-random]");
   if (scenarioRandom) {
     selectRandomScenarioForPreview();
+    syncExperienceUrl();
     return renderCurrentView({ scroll: false });
   }
 
@@ -1213,7 +1493,9 @@ document.addEventListener("click", (event) => {
   const openPreview = event.target.closest("[data-open-preview]");
   if (openPreview) {
     selectScenarioForPreview(openPreview.dataset.openPreview);
-    return setView("preview");
+    state.previewHeaderVisible = true;
+    syncExperienceUrl({ view: "preview", push: true });
+    return renderCurrentView();
   }
 
   const model = event.target.closest("[data-model]");
@@ -1237,7 +1519,9 @@ document.addEventListener("click", (event) => {
   const bundleToggle = event.target.closest("[data-bundle-toggle]");
   if (bundleToggle) {
     syncBundleOffer(bundleToggle);
-    setCommerceBundle("organization_pack", bundleToggle.checked);
+    state.bundleOverride = bundleToggle.checked;
+    setCommerceBundle(state.previewScenario === "p2" ? "gift_pack" : "organization_pack", bundleToggle.checked);
+    if (["preview", "payment"].includes(state.view) && state.previewScenario !== "classic") syncExperienceUrl();
     return;
   }
 
@@ -1447,6 +1731,10 @@ document.addEventListener("input", (event) => {
 });
 
 window.addEventListener("hashchange", () => renderCurrentView());
+window.addEventListener("popstate", () => {
+  state.appliedRoutePath = null;
+  renderCurrentView({ scroll: false });
+});
 compactViewportQuery.addEventListener?.("change", syncGlobalControls);
 window.addEventListener("keydown", (event) => {
   if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
@@ -1458,9 +1746,7 @@ window.addEventListener("keydown", (event) => {
   setView(navigableViews[nextIndex].key);
 });
 
-if (!location.hash || !views.some((view) => `#${view.key}` === location.hash)) {
-  history.replaceState(null, "", `${location.pathname}${location.search}#preview`);
-}
+if (!location.hash) history.replaceState(null, "", `${location.pathname}${location.search}#preview`);
 renderTabs();
 applyBrandTokens(state.brand);
 renderCurrentView({ scroll: false });

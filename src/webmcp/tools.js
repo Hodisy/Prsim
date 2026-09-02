@@ -390,18 +390,19 @@ export function registerPrsimTools(callbacks = {}, options = {}) {
     },
     {
       name: "update_experience_blocks",
-      description: `Update the sections of an already prepared shopping experience after a new shopper question. Use auto by default: it prioritizes an existing matching block, otherwise inserts the closest authored block and replaces the least useful one when the five-section limit is reached. Available generic section purposes: ${blockPurposeList("content")}. These are pragmatic blocks such as model comparison, reviews, airline fit, organization, delivery, material and weather proof. Never return "not available": every purpose resolves to a block and product_overview is the universal fallback. The final purchase CTA is always preserved. The response states what changed and provides suggested_reply.`,
+      description: `Update the sections of an already prepared shopping experience after a new shopper question. Use auto by default: it prioritizes an existing matching block, otherwise inserts the closest authored block and replaces the least useful one when the five-section limit is reached. When the shopper refers to a precise visible position, pass position from 1 to 5; it targets that body section while the final purchase CTA remains untouched. Available generic section purposes: ${blockPurposeList("content")}. These are pragmatic blocks such as model comparison, reviews, airline fit, organization, delivery, material and weather proof. Never return "not available": every purpose resolves to a block and product_overview is the universal fallback. The response states what changed and provides suggested_reply.`,
       inputSchema: objectSchema({
         request: { type: "string", minLength: 2, description: "The shopper's new question or request in their own words." },
         operation: stringEnum(["auto", "add", "replace", "remove", "prioritize"], "Use auto unless the shopper explicitly asks to remove or replace content."),
         purpose: stringEnum(contentBlockPurposes, "Generic content purpose. Choose the closest available value; do not invent a layout or block ID."),
         replace_purpose: stringEnum(contentBlockPurposes, "Optional generic purpose to replace. If absent, the engine replaces the least useful block."),
         placement: stringEnum(["best", "after_hero", "before_cta"]),
+        position: { type: "integer", minimum: 1, maximum: 5, description: "Optional one-based position among the visible body sections. For add, insert at this position; for replace, remove, or prioritize, target this exact position." },
       }, ["request", "purpose"]),
-      execute: ({ request, operation = "auto", purpose, replace_purpose, placement = "best" }) => {
+      execute: ({ request, operation = "auto", purpose, replace_purpose, placement = "best", position }) => {
         const language = callbacks.getLanguage?.() || "fr";
         const block = findBlockByPurpose("content", purpose);
-        const applied = callbacks.onBlocksUpdated?.({ request, operation, purpose: block.purpose, replace_purpose, placement }) || {
+        const applied = callbacks.onBlocksUpdated?.({ request, operation, purpose: block.purpose, replace_purpose, placement, position }) || {
           applied: true,
           request,
           operation,
@@ -409,7 +410,7 @@ export function registerPrsimTools(callbacks = {}, options = {}) {
         };
         if (activeExperience) {
           activeExperience.presentationUpdates ||= { hero: null, blocks: [] };
-          activeExperience.presentationUpdates.blocks.push({ operation, purpose: block.purpose, replace_purpose, placement });
+          activeExperience.presentationUpdates.blocks.push({ operation, purpose: block.purpose, replace_purpose, placement, position });
         }
         return blockToolResult("content", applied, language);
       },
@@ -471,7 +472,7 @@ export function registerPrsimTools(callbacks = {}, options = {}) {
       name: "get_current_want",
       description: "Read the active session-only need only when the shopper explicitly asks what is currently applied or when resuming after lost application state. Never call this to verify a successful prepare_shopping_experience response.",
       inputSchema: objectSchema(),
-      execute: () => result(activeExperience ? { ...activeExperience, use_language: callbacks.getLanguage?.() || activeExperience.request?.use_language || "fr" } : { active: false, sessionOnly: true, use_language: callbacks.getLanguage?.() || "fr" }),
+      execute: () => result(activeExperience ? { ...activeExperience, use_language: callbacks.getLanguage?.() || activeExperience.request?.use_language || "en" } : { active: false, sessionOnly: true, use_language: callbacks.getLanguage?.() || "en" }),
     },
     {
       name: "reset_shopping_experience",

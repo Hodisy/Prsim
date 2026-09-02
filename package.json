@@ -1,6 +1,7 @@
 {
   "name": "prsim-wireframes",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "bun server.js",
     "start": "bun server.js"

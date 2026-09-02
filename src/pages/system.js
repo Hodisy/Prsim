@@ -341,7 +341,7 @@ function scenarioCard(seed, profiles, selectedKey, activePreviewKey, ordinal) {
   const sectionCount = profile.sections?.length || 0;
   return `
     <button type="button" class="scenario-row ${selectedKey === seed.key ? "active" : ""} ${activePreviewKey === seed.key ? "preview-selected" : ""}" data-scenario-select="${seed.key}" aria-pressed="${activePreviewKey === seed.key}">
-      <span class="scenario-code"><i class="registry-order">SCN ${String(ordinal).padStart(2, "0")}</i>${seed.code}</span>
+      <span class="scenario-code"><i class="registry-order">SCN ${String(ordinal).padStart(2, "0")}</i>${seed.code}<small>/s${ordinal}#preview</small></span>
       <span class="scenario-name"><strong>${seed.title}</strong><small>${seed.family} · ${label(seed.context)}</small></span>
       <span><strong>${sectionCount}</strong><small>sections</small></span>
       <span><strong>${assetCount}</strong><small>assets liés</small></span>
@@ -355,6 +355,7 @@ export function renderScenariosPage(profiles, selectedKey = "p1", activeFamily =
   const activeScenarioIndex = Math.max(0, scenarioSeeds.findIndex((seed) => seed.key === activePreviewKey));
   const scenarioPosition = `${String(activeScenarioIndex + 1).padStart(2, "0")} / ${String(scenarioSeeds.length).padStart(2, "0")}`;
   const profile = profiles[selected.key];
+  const selectedOrdinal = scenarioSeeds.findIndex((seed) => seed.key === selected.key) + 1;
   const filtered = activeFamily === "Tous" ? scenarioSeeds : scenarioSeeds.filter((seed) => seed.family === activeFamily);
   const observations = Object.values(analytics);
   const demandFor = (context) => observations.filter((entry) => entry.parts?.[0] === context).reduce((total, entry) => total + entry.count, 0);
@@ -400,6 +401,11 @@ export function renderScenariosPage(profiles, selectedKey = "p1", activeFamily =
         <aside class="scenario-inspector">
           <span>${selected.code}</span>
           <h3>${selected.title}</h3>
+          <div class="scenario-shortcut">
+            <small>RACCOURCI PREVIEW</small><strong>/s${selectedOrdinal}#preview</strong>
+            <span>/s${selectedOrdinal}fr#preview · /s${selectedOrdinal}c3b1#preview<br>fr = français · c1 noir · c2 crème · c3 Liberty bleu · c4 Liberty bordeaux · b1 bundle</span>
+            <details><summary>Modifier la recette</summary><p>h1–h7 remplace le hero · a07p2 insère le bloc 07 en position 2 · dp4 supprime la section 4 · r09p3 remplace la section 3.</p></details>
+          </div>
           <div class="scenario-assembly-link"><small>ASSEMBLAGE ASSOCIÉ</small><strong>ASM-${selected.code}</strong><button type="button" data-view="assemblies" data-assembly-target="${selected.key}">Voir le détail</button></div>
           <dl>
             <div><dt>Contexte</dt><dd>${label(selected.context)}</dd></div>
