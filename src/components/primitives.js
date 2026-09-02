@@ -169,8 +169,8 @@ export const heroTrustRail = () => `
 export const shopHeader = () => `
   <header class="shop-header">
     <div class="shop-brand-lockup">
-      <div class="wf-only wf-shop-logo">MARQUE</div>
-      <span class="ui-only shop-wordmark" data-brand-name>PORT 70</span>
+      <a class="wf-only wf-shop-logo shop-home-link" href="#preview" aria-label="Retour à la boutique">MARQUE</a>
+      <a class="ui-only shop-wordmark shop-home-link" href="#preview" aria-label="Retour à la boutique" data-brand-name>PORT 70</a>
       <button class="shop-prsim-trigger" type="button" data-preview-menu-toggle aria-label="Afficher le header PRSIM" aria-expanded="false">Voir dans PRSIM</button>
     </div>
     <nav aria-label="Navigation boutique">

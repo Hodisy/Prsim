@@ -200,6 +200,8 @@ body.preview-home .canvas.desktop { width: min(1180px, 100vw); }
 body.preview-home.preview-chrome-visible .stage { min-height: calc(100vh - var(--appbar-height) - var(--tabs-height)); }
 
 .shop-brand-lockup { display: grid; align-content: center; justify-items: start; gap: 4px; }
+.shop-home-link { cursor: pointer; }
+.shop-home-link:hover, .shop-home-link:focus-visible { opacity: .58; outline: 0; }
 .shop-prsim-trigger { display: none; }
 body.preview-home .shop-prsim-trigger,
 body.payment-preview .shop-prsim-trigger {

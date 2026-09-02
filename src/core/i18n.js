@@ -201,6 +201,7 @@ const en = {
   // Store chrome and shared commerce UI
   "Afficher le header PRSIM": "Show the PRSIM header",
   "Voir dans PRSIM": "View in PRSIM",
+  "Retour à la boutique": "Back to the store",
   "Partager cette expérience": "Share this experience",
   "Partager": "Share",
   "Lien copié": "Link copied",

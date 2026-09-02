@@ -168,7 +168,7 @@
 .shop-footer ul { display: grid; gap: 8px; padding: 0; list-style: none; color: #aaa; font-size: 12px; }
 
 /* Wireframe-only skin. */
-.wf-shop-logo { width: 102px; height: 30px; display: grid; place-items: center; border: 2px solid #111; font-size: 10px; font-weight: 800; letter-spacing: .15em; }
+.wf-shop-logo { width: 102px; height: 30px; display: grid; place-items: center; color: inherit; border: 2px solid #111; font-size: 10px; font-weight: 800; letter-spacing: .15em; text-decoration: none; }
 .wf-nav-lines { display: flex; gap: 22px; }.wf-nav-lines i { width: 48px; height: 7px; background: #d0d0d0; border-radius: 8px; }
 .wf-icons { display: flex; gap: 10px; }.wf-icons i { width: 26px; height: 26px; border: 1px solid #888; border-radius: 50%; }
 .wf-lines { width: 100%; display: grid; gap: 9px; }
