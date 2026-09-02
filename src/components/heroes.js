@@ -1,4 +1,7 @@
-import { copySlot, dualAction, esc, heroBundleOffer, heroTrustRail, layoutLabel, materialOptions, mediaSlot, nextOrderPromo, productImages, rating, trustpilot, wireLines } from "./primitives.js";
+import { copySlot, dualAction, esc, heroBundleOffer, heroTrustRail, layoutLabel, materialChoice, mediaSlot, nextOrderPromo, productImages, rating, trustpilot, wireLines } from "./primitives.js";
+import { comparisonProducts } from "../data/comparison-products.js";
+
+const primaryReview = (profile) => profile.reviews?.[0] || { body: profile.quote || "", author: profile.author || "" };
 
 const shell = (node, className, content) => `
   <section class="layout-block hero-layout ${className}" data-layout-id="${esc(node.id)}" data-layout-variant="${esc(node.variant)}">
@@ -12,6 +15,7 @@ const purchaseAction = (node) => dualAction(
 );
 
 const classicHero = (node, profile) => shell(node, "hero-classic", `
+  ${layoutLabel(node)}
   <div class="classic-gallery">
     <div class="classic-thumbs">${[
       [productImages.hero, "Vue trois-quarts"],
@@ -22,18 +26,11 @@ const classicHero = (node, profile) => shell(node, "hero-classic", `
     ${mediaSlot(node.media || "Galerie produit", "hero-media")}
   </div>
   <div class="classic-summary">
-    ${layoutLabel(node)}
-    <div class="wf-only wf-copy">${wireLines([86, 65])}<span class="wf-rating"></span><span class="wf-price"></span>${wireLines([100, 88, 62])}<span class="wf-select"></span>${dualAction(node.cta)}</div>
+    <div class="wf-only wf-copy">${wireLines([86, 65])}<span class="wf-rating"></span><span class="wf-price"></span>${wireLines([100, 88, 62])}${dualAction(node.cta)}</div>
     <div class="ui-only ui-copy">
       <p class="eyebrow">${esc(node.kicker)}</p><h2>${esc(node.title)}</h2><div class="classic-rating-trust">${rating()}${trustpilot()}</div><strong class="product-price">${esc(profile.price)}</strong>
       <p class="body-copy">${esc(node.body)}</p>
-      <div class="material-choice">
-        <p class="choice-label">Coloris · <strong data-selected-color>Noir</strong></p>
-        <div class="choice-row" role="group" aria-label="Choisir la matière et le coloris">
-          ${materialOptions.map((option, index) => `<button class="color-option ${index === 0 ? "active" : ""}" type="button" data-color-option data-color-name="${esc(option.name)}" data-colorway="${option.colorway}" aria-label="${esc(option.detail)}" aria-pressed="${index === 0}"><img src="${option.src}" alt="" /></button>`).join("")}
-        </div>
-      </div>
-      <button class="variant-select" type="button">Passage 32 · 32 L <span>⌄</span></button>
+      ${materialChoice()}
       ${heroBundleOffer(node.bundle)}
       ${purchaseAction(node)}
       ${nextOrderPromo(node.promotion)}
@@ -42,12 +39,6 @@ const classicHero = (node, profile) => shell(node, "hero-classic", `
   </div>`);
 
 const priceHero = (node) => {
-  const products = [
-    ["Passage 24", "119 €", "24 L", "Le moins cher", "./assets/products/comparison/liberty-blue/compact-24l.png"],
-    ["Passage 32", "149 €", "32 L", "Recommandé", "./assets/products/72h-liberty-blue/01-hero-three-quarter.png"],
-    ["Passage 36", "169 €", "36 L", "Plus de place", "./assets/products/comparison/liberty-blue/expandable-36l.png"],
-    ["Passage 42", "189 €", "42 L", "Plus grand", "./assets/products/comparison/liberty-blue/weekender-42l.png"],
-  ];
   return shell(node, `hero-price ${node.id === "H11" ? "hero-price-compact" : ""}`, `
     <div class="price-intro">
       ${layoutLabel(node)}
@@ -56,11 +47,11 @@ const priceHero = (node) => {
     </div>
     <div class="price-decision-grid" data-model-group>
       <div class="price-options">
-        ${products.map(([name, price, size, note, image], index) => `
-          <button type="button" class="price-card ${index === 1 ? "selected" : ""}" data-model="${name}" data-model-price="${price}" aria-pressed="${index === 1}">
+        ${comparisonProducts.map(({ name, price, size, note, image, colorAssets, recommended }) => `
+          <button type="button" class="price-card ${recommended ? "selected" : ""}" data-model="${name}" data-model-price="${price}" aria-pressed="${Boolean(recommended)}">
             <span class="wf-only wf-product-box"></span>
             <span class="ui-only card-note">${note}</span>
-            <span class="ui-only product-asset-small"><img src="${image}" alt="${esc(note)} · sac Liberty bleu ${size}" loading="lazy" /></span>
+            <span class="ui-only product-asset-small"><img data-color-assets="${esc(JSON.stringify(colorAssets))}" src="${image}" alt="${esc(note)} · sac ${size}" loading="lazy" /></span>
             <strong class="ui-only">${name}</strong><span class="ui-only">${size}</span><b class="ui-only">${price}</b>
           </button>`).join("")}
       </div>
@@ -68,6 +59,7 @@ const priceHero = (node) => {
         <div class="wf-only">${wireLines([75, 100, 65])}</div>
         <div class="ui-only"><span>Choix actuel</span><strong data-selected-model>Passage 32</strong><p>Le meilleur équilibre entre capacité cabine, matière et prix.</p><b data-selected-price>149 €</b></div>
         ${node.showTrust ? heroTrustRail() : ""}
+        <div class="ui-only">${materialChoice({ compact: true, variant: node.colorSelector || "swatches" })}</div>
         ${heroBundleOffer(node.bundle)}
         ${purchaseAction(node)}
       </aside>
@@ -75,7 +67,7 @@ const priceHero = (node) => {
 };
 
 const airlineHero = (node, profile) => shell(node, "hero-airline", `
-  ${mediaSlot(node.media || "Produit dans le gabarit cabine", "hero-media", node.asset)}
+  ${mediaSlot(node.media || "Produit dans le gabarit cabine", "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="decision-panel">
     ${layoutLabel(node)}
     <div class="wf-only airline-wire">
@@ -87,14 +79,15 @@ const airlineHero = (node, profile) => shell(node, "hero-airline", `
       <div class="airline-row"><strong>${esc(node.airline || "AIRLINE")}</strong><span>${"✓"} Vérifié</span></div>
       <h2>${esc(node.title)}</h2><p>${esc(node.body)}</p>
       <div class="cabin-card"><span>Dimension cabine personnelle</span><strong>${esc(node.dimensions || "40 × 20 × 25 cm")}</strong><small>Règle vérifiée · 28 août 2026</small></div>
-      ${node.showTrust ? "" : `<article class="hero-context-review"><span class="context-tag">MÊME COMPAGNIE</span><blockquote>« ${esc(profile.quote)} »</blockquote><small>${esc(profile.author)}</small></article>`}
+      ${node.showTrust ? "" : `<article class="hero-context-review"><span class="context-tag">MÊME COMPAGNIE</span><blockquote>« ${esc(primaryReview(profile).body)} »</blockquote><small>${esc(primaryReview(profile).author)}</small></article>`}
+      ${materialChoice({ compact: true, variant: node.colorSelector || "menu" })}
       ${heroBundleOffer(node.bundle)}
       ${purchaseAction(node)}
     </div>
   </div>`);
 
 const giftHero = (node) => shell(node, "hero-gift", `
-  ${mediaSlot(node.media || "Cadeau en voyage", "hero-media", node.asset, node.assetCaption)}
+  ${mediaSlot(node.media || "Cadeau en voyage", "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="decision-panel gift-panel">
     ${layoutLabel(node)}
     <div class="wf-only">${wireLines([48, 92, 75])}<div class="wf-fact-grid"><span></span><span></span><span></span></div>${dualAction(node.cta)}</div>
@@ -126,29 +119,31 @@ const giftHero = (node) => shell(node, "hero-gift", `
         <label class="gift-bundle"><input type="checkbox" data-gift-card checked /> <span>Ajouter une carte-message cadeau</span><b>Offerte</b></label>
       `}
       ${node.showTrust ? heroTrustRail() : ""}
+      ${materialChoice({ compact: true, variant: node.colorSelector || "swatches" })}
       ${heroBundleOffer(node.bundle)}
       ${purchaseAction(node)}
     </div>
   </div>`);
 
 const socialHero = (node) => shell(node, "hero-social", `
-  ${mediaSlot(node.media, "hero-media")}
+  ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="decision-panel">
     ${layoutLabel(node)}
     <div class="wf-only">${wireLines([65, 88, 54])}<span class="wf-rating-large"></span>${dualAction(node.cta)}</div>
-    <div class="ui-only"><p class="eyebrow">${esc(node.kicker)}</p><h2>${esc(node.title)}</h2>${rating("4,8", "326 voyageurs vérifiés")}<p>${esc(node.body)}</p>${dualAction(node.cta)}</div>
+    <div class="ui-only"><p class="eyebrow">${esc(node.kicker)}</p><h2>${esc(node.title)}</h2>${rating("4,8", "326 voyageurs vérifiés")}<p>${esc(node.body)}</p>${materialChoice({ compact: true, variant: node.colorSelector || "swatches" })}${dualAction(node.cta)}</div>
   </div>`);
 
 const trustHero = (node, profile) => shell(node, "hero-trust", `
-  ${mediaSlot(node.media, "hero-media")}
+  ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="decision-panel trust-panel">
     ${layoutLabel(node)}
     <div class="wf-only">${wireLines([65, 88, 54])}<span class="wf-rating-large"></span><div class="wf-proof-card">${wireLines([88, 62, 72])}</div>${dualAction(node.cta)}</div>
     <div class="ui-only">
       <p class="eyebrow">${esc(node.kicker)}</p><h2>${esc(node.title)}</h2>
       <div class="trust-signals">${rating("4,8", "326 avis vérifiés")}${trustpilot()}</div>
-      <article class="hero-context-review"><span class="context-tag">PREMIER ACHAT</span><blockquote>« ${esc(profile.quote)} »</blockquote><small>${esc(profile.author)}</small></article>
+      <article class="hero-context-review"><span class="context-tag">PREMIER ACHAT</span><blockquote>« ${esc(primaryReview(profile).body)} »</blockquote><small>${esc(primaryReview(profile).author)}</small></article>
       <div class="trust-facts">${(profile.facts || []).map((fact) => `<span>✓ ${esc(fact)}</span>`).join("")}</div>
+      ${materialChoice({ compact: true, variant: node.colorSelector || "menu" })}
       ${dualAction(node.cta)}
     </div>
   </div>`);
@@ -173,6 +168,7 @@ const guidedHero = (node) => {
       <div class="wf-only">${wireLines([65, 88, 54])}<div class="wf-proof-card">${wireLines([88, 62, 72])}</div>${dualAction(node.cta)}</div>
       <div class="ui-only">
         <p class="eyebrow">${esc(node.kicker)}</p><h2>${esc(node.title)}</h2><p>${esc(node.body)}</p>
+        ${materialChoice({ compact: true, variant: node.colorSelector || "links" })}
         ${dualAction(node.cta)}
         <div class="guided-questions" data-hero-questions>
           <div class="question-chip-list">${visibleQuestions.map((question, index) => {
@@ -183,7 +179,7 @@ const guidedHero = (node) => {
         </div>
       </div>
     </div>
-    ${mediaSlot(node.media, "hero-media")}`);
+    ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption, node.colorAssets)}`);
 };
 
 const technicalHero = (node, profile) => shell(node, "hero-technical", `
@@ -193,20 +189,20 @@ const technicalHero = (node, profile) => shell(node, "hero-technical", `
       ${(profile.facts || []).map((fact, index) => `<div><span class="wf-only wf-spec-value"></span><strong class="ui-only">${["1 200", "17 KG", "1,18 KG"][index] || `0${index + 1}`}</strong><small class="ui-only">${esc(fact)}</small></div>`).join("")}
     </div>
   </div>
-  ${mediaSlot(node.media, "hero-media")}`);
+  ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption, node.colorAssets)}`);
 
 const centerHero = (node) => shell(node, `hero-center ${node.compactMedia ? "hero-center-compact" : ""} ${node.promotionPlacement ? `hero-center-with-promo promo-${node.promotionPlacement}` : ""}`, `
   ${node.promotionPlacement === "top" ? `<div class="ui-only hero-promo-edge hero-promo-top">${nextOrderPromo(node.promotion)}</div>` : ""}
   ${copySlot(node.promotionPlacement ? { ...node, promotion: null } : node)}
-  ${mediaSlot(node.media, "hero-media")}
+  ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   ${node.promotionPlacement === "footer" ? `<div class="ui-only hero-promo-edge hero-promo-footer">${nextOrderPromo(node.promotion)}</div>` : ""}`);
 
 const splitHero = (node, className = "hero-split") => shell(node, `${className} ${node.reverse ? "reverse" : ""}`, `
-  ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption)}
+  ${mediaSlot(node.media, "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   ${copySlot(node)}`);
 
 const immersiveHero = (node) => shell(node, "hero-immersive", `
-  ${mediaSlot(node.media || "Image immersive", "hero-media", node.asset, node.assetCaption)}
+  ${mediaSlot(node.media || "Image immersive", "hero-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="wf-only immersive-wire-copy">
     ${layoutLabel(node)}${wireLines([62, 88, 70, 48])}${dualAction(node.cta)}
   </div>
@@ -215,6 +211,7 @@ const immersiveHero = (node) => shell(node, "hero-immersive", `
     <p class="eyebrow">${esc(node.kicker)}</p>
     <h2>${esc(node.title)}</h2>
     <p>${esc(node.body)}</p>
+    ${materialChoice({ compact: true, variant: node.colorSelector || "links" })}
     ${heroBundleOffer(node.bundle)}
     ${purchaseAction(node)}
   </div>`);
@@ -226,7 +223,7 @@ const deliveryHero = (node) => {
     ["home", "Domicile express", "Livré aujourd’hui avant 22:00", "Coursier local", "Gratuit"],
   ];
   return shell(node, "hero-delivery", `
-    ${mediaSlot(node.media || "Retrait express", "hero-media", node.asset, node.assetCaption)}
+    ${mediaSlot(node.media || "Retrait express", "hero-media", node.asset, node.assetCaption, node.colorAssets)}
     <div class="decision-panel delivery-panel">
       ${layoutLabel(node)}
       <div class="wf-only">${wireLines([58, 92, 72])}<div class="wf-fact-grid"><span></span><span></span><span></span></div>${dualAction(node.cta)}</div>
@@ -244,8 +241,29 @@ const deliveryHero = (node) => {
         </fieldset>
         <label class="carrier-select"><span>Transporteur</span><select aria-label="Choisir le transporteur"><option>Pickup</option><option>Mondial Relay</option><option>Colissimo</option><option>Coursier local</option></select></label>
         <p class="delivery-cutoff">Commande avant 16:45 · disponibilité et créneau garantis au paiement.</p>
+        ${materialChoice({ compact: true, variant: node.colorSelector || "menu" })}
         ${dualAction(node.cta)}
       </div>
+    </div>`);
+};
+
+const sketchHero = (node) => {
+  const studies = [
+    ["./assets/sketch/passage-front-three-quarter.png", "Trois-quarts"],
+    ["./assets/sketch/passage-front.png", "Face"],
+    ["./assets/sketch/passage-rear-three-quarter.png", "Dos"],
+  ];
+  return shell(node, "hero-sketch", `
+    <div class="sketch-intro">
+      ${layoutLabel(node)}
+      <p class="sketch-index"><span data-brand-name>PORT 70</span> / ÉTUDE 01</p>
+      <h2>${esc(node.title)}</h2>
+      <p>${esc(node.body)}</p>
+      <div class="ui-only">${materialChoice({ compact: true, variant: "links" })}</div>
+      ${purchaseAction(node)}
+    </div>
+    <div class="sketch-gallery" aria-label="Étude du Passage 32 sous trois angles">
+      ${studies.map(([src, label], index) => `<figure class="sketch-card ${index === 0 ? "sketch-card-primary" : ""}"><span>0${index + 1}</span><img src="${src}" alt="Passage 32, vue ${label.toLocaleLowerCase("fr")}" /><figcaption>${label}</figcaption></figure>`).join("")}
     </div>`);
 };
 
@@ -262,6 +280,7 @@ export function renderHero(node, profile = { facts: [], price: "149 €" }) {
     center: () => centerHero(node),
     immersive: () => immersiveHero(node),
     delivery: () => deliveryHero(node),
+    sketch: () => sketchHero(node),
     premium: () => splitHero(node, "hero-premium"),
     deadline: () => splitHero(node, "hero-deadline"),
     split: () => splitHero(node),

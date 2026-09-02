@@ -1,16 +1,21 @@
 import { renderNode } from "../components/layouts.js";
+import { systemPipeline } from "../components/system-pipeline.js";
 import { catalogGroups } from "../data/catalog.js";
 import { profiles } from "../data/profiles.js";
 
 const previewProfile = profiles.p6;
 
-export function renderLibraryPage() {
+export function renderLibraryPage(brand) {
+  const layoutOrdinals = new Map(catalogGroups
+    .flatMap((group) => group.items)
+    .map((node, index) => [`${node.id}:${node.variant}`, index + 1]));
   return `
     <div class="library-page">
+      ${systemPipeline("library")}
       <header class="library-intro">
         <span>PRSIM / LAYOUT SYSTEM 01</span>
-        <h2>Un catalogue. Deux niveaux de fidélité.</h2>
-        <p>Chaque carte ci-dessous utilise le vrai composant de layout. Le toggle global ne change que sa peau.</p>
+        <h2>Des layouts indépendants du scénario.</h2>
+        <p>Chaque carte utilise le vrai composant. En mode UI, elle hérite en direct de la marque <b data-brand-name>${brand.name}</b> : palette, fonte de titre et composants.</p>
       </header>
       <aside class="library-references" aria-label="Références théoriques">
         <span class="library-references-label">ELABORATION LIKELIHOOD MODEL / PETTY & CACIOPPO, 1986</span>
@@ -35,7 +40,7 @@ export function renderLibraryPage() {
           <div class="pattern-grid">
             ${group.items.map((node) => `
               <article class="pattern-card" data-pattern-id="${node.id}">
-                <div class="pattern-card-head"><strong>${node.id} · ${node.label}</strong><span data-pattern-mode>GLOBAL</span></div>
+                <div class="pattern-card-head"><strong><i class="registry-order">L${String(layoutOrdinals.get(`${node.id}:${node.variant}`)).padStart(2, "0")}</i>${node.id} · ${node.label}</strong><span data-pattern-mode>GLOBAL</span></div>
                 <div class="pattern-viewport"><div class="pattern-scale">${renderNode(node, previewProfile)}</div></div>
               </article>`).join("")}
           </div>

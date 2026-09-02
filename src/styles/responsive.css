@@ -1,0 +1,418 @@
+/*
+ * Mobile commerce geometry
+ * ------------------------
+ * One final, shared override for every storefront hero and content block.
+ * The DOM stays identical between Wireframe and UI; only its composition adapts.
+ */
+
+.canvas.mobile {
+  width: min(390px, 100%);
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.canvas.mobile .shop-page,
+.canvas.mobile .shop-page > * { min-width: 0; }
+
+.canvas.mobile .shop-header {
+  position: relative;
+  z-index: 20;
+  height: 58px;
+  min-height: 58px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 0 18px;
+}
+.canvas.mobile .shop-header nav { display: none; }
+.canvas.mobile .shop-actions > .ui-only { gap: 12px; }
+.canvas.mobile .shop-wordmark { font-size: 15px; }
+.canvas.mobile .layout-label { top: 10px; left: 12px; max-width: calc(100% - 24px); font-size: 7px; }
+
+/* Heroes: every variant becomes a deliberate single-column composition. */
+.canvas.mobile .hero-layout:not(.hero-immersive),
+.canvas.mobile .hero-delivery,
+.canvas.mobile .hero-price,
+.canvas.mobile .hero-price-compact,
+.canvas.mobile .hero-classic,
+.canvas.mobile .hero-center,
+.canvas.mobile .hero-sketch {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.canvas.mobile .hero-split,
+.canvas.mobile .hero-premium,
+.canvas.mobile .hero-deadline,
+.canvas.mobile .hero-airline,
+.canvas.mobile .hero-gift,
+.canvas.mobile .hero-social,
+.canvas.mobile .hero-technical,
+.canvas.mobile .hero-trust,
+.canvas.mobile .hero-guided,
+.canvas.mobile .hero-delivery,
+.canvas.mobile .hero-classic,
+.canvas.mobile .hero-sketch {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.canvas.mobile .hero-split.reverse > :first-child,
+.canvas.mobile .hero-premium.reverse > :first-child,
+.canvas.mobile .hero-deadline.reverse > :first-child { order: 0; }
+
+.canvas.mobile .hero-split .hero-media,
+.canvas.mobile .hero-premium .hero-media,
+.canvas.mobile .hero-deadline .hero-media,
+.canvas.mobile .hero-airline .hero-media,
+.canvas.mobile .hero-gift .hero-media,
+.canvas.mobile .hero-social .hero-media,
+.canvas.mobile .hero-technical > .hero-media,
+.canvas.mobile .hero-trust .hero-media,
+.canvas.mobile .hero-guided .hero-media,
+.canvas.mobile .hero-delivery .hero-media {
+  width: 100%;
+  height: 330px !important;
+  min-height: 330px;
+}
+
+.canvas.mobile .copy-slot,
+.canvas.mobile .decision-panel,
+.canvas.mobile .technical-copy .copy-slot,
+.canvas.mobile .delivery-ui {
+  min-height: 0;
+  padding: 52px 20px 32px !important;
+}
+
+.canvas.mobile .decision-panel,
+.canvas.mobile .hero-delivery .decision-panel {
+  border-left: 0;
+  border-top: 1px solid #b9b9b9;
+}
+
+.canvas.mobile .ui-copy h2,
+.canvas.mobile .airline-ui h2,
+.canvas.mobile .gift-panel h2,
+.canvas.mobile .price-intro h2,
+.canvas.mobile .delivery-ui h2 {
+  max-width: 100%;
+  margin-bottom: 15px;
+  font-size: clamp(34px, 10.7vw, 42px);
+  line-height: .96;
+}
+
+.canvas.mobile .ui-copy .body-copy,
+.canvas.mobile .airline-ui > p,
+.canvas.mobile .gift-panel p,
+.canvas.mobile .price-intro p {
+  margin-bottom: 19px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.canvas.mobile .hero-layout .shop-button { width: 100%; min-height: 50px; }
+.canvas.mobile .material-choice.compact { align-items: flex-start; }
+.canvas.mobile .material-choice.compact .choice-label { width: 100%; }
+.canvas.mobile .material-choice.variant-menu,
+.canvas.mobile .material-choice.variant-menu summary { width: 100%; }
+.canvas.mobile .material-choice.variant-menu .choice-row { width: 100%; }
+.canvas.mobile .micro-proof { grid-template-columns: 1fr; gap: 5px; }
+.canvas.mobile .classic-rating-trust { align-items: flex-start; }
+.canvas.mobile .classic-rating-trust .trustpilot-mark { width: 100%; padding: 9px 0 0; border-top: 1px solid #aaa; border-left: 0; }
+
+/* Classic PDP keeps the product large and moves thumbnails beneath it. */
+.canvas.mobile .hero-classic { padding: 42px 16px 30px; gap: 28px; }
+.canvas.mobile .classic-gallery { height: auto; display: flex; flex-direction: column-reverse; gap: 10px; }
+.canvas.mobile .classic-gallery > .hero-media { height: 345px !important; min-height: 345px; }
+.canvas.mobile .classic-thumbs { grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.canvas.mobile .classic-thumbs button { width: 100%; aspect-ratio: 1; }
+.canvas.mobile .classic-summary { min-height: 0; padding-top: 0; }
+.canvas.mobile .hero-classic .ui-copy h2 { font-size: 37px; }
+.canvas.mobile .hero-classic .shop-button { min-height: 54px; }
+
+/* Comparison hero: cards remain readable and swipe horizontally. */
+.canvas.mobile .price-intro,
+.canvas.mobile .hero-price-compact .price-intro {
+  min-height: 0;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 50px 20px 22px;
+}
+.canvas.mobile .price-decision-grid,
+.canvas.mobile .hero-price-compact .price-decision-grid {
+  min-height: 0;
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 0 16px 30px;
+}
+.canvas.mobile .price-options,
+.canvas.mobile .hero-price-compact .price-options {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(218px, 82%);
+  gap: 9px;
+  overflow-x: auto;
+  padding: 2px 2px 12px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.canvas.mobile .price-card,
+.canvas.mobile .hero-price-compact .price-card {
+  min-height: 320px;
+  border: 1px solid #aaa;
+  scroll-snap-align: start;
+}
+.canvas.mobile .price-card.selected { padding: 21px 13px 17px; border: 2px solid #111; }
+.canvas.mobile .price-cta-panel { min-height: 0; gap: 18px; padding: 25px 20px; }
+
+/* Center and immersive heroes keep their distinct art direction. */
+.canvas.mobile .hero-center,
+.canvas.mobile .hero-center.hero-center-compact,
+.canvas.mobile .hero-center.hero-center-with-promo.promo-footer,
+.canvas.mobile .hero-center.hero-center-with-promo.promo-top {
+  grid-template-rows: auto auto auto;
+}
+.canvas.mobile .hero-center .copy-slot { padding: 54px 20px 25px !important; }
+.canvas.mobile .hero-center .hero-media,
+.canvas.mobile .hero-center-compact .hero-media {
+  width: calc(100% - 32px);
+  height: 285px;
+  min-height: 285px;
+  margin: 0 16px 28px;
+}
+.canvas.mobile .hero-promo-top { grid-row: 1; padding: 16px 16px 0; }
+.canvas.mobile .hero-promo-footer { padding: 0 16px 24px; }
+.canvas.mobile .hero-immersive,
+.canvas.mobile .hero-immersive .hero-media { min-height: 680px; }
+.canvas.mobile .immersive-wire-copy { width: auto; align-self: end; margin: 20px; padding: 24px 18px; }
+.canvas.mobile .immersive-copy { width: 100%; align-content: end; padding: 70px 20px 34px; }
+.canvas.mobile .immersive-copy h2 { font-size: clamp(39px, 12vw, 47px); }
+.canvas.mobile .hero-immersive .media-ui::after { background: linear-gradient(0deg, rgba(5,5,5,.9) 0%, rgba(5,5,5,.58) 53%, rgba(5,5,5,.08) 80%); }
+
+/* Technical, gift and delivery controls never squeeze or overflow. */
+.canvas.mobile .technical-copy { grid-template-rows: auto auto; }
+.canvas.mobile .technical-specs { grid-template-columns: 1fr 1fr; }
+.canvas.mobile .technical-specs > div { min-height: 92px; border-bottom: 1px solid #aaa; }
+.canvas.mobile .technical-specs > div:nth-child(even) { border-right: 0; }
+.canvas.mobile .gift-facts { grid-template-columns: 1fr; }
+.canvas.mobile .gift-facts > div { min-height: 62px; border-right: 0; border-bottom: 1px solid #aaa; }
+.canvas.mobile .gift-facts > div:last-child { border-bottom: 0; }
+.canvas.mobile .gift-option { grid-template-columns: auto minmax(0, 1fr) auto; }
+.canvas.mobile .gift-message { padding-left: 12px; }
+.canvas.mobile .delivery-option { grid-template-columns: auto minmax(0, 1fr) auto; }
+.canvas.mobile .delivery-option small { line-height: 1.35; }
+
+/* Sections: content drives height; no mobile-only spacer blocks. */
+.canvas.mobile .shop-page > .section-layout {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 46px 18px;
+}
+.canvas.mobile .section-heading { margin-bottom: 22px; }
+.canvas.mobile .section-heading h3,
+.canvas.mobile .section-copy h3,
+.canvas.mobile .journal-copy h3,
+.canvas.mobile .section-final h3 {
+  max-width: 100%;
+  font-size: clamp(31px, 9.3vw, 37px);
+  line-height: 1;
+}
+.canvas.mobile .section-copy p,
+.canvas.mobile .journal-copy p { font-size: 13px; line-height: 1.55; }
+
+.canvas.mobile .section-split,
+.canvas.mobile .section-journal,
+.canvas.mobile .section-journal.reverse,
+.canvas.mobile .section-scene-selector,
+.canvas.mobile .section-loadout-switch,
+.canvas.mobile .section-routine-selector {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0 !important;
+}
+.canvas.mobile .section-split.reverse > :first-of-type,
+.canvas.mobile .section-journal.reverse .journal-media { order: 0; }
+.canvas.mobile .section-split .section-media,
+.canvas.mobile .journal-media,
+.canvas.mobile .packing-media,
+.canvas.mobile .airline-proof-media {
+  width: 100%;
+  height: 310px;
+  min-height: 310px;
+}
+.canvas.mobile .section-copy,
+.canvas.mobile .journal-copy { min-height: 0; padding: 46px 20px; }
+
+.canvas.mobile .metric-grid,
+.canvas.mobile .review-grid,
+.canvas.mobile .comment-grid,
+.canvas.mobile .feature-grid,
+.canvas.mobile .warranty-grid,
+.canvas.mobile .gift-reassurance-grid { grid-template-columns: 1fr; gap: 10px; }
+.canvas.mobile .metric-grid article,
+.canvas.mobile .review-card,
+.canvas.mobile .comment-grid article,
+.canvas.mobile .feature-grid article,
+.canvas.mobile .warranty-grid article,
+.canvas.mobile .gift-reassurance-grid article,
+.canvas.mobile .customer-evidence-card { min-height: 0; padding: 20px; }
+.canvas.mobile .feature-icon,
+.canvas.mobile .process-number { margin-bottom: 24px; }
+.canvas.mobile .gift-reassurance-grid article + article { border-left: 0; border-top: 1px solid #111; }
+
+/* Customer proof stays concise: summary, then swipeable review evidence. */
+.canvas.mobile .customer-evidence-layout { grid-template-columns: 1fr; gap: 10px; }
+.canvas.mobile .customer-evidence-summary { min-height: 0; padding: 22px; }
+.canvas.mobile .customer-evidence-summary p:not(.eyebrow) { margin-bottom: 20px; }
+.canvas.mobile .customer-evidence-summary dl { margin-top: 0; }
+.canvas.mobile .customer-evidence-reviews {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: 86%;
+  gap: 9px;
+  overflow-x: auto;
+  padding-bottom: 9px;
+  scroll-snap-type: x mandatory;
+}
+.canvas.mobile .customer-evidence-card { scroll-snap-align: start; }
+.canvas.mobile .customer-evidence-card > .ui-only { min-height: 245px; }
+
+/* Product and packing grids remain scannable without horizontal page overflow. */
+.canvas.mobile .product-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+.canvas.mobile .product-tile { min-height: 245px; padding: 10px; }
+.canvas.mobile .packing-grid,
+.canvas.mobile .airline-proof-layout { grid-template-columns: 1fr; min-height: 0; }
+.canvas.mobile .packing-items { grid-template-columns: 1fr 1fr; gap: 7px; padding: 10px 0 0; }
+.canvas.mobile .packing-items > div { min-height: 150px; }
+.canvas.mobile .packing-item-top { padding: 12px 10px 2px; }
+.canvas.mobile .packing-item-copy { padding: 0 10px 12px; }
+.canvas.mobile .packing-icon { height: 68px; }
+
+/* Story and travel evidence. */
+.canvas.mobile .section-airport-story { padding: 0 !important; }
+.canvas.mobile .airport-story-media { height: 340px; }
+.canvas.mobile .airport-story-band { min-height: 0; grid-template-columns: 1fr; }
+.canvas.mobile .airport-story-copy { padding: 36px 20px 25px; }
+.canvas.mobile .airport-cost-rail { grid-template-columns: 1fr; border-top: 1px solid #4b4b47; border-left: 0; }
+.canvas.mobile .airport-cost-rail > div { min-height: 82px; grid-template-columns: 1fr auto; align-items: center; gap: 10px; padding: 16px 20px; border-right: 0; border-bottom: 1px solid #4b4b47; }
+.canvas.mobile .section-commute-proof { padding-inline: 14px; }
+.canvas.mobile .commute-proof-images { grid-template-columns: 1fr; gap: 8px; }
+.canvas.mobile .commute-proof-image { height: 245px; }
+.canvas.mobile .commute-proof-rail { grid-template-columns: 1fr; }
+.canvas.mobile .commute-proof-rail article { min-height: 72px; border-right: 0; border-bottom: 1px solid #999; }
+.canvas.mobile .commute-proof-rail article:last-child { border-bottom: 0; }
+
+/* Timelines become vertical, while image proofs become swipeable galleries. */
+.canvas.mobile .timeline,
+.canvas.mobile .section-timeline .timeline { grid-template-columns: 1fr; gap: 16px; padding-top: 6px; }
+.canvas.mobile .timeline::before { top: 0; bottom: 0; left: 18px; right: auto; border: 0; border-left: 1px solid #777; }
+.canvas.mobile .timeline > div { grid-template-columns: 38px 1fr; align-items: center; text-align: left; }
+.canvas.mobile .timeline-dot { margin: 0; }
+.canvas.mobile .photo-proof-heading { display: block; }
+.canvas.mobile .photo-ratio-toggle { width: 100%; margin-top: 16px; }
+.canvas.mobile .photo-ratio-toggle button { flex: 1; }
+.canvas.mobile .photo-proof-grid,
+.canvas.mobile .photo-proof-grid[data-ratio="story"] {
+  height: 420px;
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: 84%;
+  justify-content: start;
+  gap: 9px;
+  overflow-x: auto;
+  padding: 0 0 9px;
+  scroll-snap-type: x mandatory;
+}
+.canvas.mobile .photo-proof-card,
+.canvas.mobile .photo-proof-grid[data-ratio="story"] .photo-proof-card { width: 100%; height: 405px; scroll-snap-align: start; }
+
+/* Tables become stacked, readable product cards instead of desktop strips. */
+.canvas.mobile .data-table { overflow: visible; border: 0; background: transparent; }
+.canvas.mobile .table-head { display: none; }
+.canvas.mobile .table-row {
+  min-width: 0 !important;
+  grid-template-columns: 1fr 1fr !important;
+  margin-bottom: 9px;
+  border: 1px solid #999;
+  background: #fff;
+}
+.canvas.mobile .table-row > span,
+.canvas.mobile .table-row > i { min-width: 0; min-height: 46px; padding: 10px; font-size: 10px; }
+.canvas.mobile .table-row > :first-child { grid-column: 1 / -1; min-height: 42px; font-weight: 750; border-bottom: 1px solid #999; }
+.canvas.mobile .table-row.selected { outline-offset: -2px; }
+.canvas.mobile .airline-compare-layout { grid-template-columns: 1fr; border: 0; }
+.canvas.mobile .airline-compare-now { min-height: 0; padding: 22px 18px; border-right: 0; border-bottom: 1px solid #999; }
+.canvas.mobile .airline-compare-table .table-row.current-airline > span { border-color: #42423e; }
+
+/* Image-led modules preserve useful scale without huge empty mobile sections. */
+.canvas.mobile .before-after-grid { grid-template-columns: 1fr; }
+.canvas.mobile .before-after-grid article { height: 285px; }
+.canvas.mobile .compare-arrow { min-height: 42px; transform: rotate(90deg); }
+.canvas.mobile .hotspot-layout { height: 330px; }
+.canvas.mobile .hotspot i { left: auto; right: 38px; max-width: 125px; white-space: normal; }
+.canvas.mobile .mosaic-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 245px 190px 190px; }
+.canvas.mobile .mosaic-grid > :first-child { grid-column: 1 / -1; grid-row: auto; }
+
+/* Interactive contextual blocks. */
+.canvas.mobile .scene-stage,
+.canvas.mobile .routine-stage,
+.canvas.mobile .loadout-stage { height: 350px; min-height: 350px; }
+.canvas.mobile .scene-panel,
+.canvas.mobile .loadout-panel { min-height: 0; padding: 46px 20px 30px; border-left: 0; border-top: 1px solid #999; }
+.canvas.mobile .routine-band { grid-template-columns: 1fr; }
+.canvas.mobile .routine-copy { padding: 40px 20px 24px; }
+.canvas.mobile .routine-moments {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: 78%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+.canvas.mobile .routine-moment { min-height: 150px; padding: 22px 18px; border-top: 1px solid #999; border-left: 0; scroll-snap-align: start; }
+.canvas.mobile .routine-moment + .routine-moment { border-left: 1px solid #999; }
+.canvas.mobile .loadout-toggle { display: grid; grid-template-columns: 1fr; }
+.canvas.mobile .loadout-toggle button { min-height: 44px; border-right: 0; border-bottom: 1px solid #999; }
+.canvas.mobile .loadout-toggle button:last-child { border-bottom: 0; }
+.canvas.mobile .loadout-ui ul { grid-template-columns: 1fr; }
+
+/* Hidden sketch experience follows the same mobile rhythm. */
+.canvas.mobile .hero-sketch { grid-template-columns: 1fr; }
+.canvas.mobile .sketch-intro { min-height: 0; padding: 54px 20px 28px; border-right: 0; border-bottom: 1px solid #aaa; }
+.canvas.mobile .sketch-index { margin: 28px 0 17px; }
+.canvas.mobile .sketch-intro h2 { font-size: 39px; }
+.canvas.mobile .sketch-gallery { min-height: 0; height: 520px; grid-template-columns: 1fr 1fr; grid-template-rows: 1.2fr .8fr; padding: 10px; }
+.canvas.mobile .sketch-card-primary { grid-column: 1 / -1; grid-row: auto; }
+
+.canvas.mobile .section-faq .faq-list button { min-height: 58px; }
+.canvas.mobile .section-final { min-height: 290px !important; padding: 48px 20px !important; }
+.canvas.mobile .section-final .shop-button { width: min(300px, 100%); }
+.canvas.mobile .sticky-shop-bar { min-height: 68px; padding: 9px 11px; }
+.canvas.mobile .sticky-product { display: none; }
+.canvas.mobile .sticky-buy { width: 100%; justify-content: space-between; gap: 10px; }
+.canvas.mobile .sticky-buy .shop-button { min-height: 46px; padding-inline: 14px; }
+.canvas.mobile .shop-footer { grid-template-columns: 1fr 1fr; gap: 28px 18px; padding: 38px 20px; }
+.canvas.mobile .shop-footer > div:first-child { grid-column: 1 / -1; }
+
+/* Payment is part of Preview: one uninterrupted, scrollable mobile experience. */
+body.payment-preview .canvas.mobile { height: auto; min-height: 100vh; overflow: visible; }
+body.payment-preview .stage { height: auto; min-height: 100vh; overflow: visible; }
+.canvas.mobile .payment-page { min-height: 100vh; }
+.canvas.mobile .payment-page .shop-header { height: 58px; min-height: 58px; }
+.canvas.mobile .payment-shell { height: auto !important; min-height: 0; grid-template-columns: 1fr; }
+.canvas.mobile .payment-decision { min-height: 390px; padding: 34px 20px 18px; }
+.canvas.mobile .payment-comment { max-width: 100%; font-size: 11px; }
+.canvas.mobile .payment-decision h2 { font-size: 37px; }
+.canvas.mobile .payment-clock-wrap canvas { height: 112px; }
+.canvas.mobile .payment-decision-foot { flex-direction: column; gap: 4px; }
+.canvas.mobile .payment-checkout { padding: 24px 18px 20px; }
+.canvas.mobile .payment-product { grid-template-columns: 78px minmax(0, 1fr); }
+.canvas.mobile .payment-product-image { height: 78px; }
+.canvas.mobile .payment-form input { height: 42px; font-size: 12px; }
+.canvas.mobile .payment-submit { height: 48px; font-size: 12px; }
+
+@media (max-width: 720px) {
+  body.preview-home .workspace,
+  body.payment-preview .workspace { padding: 0; }
+  body.preview-home .stage,
+  body.payment-preview .stage { width: 100%; padding: 0; }
+}

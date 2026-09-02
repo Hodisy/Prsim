@@ -1,11 +1,55 @@
 export const colors = ["black", "cream", "liberty-blue", "liberty-burgundy"];
 
+export const colorMerchandisingSpecs = Object.freeze({
+  black: {
+    label: "Noir",
+    age_groups: ["25_34", "35_44", "45_54", "55_64"],
+    gender_representations: ["woman", "man", "other"],
+    projections: ["discreet", "professional", "premium", "practical"],
+    product_expressions: ["discreet", "balanced"],
+    contexts: ["office", "sport", "rail_business", "photography", "cycling_commute"],
+    tones: ["restrained", "serious", "energetic"],
+    evidence: { source: "merchant_authored_hypothesis", confidence: "prototype", use: "creative_tie_breaker_only" },
+  },
+  cream: {
+    label: "Crème",
+    age_groups: ["18_24", "25_34", "35_44", "45_54", "55_64", "65_plus"],
+    gender_representations: ["woman", "man", "other"],
+    projections: ["discreet", "photogenic", "responsible", "practical"],
+    product_expressions: ["discreet", "balanced"],
+    contexts: ["office", "sport", "rail_leisure", "short_city_trip", "family_trip"],
+    tones: ["restrained", "warm", "reassuring"],
+    evidence: { source: "merchant_authored_hypothesis", confidence: "prototype", use: "creative_tie_breaker_only" },
+  },
+  "liberty-blue": {
+    label: "Liberty bleu",
+    age_groups: ["18_24", "25_34", "35_44"],
+    gender_representations: ["woman", "man", "other"],
+    projections: ["photogenic", "expressive", "responsible"],
+    product_expressions: ["balanced", "statement"],
+    contexts: ["sport", "study", "cycling_commute", "short_city_trip", "walking_city"],
+    tones: ["warm", "joyful", "energetic"],
+    evidence: { source: "merchant_authored_hypothesis", confidence: "prototype", use: "creative_tie_breaker_only" },
+  },
+  "liberty-burgundy": {
+    label: "Liberty bordeaux",
+    age_groups: ["25_34", "35_44", "45_54", "55_64"],
+    gender_representations: ["woman", "man", "other"],
+    projections: ["premium", "photogenic", "expressive"],
+    product_expressions: ["balanced", "statement"],
+    contexts: ["sport", "office", "family_trip", "short_city_trip", "walking_city"],
+    tones: ["warm", "joyful", "energetic"],
+    evidence: { source: "merchant_authored_hypothesis", confidence: "prototype", use: "creative_tie_breaker_only" },
+  },
+});
+
 const variantsFor = (productId, price) => colors.map((color) => ({
   id: `${productId}-${color}`,
   product_id: productId,
   color,
   price_eur: price,
   available: true,
+  merchandising: colorMerchandisingSpecs[color],
 }));
 
 export const products = [

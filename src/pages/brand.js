@@ -1,30 +1,57 @@
-import { icon, rating, trustpilot, uiButton } from "../components/primitives.js";
+import { esc, icon, rating, trustpilot, uiButton } from "../components/primitives.js";
+import { systemPipeline } from "../components/system-pipeline.js";
+import { titleFonts } from "../core/brand.js";
 
-export function renderBrandPage() {
+const editorFields = (brand) => `
+  <form class="brand-editor" data-brand-editor>
+    <label class="brand-field brand-name-field"><span>Nom de marque</span><input type="text" maxlength="32" value="${esc(brand.name)}" data-brand-field="name"></label>
+    ${[
+      ["ink", "Encre"], ["graphite", "Graphite"], ["fog", "Brume"],
+      ["paper", "Papier"], ["review", "Avis"], ["trust", "Confiance"],
+    ].map(([key, fieldLabel]) => `<label class="brand-field brand-color-field"><span>${fieldLabel}</span><span class="brand-color-input"><input type="color" value="${brand[key]}" data-brand-field="${key}"><code data-brand-value="${key}">${brand[key].toUpperCase()}</code></span></label>`).join("")}
+    <label class="brand-field brand-font-field"><span>Fonte des titres</span><select data-brand-field="titleFont">${Object.entries(titleFonts).map(([key, option]) => `<option value="${key}" ${brand.titleFont === key ? "selected" : ""}>${option.label}</option>`).join("")}</select></label>
+  </form>`;
+
+export function renderBrandPage(brand, options = {}) {
+  const editing = Boolean(options.editing);
+  const draft = options.draft || brand;
   return `
     <div class="brand-page">
-      <header class="brand-hero">
-        <div class="brand-hero-top"><span>BRAND SYSTEM / VERSION 0.2</span><span>SEPTEMBRE 2026</span></div>
-        <div class="brand-lockup"><strong>PORT 70</strong><p>Un bagage précis pour les départs courts.<br>Une collection nommée simplement par son volume.</p></div>
-        <div class="brand-principles"><span>MONOCHROME</span><span>FONCTION AVANT STYLE</span><span>PREUVE CONTEXTUELLE</span><span>PHOTOGRAPHIE DOCUMENTAIRE</span></div>
+      ${systemPipeline("brand")}
+      <header class="brand-hero ${editing ? "is-editing" : ""}"${editing ? ` style="--draft-ink:${draft.ink};--draft-paper:${draft.paper};--draft-title-font:${esc(titleFonts[draft.titleFont].stack)}"` : ""}>
+        <div class="brand-hero-top"><span>BRAND SYSTEM / VERSION 0.2</span>${editing ? `<span>MODE ÉDITION</span>` : `<button type="button" data-brand-edit>Éditer la Brand</button>`}</div>
+        ${editing ? `
+          <div class="brand-hero-editor">
+            <div class="brand-editor-intro">
+              <span>APERÇU LOCAL</span>
+              <strong data-brand-draft-name>${esc(draft.name)}</strong>
+              <p>Modifiez les tokens ici. Rien ne se propage dans le projet avant l’enregistrement.</p>
+            </div>
+            ${editorFields(draft)}
+          </div>
+          <div class="brand-editor-actions"><button type="button" data-brand-reset>Réinitialiser</button><button type="button" data-brand-cancel>Annuler</button><button type="button" class="primary" data-brand-save>Enregistrer</button></div>
+        ` : `
+          <div class="brand-lockup"><strong data-brand-name>${esc(brand.name)}</strong><p>Un bagage précis pour les départs courts.<br>Une collection nommée simplement par son volume.</p></div>
+          <div class="brand-principles"><span>MONOCHROME</span><span>FONCTION AVANT STYLE</span><span>PREUVE CONTEXTUELLE</span><span>PHOTOGRAPHIE DOCUMENTAIRE</span></div>
+        `}
       </header>
 
       <section class="brand-section">
         <header><span>01</span><div><h2>Fondations</h2><p>Une palette noire éditoriale. Les seules couleurs servent une information, jamais la décoration.</p></div></header>
         <div class="palette-grid">
-          <div class="swatch-card ink"><span>#0A0A0A</span><strong>INK</strong></div>
-          <div class="swatch-card graphite"><span>#272727</span><strong>GRAPHITE</strong></div>
-          <div class="swatch-card fog"><span>#E8E8E3</span><strong>FOG</strong></div>
-          <div class="swatch-card paper"><span>#F7F7F2</span><strong>PAPER</strong></div>
-          <div class="swatch-card star-color"><span>#F4B740</span><strong>REVIEW ONLY</strong></div>
-          <div class="swatch-card trust-color"><span>#00B67A</span><strong>TRUST ONLY</strong></div>
+          <div class="swatch-card ink"><span data-brand-value="ink">${brand.ink.toUpperCase()}</span><strong>INK</strong></div>
+          <div class="swatch-card graphite"><span data-brand-value="graphite">${brand.graphite.toUpperCase()}</span><strong>GRAPHITE</strong></div>
+          <div class="swatch-card fog"><span data-brand-value="fog">${brand.fog.toUpperCase()}</span><strong>FOG</strong></div>
+          <div class="swatch-card paper"><span data-brand-value="paper">${brand.paper.toUpperCase()}</span><strong>PAPER</strong></div>
+          <div class="swatch-card star-color"><span data-brand-value="review">${brand.review.toUpperCase()}</span><strong>REVIEW ONLY</strong></div>
+          <div class="swatch-card trust-color"><span data-brand-value="trust">${brand.trust.toUpperCase()}</span><strong>TRUST ONLY</strong></div>
         </div>
       </section>
 
       <section class="brand-section">
-        <header><span>02</span><div><h2>Typographie</h2><p>Une sans grotesque système et une serif éditoriale. Pas de fonte « futuriste » illustrative.</p></div></header>
+        <header><span>02</span><div><h2>Typographie</h2><p>Une sans grotesque système et une fonte de titre configurable. Pas de fonte « futuriste » illustrative.</p></div></header>
         <div class="type-grid">
-          <article class="type-display"><span>DISPLAY / GEORGIA</span><strong>Trois jours.<br>Un seul volume.</strong><small>64 / 0.94 / −0.04 em</small></article>
+          <article class="type-display"><span>DISPLAY / <b data-brand-font-label>${titleFonts[brand.titleFont].label}</b></span><strong>Trois jours.<br>Un seul volume.</strong><small>64 / 0.94 / −0.04 em</small></article>
           <article class="type-system"><span>INTERFACE / SYSTEM SANS</span><h3>Une information nette au bon moment.</h3><p>La preuve est attachée à la décision qu’elle sécurise. Les labels sont courts, les données tabulaires et les conditions explicites.</p><small>14 / 1.55 / 0</small></article>
         </div>
       </section>

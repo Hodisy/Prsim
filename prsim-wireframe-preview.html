@@ -4,16 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="PRSIM — layouts e-commerce adaptatifs en wireframe et UI." />
-    <title>PRSIM — Adaptive Commerce Preview</title>
+    <title>PRSIM | Adaptive Commerce Preview</title>
+    <link rel="icon" href="./assets/brand/port70-mark.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./src/styles/app.css" />
     <link rel="stylesheet" href="./src/styles/wireframe.css" />
     <link rel="stylesheet" href="./src/styles/ui.css" />
     <link rel="stylesheet" href="./src/styles/brand.css" />
+    <link rel="stylesheet" href="./src/styles/payment.css" />
+    <link rel="stylesheet" href="./src/styles/system.css" />
+    <link rel="stylesheet" href="./src/styles/responsive.css" />
   </head>
   <body>
     <header class="appbar">
-      <a class="app-identity" href="#brand" aria-label="Ouvrir la charte de marque">
-        <span class="app-mark">P</span>
+      <a class="app-identity" href="#preview" aria-label="Ouvrir la boutique adaptative">
+        <span class="app-mark"><img src="./assets/brand/port70-mark.svg" alt="" /></span>
         <span><strong>PRSIM</strong><small>Adaptive commerce preview</small></span>
       </a>
       <div class="app-controls">
@@ -25,6 +29,8 @@
           <button type="button" data-viewport="desktop">Desktop</button>
           <button type="button" data-viewport="mobile">Mobile</button>
         </div>
+        <button class="language-toggle" type="button" data-language-toggle aria-label="Afficher le site en anglais">EN</button>
+        <button class="preview-hide-header" type="button" data-preview-header-hide>Masquer</button>
       </div>
     </header>
 
@@ -42,7 +48,7 @@
       </div>
       <div id="sequence" class="sequence" aria-label="Séquence de la page"></div>
       <div class="stage">
-        <div id="canvas" class="canvas desktop mode-wireframe" aria-live="polite"></div>
+        <div id="canvas" class="canvas desktop mode-ui" aria-live="polite"></div>
       </div>
     </main>
 

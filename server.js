@@ -2,10 +2,12 @@ import { join, normalize } from "node:path";
 
 const root = import.meta.dir;
 const entry = "prsim-wireframe-preview.html";
+const hostname = Bun.env.PRSIM_HOST || "localhost";
+const port = Number(Bun.env.PRSIM_PORT || 4173);
 
 const server = Bun.serve({
-  hostname: "localhost",
-  port: 4173,
+  hostname,
+  port,
   async fetch(request) {
     const url = new URL(request.url);
     const requestedPath = decodeURIComponent(url.pathname).replace(/^\/+/, "") || entry;

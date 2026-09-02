@@ -32,6 +32,18 @@ export const materialOptions = [
   { name: "Liberty bordeaux", colorway: "liberty-burgundy", detail: "Motif · bordeaux", src: "./assets/materials/liberty-burgundy.png" },
 ];
 
+const colorButtons = (variant) => materialOptions.map((option, index) => `<button class="color-option ${index === 0 ? "active" : ""}" type="button" data-color-option data-color-name="${esc(option.name)}" data-colorway="${option.colorway}" aria-label="${esc(option.detail)}" aria-pressed="${index === 0}">${variant === "swatches" ? `<img src="${option.src}" alt="" />` : `<span>${esc(option.name)}</span>${variant === "menu" ? `<small>${esc(option.detail)}</small>` : ""}`}</button>`).join("");
+
+export const materialChoice = ({ compact = false, variant = "swatches" } = {}) => variant === "menu" ? `
+  <details class="material-choice compact variant-menu">
+    <summary>Coloris · <strong data-selected-color>Noir</strong><span aria-hidden="true">+</span></summary>
+    <div class="choice-row" role="group" aria-label="Choisir la matière et le coloris">${colorButtons("menu")}</div>
+  </details>` : `
+  <div class="material-choice ${compact ? "compact" : ""} variant-${variant}">
+    <p class="choice-label">Coloris · <strong data-selected-color>Noir</strong></p>
+    <div class="choice-row" role="group" aria-label="Choisir la matière et le coloris">${colorButtons(variant)}</div>
+  </div>`;
+
 const productColorNames = {
   black: "Noir",
   cream: "Crème",
@@ -73,7 +85,7 @@ export const wireLines = (widths = [100, 88, 64]) => `
     ${widths.map((width) => `<span style="--line-width:${width}%"></span>`).join("")}
   </div>`;
 
-export const mediaSlot = (label = "Asset produit", className = "", explicitSrc = "", explicitCaption = "") => {
+export const mediaSlot = (label = "Asset produit", className = "", explicitSrc = "", explicitCaption = "", colorAssets = null) => {
   const src = explicitSrc || mediaImageFor(label);
   const view = src.split("/").at(-1);
   const productView = explicitSrc ? "" : ` data-product-view="${view}"`;
@@ -82,16 +94,31 @@ export const mediaSlot = (label = "Asset produit", className = "", explicitSrc =
     <div class="media-slot ${esc(className)}">
       <div class="wf-only media-wire" aria-hidden="true"><span>${esc(label)}</span></div>
       <div class="ui-only media-ui">
-        <img class="product-media-image"${productView} src="${src}" alt="${esc(label)}" loading="lazy" />
+        <img class="product-media-image"${productView}${colorAssets ? ` data-color-assets="${esc(JSON.stringify(colorAssets))}"` : ""} src="${src}" alt="${esc(label)}" loading="lazy" />
         <span class="asset-caption"${colorCaption}>${esc(explicitCaption || (explicitSrc ? "EN VOYAGE / 32 L" : "NOIR / TOILE TECHNIQUE / 32 L"))}</span>
       </div>
     </div>`;
 };
 
-export const uiButton = (label, secondary = false, attributes = "") => `
-  <button type="button" class="shop-button ${secondary ? "secondary" : ""}" data-purchase-action ${attributes}>${esc(label)}</button>`;
+const dynamicColorCopy = (label = "") => {
+  const template = String(label);
+  const dynamic = template.includes("{color}");
+  return {
+    label: dynamic ? template.replaceAll("{color}", "Coloris sélectionné") : template,
+    attributes: dynamic ? ` data-color-copy data-color-template="${esc(template)}"` : "",
+  };
+};
 
-export const wfButton = (label = "CTA principal") => `<div class="wf-button" aria-hidden="true">${esc(label)}</div>`;
+export const uiButton = (label, secondary = false, attributes = "") => {
+  const copy = dynamicColorCopy(label);
+  return `
+  <button type="button" class="shop-button ${secondary ? "secondary" : ""}" data-purchase-action${copy.attributes} ${attributes}>${esc(copy.label)}</button>`;
+};
+
+export const wfButton = (label = "CTA principal") => {
+  const copy = dynamicColorCopy(label);
+  return `<div class="wf-button"${copy.attributes} aria-hidden="true">${esc(copy.label)}</div>`;
+};
 
 export const dualAction = (label, secondary = false, attributes = "") => `
   <div class="wf-only">${wfButton(label)}</div>
@@ -140,22 +167,29 @@ export const heroTrustRail = () => `
 
 export const shopHeader = () => `
   <header class="shop-header">
-    <div class="wf-only wf-shop-logo">MARQUE</div>
-    <a class="ui-only shop-wordmark" href="#classic">PORT 70</a>
+    <div class="shop-brand-lockup">
+      <div class="wf-only wf-shop-logo">MARQUE</div>
+      <span class="ui-only shop-wordmark" data-brand-name>PORT 70</span>
+      <button class="shop-prsim-trigger" type="button" data-preview-menu-toggle aria-label="Afficher le header PRSIM" aria-expanded="false">Voir dans PRSIM</button>
+    </div>
     <nav aria-label="Navigation boutique">
       <span class="wf-only wf-nav-lines"><i></i><i></i><i></i></span>
-      <span class="ui-only shop-nav"><a href="#classic">Sacs</a><a href="#library">Cabine</a><a href="#brand">Journal</a></span>
+      <span class="ui-only shop-nav" aria-label="Navigation de démonstration"><span>Sacs</span><span>Cabine</span><span>Journal</span></span>
     </nav>
     <div class="shop-actions">
       <span class="wf-only wf-icons"><i></i><i></i></span>
-      <span class="ui-only">${icon("search")} ${icon("bag")}<b>0</b></span>
+      <span class="ui-only" aria-hidden="true">${icon("search")} ${icon("bag")}<b>0</b></span>
     </div>
   </header>`;
 
 export const shopFooter = () => `
   <footer class="shop-footer">
-    <div><span class="wf-only wf-footer-mark"></span><strong class="ui-only shop-wordmark">PORT 70</strong></div>
-    ${["Collection", "Aide", "Journal"].map((title) => `<div><strong class="ui-only">${title}</strong><span class="wf-only">${wireLines([75, 56, 68])}</span><ul class="ui-only"><li>Le Passage 32</li><li>Livraison & retours</li><li>Conditions</li></ul></div>`).join("")}
+    <div><span class="wf-only wf-footer-mark"></span><strong class="ui-only shop-wordmark" data-brand-name>PORT 70</strong></div>
+    ${[
+      ["Le sac", ["Passage 32", "Matières & coloris", "Dimensions cabine"]],
+      ["Aide", ["Livraison & retours", "Garantie deux ans", "Nous contacter"]],
+      ["Journal", ["Guides de villes", "Conseils packing", "Histoires de voyage"]],
+    ].map(([title, links]) => `<div><strong class="ui-only">${title}</strong><span class="wf-only">${wireLines([75, 56, 68])}</span><ul class="ui-only">${links.map((link) => `<li>${link}</li>`).join("")}</ul></div>`).join("")}
   </footer>`;
 
 export const stickyBar = (profile) => {
@@ -186,12 +220,13 @@ export const copySlot = (node) => `
       ${wfButton(node.cta || "CTA principal")}
     </div>
     <div class="ui-only ui-copy">
-      <p class="eyebrow">${esc(node.kicker || "PORT 70 · PASSAGE 32")}</p>
+      <p class="eyebrow">${node.kicker ? esc(node.kicker) : '<span data-brand-name>PORT 70</span> · PASSAGE 32'}</p>
       <h2>${esc(node.title)}</h2>
       <p class="body-copy">${esc(node.body || "Un argument précis, relié au contexte et à une preuve immédiatement visible.")}</p>
       ${nextOrderPromo(node.promotion)}
       ${node.showTrust ? heroTrustRail() : ""}
       ${node.proofs?.length ? `<div class="hero-proof-list">${node.proofs.map((proof) => `<span>✓ ${esc(proof)}</span>`).join("")}</div>` : ""}
+      ${materialChoice({ compact: true, variant: node.colorSelector || (["premium", "technical"].includes(node.variant) ? "links" : node.variant === "deadline" ? "menu" : "swatches") })}
       ${node.cta ? uiButton(node.cta) : ""}
     </div>
   </div>`;

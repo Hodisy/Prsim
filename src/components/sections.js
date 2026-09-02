@@ -1,4 +1,6 @@
 import { dualAction, esc, icon, layoutLabel, mediaSlot, productImages, rating, trustpilot, wireLines } from "./primitives.js";
+import { reviewSourceLabels } from "../data/reviews.js";
+import { comparisonProducts } from "../data/comparison-products.js";
 
 const shell = (node, className, content) => `
   <section class="layout-block section-layout ${className}" data-layout-id="${esc(node.id)}" data-layout-variant="${esc(node.variant)}">
@@ -8,11 +10,15 @@ const shell = (node, className, content) => `
 const heading = (node, centered = false) => `
   <header class="section-heading ${centered ? "centered" : ""}">
     <div class="wf-only">${wireLines([76, 55])}</div>
-    <div class="ui-only"><p class="eyebrow">${esc(node.id)} · PORT 70</p><h3>${esc(node.title)}</h3></div>
+    <div class="ui-only"><p class="eyebrow">${esc(node.id)} · <span data-brand-name>PORT 70</span></p><h3>${esc(node.title)}</h3></div>
   </header>`;
 
+const colorAssetsAttr = (assets, attribute = "data-color-assets") => assets
+  ? ` ${attribute}="${esc(JSON.stringify(assets))}"`
+  : "";
+
 const split = (node) => shell(node, `section-split ${node.reverse ? "reverse" : ""}`, `
-  ${mediaSlot(node.media || "Asset argument", "section-media", node.asset, node.assetCaption)}
+  ${mediaSlot(node.media || "Asset argument", "section-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="section-copy">
     <div class="wf-only">${wireLines([82, 67, 92, 74])}<span class="wf-paragraph"></span></div>
     <div class="ui-only"><p class="eyebrow">DÉTAIL / USAGE</p><h3>${esc(node.title)}</h3><p>${esc(node.body || "Chaque détail répond à un moment concret du trajet, sans multiplier les fonctions décoratives.")}</p><a href="#brand">Voir le détail ${icon("arrow")}</a></div>
@@ -26,17 +32,55 @@ const metrics = (node, profile) => {
 };
 
 const reviewCards = (node, profile) => {
-  const quotes = profile.reviewQuotes || [profile.quote, "La taille correspond exactement à ce qui est annoncé.", "Les accès sont simples à comprendre dès le premier trajet."];
-  return shell(node, "section-reviews", `${heading(node)}<div class="review-grid">${quotes.map((quote, index) => `
-    <article class="review-card"><div class="wf-only">${wireLines([42, 100, 90, 62])}<span class="wf-avatar"></span></div><div class="ui-only">${rating("5,0", "")}<blockquote>« ${esc(quote)} »</blockquote><footer><span class="avatar">${String.fromCharCode(65 + index)}</span><span><strong>${index === 0 ? esc(profile.author) : `Client vérifié 0${index + 1}`}</strong><small>Profil et achat vérifiés</small></span></footer></div></article>`).join("")}</div>`);
+  const reviews = node.content?.reviews?.length ? node.content.reviews : profile.reviews || [];
+  return shell(node, "section-reviews", `${heading(node)}<div class="review-grid">${reviews.map((review, index) => `
+    <article class="review-card"><div class="wf-only">${wireLines([42, 100, 90, 62])}<span class="wf-avatar"></span></div><div class="ui-only">${rating(review.rating ? String(review.rating).replace(".", ",") : "—", "")}<blockquote>« ${esc(review.body)} »</blockquote><footer><span class="avatar">${esc(review.author?.charAt(0) || String.fromCharCode(65 + index))}</span><span><strong>${esc(review.author)}</strong><small>${esc(reviewSourceLabels[review.source] || review.source)}${review.verifiedPurchase ? " · achat vérifié" : ""}${review.prototype ? " · prototype" : ""}</small></span></footer></div></article>`).join("")}</div>`);
 };
 
 const comments = (node) => {
-  const tags = node.tags || ["Même usage", "Même contrainte", "Point de vigilance"];
-  const quotes = node.quotes || ["Le format est passé sans supplément.", "Le tissu a tenu pendant deux jours de pluie.", "Ne pas trop remplir la poche avant."];
-  const entries = node.entries || tags.map((tag, index) => ({ tag, quote: quotes[index] || quotes.at(-1), meta: node.source || "Profil vérifié · contexte similaire" }));
-  return shell(node, "section-comments", `${heading(node)}<div class="comment-grid">${entries.map((entry) => `
-    <article><div class="wf-only">${wireLines([48, 100, 86, 66])}</div><div class="ui-only"><span class="context-tag">${esc(entry.tag)}</span><blockquote>« ${esc(entry.quote)} »</blockquote><small>${esc(entry.meta || node.source || "Profil vérifié · contexte similaire")}</small></div></article>`).join("")}</div>`);
+  const reviews = node.content?.reviews || [];
+  return shell(node, "section-comments", `${heading(node)}<div class="comment-grid">${reviews.map((review) => `
+    <article><div class="wf-only">${wireLines([48, 100, 86, 66])}</div><div class="ui-only"><span class="context-tag">${esc(review.tags?.find((tag) => !/^p\d+$/.test(tag)) || "contexte comparable")}</span><blockquote>« ${esc(review.body)} »</blockquote><small>${esc(review.context || review.author)} · ${esc(reviewSourceLabels[review.source] || review.source)}${review.prototype ? " · prototype" : ""}</small></div></article>`).join("")}</div>`);
+};
+
+const customerEvidence = (node) => {
+  const reviews = node.content?.reviews || [];
+  const evidence = node.evidence || {};
+  const average = evidence.averageRating ? String(evidence.averageRating).replace(".", ",") : "—";
+  const sources = evidence.sources || [...new Set(reviews.map((review) => review.source))];
+  const sourceChips = sources.map((source) => `<span>${esc(reviewSourceLabels[source] || source)}</span>`).join("");
+  const disclosure = evidence.prototype
+    ? "Contenus de démonstration · chaque source est signalée · connecteurs réels à brancher"
+    : "Avis reliés à leur source · aucune approbation déduite ou inventée";
+  return shell(node, "section-customer-evidence", `
+    ${heading(node)}
+    <div class="customer-evidence-layout">
+      <aside class="customer-evidence-summary">
+        <div class="wf-only">${wireLines([46, 72, 94, 66])}<span class="wf-metric"></span></div>
+        <div class="ui-only">
+          <p class="eyebrow">${esc(evidence.label || "PREUVE CLIENT")}</p>
+          <div class="customer-evidence-score"><strong>${esc(average)}</strong><span>/ 5</span></div>
+          <p>${esc(evidence.summary || "Les retours les plus proches de la question exprimée.")}</p>
+          <dl>
+            <div><dt>Avis affichés</dt><dd>${reviews.length}</dd></div>
+            <div><dt>Achats vérifiés</dt><dd>${evidence.verifiedCount || 0}</dd></div>
+          </dl>
+          <div class="customer-evidence-sources" aria-label="Sources des avis">${sourceChips}</div>
+        </div>
+      </aside>
+      <div class="customer-evidence-reviews">
+        ${reviews.map((review, index) => `<article class="customer-evidence-card">
+          <div class="wf-only">${wireLines([38, 100, 88, 64])}<span class="wf-avatar"></span></div>
+          <div class="ui-only">
+            <div class="customer-evidence-card-top">${review.rating ? rating(String(review.rating).replace(".", ","), "") : `<span class="context-tag">Retour d’usage</span>`}<span>0${index + 1}</span></div>
+            <blockquote>« ${esc(review.body)} »</blockquote>
+            <footer><span class="avatar">${esc(review.author?.charAt(0) || "C")}</span><span><strong>${esc(review.author)}</strong><small>${esc(review.context || "Contexte déclaré")}</small></span></footer>
+            <div class="customer-evidence-source"><span>${esc(reviewSourceLabels[review.source] || review.source)}</span>${review.verifiedPurchase ? "<strong>✓ Achat vérifié</strong>" : "<i>Source déclarée</i>"}</div>
+          </div>
+        </article>`).join("")}
+      </div>
+    </div>
+    <p class="ui-only customer-evidence-disclosure">${esc(disclosure)}</p>`);
 };
 
 const routineSelector = (node) => {
@@ -94,7 +138,7 @@ const sceneSelector = (node) => {
   return shell(node, "section-scene-selector", `
     <div class="scene-stage">
       <div class="wf-only media-wire"><span>Image principale sélectionnable</span></div>
-      <div class="ui-only media-ui"><img class="scene-stage-image" data-scene-image src="${esc(first.image)}" alt="${esc(first.alt || first.place)}" loading="lazy" /><span class="asset-caption" data-scene-caption>${esc(first.caption || first.place)}</span></div>
+      <div class="ui-only media-ui"><img class="scene-stage-image" data-scene-image${colorAssetsAttr(first.colorAssets)} src="${esc(first.image)}" alt="${esc(first.alt || first.place)}" loading="lazy" /><span class="asset-caption" data-scene-caption>${esc(first.caption || first.place)}</span></div>
     </div>
     <aside class="scene-panel" data-scene-selector>
       <div class="wf-only">${wireLines([48, 92, 72])}<span class="wf-paragraph"></span><div class="wf-scene-controls"><i></i><i></i><i></i></div>${dualAction(node.cta || "Acheter")}</div>
@@ -103,7 +147,7 @@ const sceneSelector = (node) => {
         <h3>${esc(node.title)}</h3>
         <p data-scene-note>${esc(first.note)}</p>
         <div class="scene-choice-list" role="group" aria-label="Choisir une tenue et un lieu">
-          ${scenes.map((scene, index) => `<button type="button" class="scene-choice ${index === 0 ? "active" : ""}" data-scene-choice data-scene-src="${esc(scene.image)}" data-scene-alt="${esc(scene.alt || scene.place)}" data-scene-caption="${esc(scene.caption || scene.place)}" data-scene-note="${esc(scene.note)}" aria-pressed="${index === 0}"><span>0${index + 1}</span><strong>${esc(scene.label)}</strong><small>${esc(scene.place)}</small></button>`).join("")}
+          ${scenes.map((scene, index) => `<button type="button" class="scene-choice ${index === 0 ? "active" : ""}" data-scene-choice data-scene-src="${esc(scene.image)}"${colorAssetsAttr(scene.colorAssets, "data-scene-color-assets")} data-scene-alt="${esc(scene.alt || scene.place)}" data-scene-caption="${esc(scene.caption || scene.place)}" data-scene-note="${esc(scene.note)}" aria-pressed="${index === 0}"><span>0${index + 1}</span><strong>${esc(scene.label)}</strong><small>${esc(scene.place)}</small></button>`).join("")}
         </div>
         <small class="editorial-disclosure">Shooting éditorial · modèle de projection, pas une cliente.</small>
         ${dualAction(node.cta || "Acheter")}
@@ -124,18 +168,17 @@ const photoProof = (node) => {
       <div class="ui-only photo-ratio-toggle" role="group" aria-label="Choisir le cadrage"><button type="button" class="active" data-photo-ratio="portrait" aria-pressed="true">Portrait 4:5</button><button type="button" data-photo-ratio="story" aria-pressed="false">Story 9:16</button></div>
     </div>
     <div class="photo-proof-grid" data-photo-proof-grid data-ratio="portrait">
-      ${proofs.map((proof) => `<figure class="photo-proof-card"><div class="wf-only media-wire"><span>${esc(proof.label)}</span></div><img class="ui-only" src="${esc(proof.image)}" alt="${esc(proof.alt || proof.label)}" loading="lazy" /><figcaption class="ui-only"><strong>${esc(proof.label)}</strong><span>${esc(proof.note)}</span></figcaption></figure>`).join("")}
+      ${proofs.map((proof) => `<figure class="photo-proof-card"><div class="wf-only media-wire"><span>${esc(proof.label)}</span></div><img class="ui-only"${colorAssetsAttr(proof.colorAssets)} src="${esc(proof.image)}" alt="${esc(proof.alt || proof.label)}" loading="lazy" /><figcaption class="ui-only"><strong>${esc(proof.label)}</strong><span>${esc(proof.note)}</span></figcaption></figure>`).join("")}
     </div>`);
 };
 
 const productGrid = (node) => {
-  const products = [["Passage 24", "69 €"], ["Passage 32", "89 €"], ["Passage 36", "109 €"], ["Passage 42", "129 €"]];
-  return shell(node, "section-products", `${heading(node, true)}<div class="product-grid">${products.map(([name, price], index) => `
-    <article class="product-tile ${index === 1 ? "featured" : ""}"><span class="wf-only wf-product-box"></span><div class="ui-only product-asset-small"><img data-product-view="01-hero-three-quarter.png" src="${productImages.hero}" alt="Sac Passage 32" loading="lazy" /></div><span class="ui-only card-note">${index === 1 ? "MEILLEUR CHOIX" : index === 0 ? "LE MOINS CHER" : `OPTION 0${index + 1}`}</span><strong class="ui-only">${name}</strong><b class="ui-only">${price}</b><div class="wf-only">${wireLines([72, 48])}</div></article>`).join("")}</div>`);
+  return shell(node, "section-products", `${heading(node, true)}<div class="product-grid">${comparisonProducts.map(({ name, price, size, note, image, recommended }) => `
+    <article class="product-tile ${recommended ? "featured" : ""}"><span class="wf-only wf-product-box"></span><div class="ui-only product-asset-small"><img src="${image}" alt="${esc(name)} · ${esc(size)}" loading="lazy" /></div><span class="ui-only card-note">${esc(note)}</span><strong class="ui-only">${esc(name)}</strong><span class="ui-only">${esc(size)}</span><b class="ui-only">${esc(price)}</b><div class="wf-only">${wireLines([72, 48])}</div></article>`).join("")}</div>`);
 };
 
 const airportStory = (node) => shell(node, "section-airport-story", `
-  ${mediaSlot(node.media || "Voyageur dans un aéroport", "airport-story-media", node.asset, node.assetCaption)}
+  ${mediaSlot(node.media || "Voyageur dans un aéroport", "airport-story-media", node.asset, node.assetCaption, node.colorAssets)}
   <div class="airport-story-band">
     <div class="wf-only airport-story-wire">${wireLines([74, 92, 66])}<span class="wf-quote"></span></div>
     <div class="ui-only airport-story-copy">
@@ -148,10 +191,21 @@ const airportStory = (node) => shell(node, "section-airport-story", `
     </dl>
   </div>`);
 
-const packing = (node) => shell(node, "section-packing", `${heading(node)}<div class="packing-grid">
-  ${mediaSlot(node.media || "Sac ouvert / flatlay", "packing-media", node.asset, node.assetCaption)}
-  <div class="packing-items">${(node.items || ["Ordinateur", "2 chemises", "Chaussures", "Trousse", "Passeport", "Câbles"]).map((item, index) => `<div><span class="wf-only"></span><strong class="ui-only">0${index + 1}</strong><small class="ui-only">${esc(item)}</small></div>`).join("")}</div>
+const packing = (node) => {
+  const items = node.items?.length
+    ? node.items
+    : Array.from({ length: 6 }, (_, index) => ({ label: `Élément ${index + 1}`, specification: "Asset et contenu à associer" }));
+  return shell(node, "section-packing", `${heading(node)}<div class="packing-grid">
+    ${mediaSlot(node.media || "Vue principale du produit", "packing-media", node.asset, node.assetCaption, node.colorAssets)}
+    <div class="packing-items">${items.map((item, index) => {
+      const normalized = typeof item === "string" ? { label: item } : item;
+      const asset = normalized.asset
+        ? `<img class="packing-icon" src="${esc(normalized.asset)}" alt="" loading="lazy" />`
+        : '<span class="packing-icon packing-icon-placeholder" aria-hidden="true"></span>';
+      return `<div class="packing-item"><span class="wf-only"></span><div class="ui-only packing-item-top"><strong>${String(index + 1).padStart(2, "0")}</strong>${asset}</div><div class="ui-only packing-item-copy"><b>${esc(normalized.label || `Élément ${index + 1}`)}</b><small>${esc(normalized.specification || "Information à renseigner")}</small></div></div>`;
+    }).join("")}</div>
   </div>`);
+};
 
 const timeline = (node, journey = false) => {
   const steps = node.steps || (journey ? ["Bureau", "Train", "Rendez-vous", "Hôtel"] : ["Aujourd’hui", "Expédié", "Livré jeudi"]);
@@ -161,7 +215,7 @@ const timeline = (node, journey = false) => {
 };
 
 const journal = (node, profile) => shell(node, `section-journal ${node.reverse ? "reverse" : ""}`, `
-  ${mediaSlot(node.media || "Photo de voyage", "journal-media", node.asset, node.assetCaption)}
+  ${mediaSlot(node.media || "Photo de voyage", "journal-media", node.asset, node.assetCaption, node.colorAssets)}
   <article class="journal-copy"><div class="wf-only">${wireLines([38, 88, 68, 100, 82])}<span class="wf-quote"></span></div><div class="ui-only"><p class="eyebrow">${esc(node.eyebrow || "CHAPITRE 01 · SUR LA ROUTE")}</p><h3>${esc(node.title)}</h3><p>${esc(node.body || "La section devient un court récit : un lieu, une contrainte et la manière dont le produit intervient sans interrompre l’histoire.")}</p><blockquote>« ${esc(node.quote || profile.quote)} »</blockquote><small>${esc(node.author || profile.author)}</small></div></article>`);
 
 const commuteProof = (node, profile) => {
@@ -209,11 +263,12 @@ const hotspots = (node) => shell(node, "section-hotspots", `${heading(node)}<div
 const table = (node, comparison = false) => {
   const headers = comparison ? ["Modèle", "Volume", "Poids", "Prix"] : ["Compagnie", "Limite", "Passage 32", "Statut"];
   const rows = comparison
-    ? [["Passage 26", "26 L", "890 g", "119 €"], ["Passage 32", "32 L", "980 g", "149 €"], ["Passage 34", "34 L", "920 g", "169 €"], ["Passage 38", "38 L", "1,1 kg", "189 €"]]
+    ? [["Passage 24", "24 L", "980 g", "119 €"], ["Passage 32", "32 L", "1,18 kg", "149 €"], ["Passage 36", "36 L", "1,34 kg", "169 €"], ["Passage 42", "42 L", "1,48 kg", "189 €"]]
     : [["Ryanair", "40×20×25", "40×20×25", "Compatible"], ["easyJet", "45×36×20", "44×34×19", "Compatible"], ["Air France", "55×35×25", "44×34×19", "Compatible"], ["Delta", "56×35×23", "44×34×19", "Compatible"]];
+  const selectedAirline = comparison || !node.airline ? "" : String(node.airline).toLocaleLowerCase("fr");
   return shell(node, comparison ? "section-comparison" : "section-table", `${heading(node)}<div class="data-table">
     <div class="table-row table-head">${headers.map((cell) => `<span class="ui-only">${cell}</span><i class="wf-only"></i>`).join("")}</div>
-    ${rows.map((row, index) => `<div class="table-row ${index === 1 ? "selected" : ""}">${row.map((cell) => `<span class="ui-only">${cell}</span><i class="wf-only"></i>`).join("")}</div>`).join("")}
+    ${rows.map((row, index) => `<div class="table-row ${(comparison && index === 1) || (selectedAirline && row[0].toLocaleLowerCase("fr") === selectedAirline) ? "selected" : ""}">${row.map((cell) => `<span class="ui-only">${cell}</span><i class="wf-only"></i>`).join("")}</div>`).join("")}
   </div>`);
 };
 
@@ -252,9 +307,19 @@ const cards = (node, profile, kind = "cards") => {
 const warranty = (node) => shell(node, "section-warranty", `${heading(node, true)}<div class="warranty-grid">${["Écrivez-nous", "Diagnostic sous 48 h", "Réparation ou échange"].map((step, index) => `<article><span class="process-number">0${index + 1}</span><div class="wf-only">${wireLines([78, 58])}</div><strong class="ui-only">${step}</strong><p class="ui-only">Un interlocuteur et un statut lisible.</p></article>`).join("")}</div>`);
 
 const mosaic = (node) => {
-  const defaults = ["Look principal", "Détail matière", "Porté épaule", "En mouvement", "Week-end"].map((label) => ({ label }));
+  const defaults = [
+    { label: "Vue trois-quarts", image: productImages.hero, view: "01-hero-three-quarter.png", caption: "SILHOUETTE" },
+    { label: "Face", image: productImages.front, view: "02-front.png", caption: "ACCÈS AVANT" },
+    { label: "Dos", image: productImages.rear, view: "03-rear-three-quarter.png", caption: "PORTAGE" },
+    { label: "Intérieur", image: productImages.interior, view: "04-open-interior.png", caption: "ORGANISATION" },
+    { label: "Matière", image: productImages.fabric, view: "05-macro-fabric-seam.png", caption: "TOILE TECHNIQUE" },
+  ];
   const images = node.images || defaults;
-  return shell(node, "section-mosaic", `${heading(node, true)}<div class="mosaic-grid">${images.map((item) => mediaSlot(item.label, "mosaic-media", item.image, item.caption)).join("")}</div>`);
+  return shell(node, "section-mosaic", `${heading(node, true)}<div class="mosaic-grid">${images.map((item) => `<figure class="mosaic-media">
+    <div class="wf-only media-wire"><span>${esc(item.label)}</span></div>
+    <div class="ui-only mosaic-visual"><img class="product-media-image"${item.view ? ` data-product-view="${esc(item.view)}"` : ""}${colorAssetsAttr(item.colorAssets)} src="${esc(item.image)}" alt="${esc(item.alt || item.label)}" loading="lazy" /></div>
+    <figcaption class="ui-only"><strong>${esc(item.label)}</strong><span>${esc(item.caption || "PORT 70 / EN MOUVEMENT")}</span></figcaption>
+  </figure>`).join("")}</div>`);
 };
 
 const faq = (node) => shell(node, "section-faq", `${heading(node)}<div class="faq-list">${["Passe-t-il sous le siège ?", "Comment choisir le volume ?", "Le tissu résiste-t-il à la pluie ?", "Comment fonctionne un retour ?"].map((question, index) => `<button type="button" data-accordion aria-expanded="false"><span class="wf-only wf-faq-line"></span><span class="ui-only">${question}</span>${icon("plus")}<small class="ui-only">${index === 0 ? "Oui, selon la compagnie et le chargement. Les dimensions vérifiées restent affichées sur la page." : "Réponse détaillée disponible dans la fiche produit."}</small></button>`).join("")}</div>`);
@@ -267,6 +332,7 @@ export function renderSection(node, profile = { facts: [], quote: "", author: ""
     metrics: () => metrics(node, profile),
     reviews: () => reviewCards(node, profile),
     comments: () => comments(node),
+    "customer-evidence": () => customerEvidence(node),
     "routine-selector": () => routineSelector(node),
     "loadout-switch": () => loadoutSwitch(node),
     "scene-selector": () => sceneSelector(node),
