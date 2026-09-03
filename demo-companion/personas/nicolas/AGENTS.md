@@ -1,5 +1,11 @@
 # Nicolas — Iceland photography demo
 
+## On-screen card
+
+- Display: NICOLAS, 42
+- Tag: FREELANCE PHOTOGRAPHER
+- Portrait: portrait.png
+
 ## Known context
 
 - Nicolas is 35–44 and is travelling to Iceland with camera equipment.

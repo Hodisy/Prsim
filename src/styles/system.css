@@ -62,7 +62,9 @@
 
 .tool-contract { display: grid; grid-template-columns: .8fr 1.2fr; gap: 46px; padding: 54px 0; border-bottom: 1px solid #aaa; }
 .tool-contract span, .gap-queue header span { font: 700 9px ui-monospace, monospace; letter-spacing: .12em; }
-.tool-contract h3 { overflow-wrap: anywhere; margin: 8px 0 18px; font: 500 52px/1 Georgia, serif; font-size: clamp(30px, 3.6vw, 52px); }
+.tool-contract h3 { margin: 8px 0 18px; font: 500 clamp(24px, 2.3vw, 30px)/1.08 Georgia, serif; letter-spacing: -.035em; white-space: nowrap; }
+.tool-contract .tool-name-list { display: grid; gap: 9px; }
+.tool-contract .tool-name-list > span { font: inherit; letter-spacing: inherit; }
 .tool-contract p { max-width: 410px; color: #555; font-size: 13px; line-height: 1.55; }
 .tool-contract pre { margin: 0; overflow: auto; padding: 24px; color: #eee; background: #111; border-radius: 2px; font: 12px/1.65 ui-monospace, monospace; }
 
@@ -318,6 +320,7 @@
 
 .canvas.mobile .system-page { padding: 24px 18px; }
 .canvas.mobile .system-lead, .canvas.mobile .tool-contract, .canvas.mobile .system-rules { grid-template-columns: 1fr; }
+.canvas.mobile .tool-contract h3 { font-size: 18px; }
 .canvas.mobile .system-lead h2 { font-size: 38px; }
 .canvas.mobile .coverage-strip { grid-template-columns: 1fr 1fr; }
 .canvas.mobile .coverage-strip > i { display: none; }

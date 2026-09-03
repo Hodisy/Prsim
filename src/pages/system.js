@@ -72,7 +72,7 @@ export function renderFoundationPage() {
       <section class="tool-contract">
         <div>
           <span>PRIMARY WEBMCP FUNCTION</span>
-          <h3>prepare_shopping_experience</h3>
+          <h3 class="tool-name">prepare_shopping_experience</h3>
           <p>La personne exprime une situation, ses contraintes et ses envies ; le companion peut compléter uniquement avec un contexte déjà connu et pertinent. PRSIM prépare et améliore alors l’expérience d’achat en sélectionnant la présentation, le contenu, les images et les preuves les plus utiles. Le mécanisme reste caché pour préserver la surprise. Si le besoin est trop vague, une seule question courte est renvoyée ; sinon l’expérience prête à découvrir termine la recherche.</p>
         </div>
         <pre><code>prepare_shopping_experience({
@@ -95,7 +95,7 @@ export function renderFoundationPage() {
       <section class="tool-contract">
         <div>
           <span>FOLLOW-UP WEBMCP FUNCTIONS</span>
-          <h3>change_experience_hero<br>update_experience_blocks<br>show_customer_evidence</h3>
+          <h3 class="tool-name tool-name-list"><span>change_experience_hero</span><span>update_experience_blocks</span><span>show_customer_evidence</span></h3>
           <p>Une fois l’expérience préparée, le point d’entrée principal disparaît. Le companion peut alors répondre à une nouvelle question en remplaçant le hero, en ajustant un bloc générique ou en faisant remonter des avis pertinents et sourcés. Une nouvelle preuve client remplace la précédente, apparaît au meilleur endroit puis est amenée dans la fenêtre. Le CTA final reste présent et le moteur ne dépasse pas cinq blocs de contenu.</p>
         </div>
         <pre><code>change_experience_hero({

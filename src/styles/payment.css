@@ -1,4 +1,4 @@
-.payment-page { min-height: 760px; color: #121212; background: #fff; }
+.payment-page { width: 100%; min-height: 760px; overflow-x: clip; color: #121212; background: #fff; container-type: inline-size; }
 .payment-page .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 body.payment-preview .payment-page { height: 100%; min-height: 0; }
 .payment-page .shop-header { height: 54px; min-height: 54px; padding-inline: 30px; background: #fff; border-bottom: 1px solid #d7d7d2; }
@@ -23,3 +23,48 @@ body.payment-preview .payment-shell { height: calc(100% - 54px); min-height: 0; 
 .canvas.mode-wireframe .payment-page { background: #f7f7f5; }.canvas.mode-wireframe .payment-decision { background: #ecece7; }.canvas.mode-wireframe .payment-decision-copy, .canvas.mode-wireframe .payment-clock-wrap, .canvas.mode-wireframe .payment-decision-foot, .canvas.mode-wireframe .payment-checkout-top, .canvas.mode-wireframe .payment-product-copy, .canvas.mode-wireframe .payment-totals, .canvas.mode-wireframe .payment-form { opacity: .32; filter: grayscale(1); }.canvas.mode-wireframe .payment-product-image { background: repeating-linear-gradient(45deg, #d5d5d0 0 1px, transparent 1px 8px); border: 1px solid #aaa; }
 
 .canvas.mobile .payment-page { min-height: 730px; }.canvas.mobile .payment-page .shop-header { height: 45px; min-height: 45px; padding-inline: 17px; }.canvas.mobile .payment-page .shop-nav { display: none; }.canvas.mobile .payment-shell { min-height: 685px; grid-template-columns: 1fr; }.canvas.mobile .payment-decision { min-height: 309px; padding: 27px 22px 14px; border-right: 0; border-bottom: 1px solid #d7d7d2; }.canvas.mobile .payment-kicker { margin-bottom: 7px; font-size: 7px; }.canvas.mobile .payment-comment { margin-bottom: 9px; font-size: 10px; }.canvas.mobile .payment-decision h2 { font-size: 34px; }.canvas.mobile .payment-benchmark { margin-top: 8px; font-size: 10px; }.canvas.mobile .payment-reference { font-size: 8px; }.canvas.mobile .payment-clock-wrap { margin-top: 0; }.canvas.mobile .payment-clock-wrap canvas { height: 92px; }.canvas.mobile .payment-decision-foot { padding-top: 8px; font-size: 7px; }.canvas.mobile .payment-checkout { padding: 18px 20px 14px; }.canvas.mobile .payment-checkout-top { padding-bottom: 12px; }.canvas.mobile .payment-product { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; padding: 12px 0; }.canvas.mobile .payment-product-image { height: 72px; }.canvas.mobile .payment-product-copy h3 { font-size: 19px; }.canvas.mobile .payment-product-copy p { font-size: 9px; }.canvas.mobile .payment-product-copy strong { font-size: 12px; }.canvas.mobile .payment-totals { padding: 8px 0; }.canvas.mobile .payment-totals div { font-size: 9px; }.canvas.mobile .payment-totals .payment-total { margin-top: 2px; padding-top: 6px; font-size: 10px; }.canvas.mobile .payment-form { padding-top: 11px; }.canvas.mobile .payment-form-head { margin-bottom: 9px; }.canvas.mobile .payment-form label { margin-top: 6px; }.canvas.mobile .payment-form input { height: 30px; font-size: 10px; }.canvas.mobile .payment-submit { height: 36px; margin-top: 10px; font-size: 11px; }.canvas.mobile .payment-disclaimer { font-size: 7px; }
+
+/* Payment can also live in a narrow desktop panel (for example Codex's browser).
+   Respond to the rendered checkout width, not only to the Desktop/Mobile switch. */
+@container (max-width: 780px) {
+  .payment-page .shop-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    padding-inline: 20px;
+  }
+  .payment-page .shop-nav { display: none; }
+  .payment-shell {
+    height: auto !important;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .payment-decision {
+    min-height: 400px;
+    padding: 34px 28px 20px;
+    border-right: 0;
+    border-bottom: 1px solid #d7d7d2;
+  }
+  .payment-decision::before { display: none; }
+  .payment-decision h2 { font-size: clamp(38px, 8cqw, 52px); }
+  .payment-clock-wrap canvas { height: 130px; }
+  .payment-checkout { padding: 26px 28px 24px; }
+}
+
+@container (max-width: 460px) {
+  .payment-page .shop-header { height: 58px; min-height: 58px; padding-inline: 16px; }
+  .payment-decision { min-height: 390px; padding: 30px 18px 18px; }
+  .payment-comment { max-width: 100%; font-size: 11px; }
+  .payment-decision h2 { font-size: 36px; }
+  .payment-clock-wrap canvas { height: 108px; }
+  .payment-decision-foot { flex-direction: column; gap: 4px; }
+  .payment-checkout { padding: 22px 17px 20px; }
+  .payment-product { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; }
+  .payment-product-image { height: 72px; }
+  .payment-product-copy { grid-template-columns: minmax(0, 1fr); }
+  .payment-product-copy p,
+  .payment-product-copy strong { grid-column: 1; grid-row: auto; }
+  .payment-product-copy strong { justify-self: start; }
+  .payment-form-row { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .payment-form input { height: 42px; font-size: 12px; }
+  .payment-submit { height: 48px; }
+}

@@ -1,5 +1,11 @@
 # Maya — digital nomad Asia demo
 
+## On-screen card
+
+- Display: MAYA, 30
+- Tag: REMOTE PRODUCT MANAGER
+- Portrait: portrait.png
+
 ## Known context
 
 - Maya is 25–34 and will work while travelling around Asia, including Bangkok.

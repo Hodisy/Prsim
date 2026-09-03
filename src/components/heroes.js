@@ -4,7 +4,7 @@ import { comparisonProducts } from "../data/comparison-products.js";
 const primaryReview = (profile) => profile.reviews?.[0] || { body: profile.quote || "", author: profile.author || "" };
 
 const shell = (node, className, content) => `
-  <section class="layout-block hero-layout ${className}" data-layout-id="${esc(node.id)}" data-layout-variant="${esc(node.variant)}">
+  <section class="layout-block hero-layout ${className}" data-layout-id="${esc(node.id)}" data-layout-variant="${esc(node.variant)}"${node.blockPurpose ? ` data-block-purpose="${esc(node.blockPurpose)}"` : ""}>
     ${content}
   </section>`;
 

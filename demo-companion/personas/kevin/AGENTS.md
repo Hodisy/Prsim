@@ -1,5 +1,11 @@
 # Kevin — departure-tomorrow demo
 
+## On-screen card
+
+- Display: KEVIN, 29
+- Tag: LAST-MINUTE TRAVELLER
+- Portrait: portrait.png
+
 ## Known context
 
 - Kevin is 25–34 and leaves tomorrow.

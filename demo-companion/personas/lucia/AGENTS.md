@@ -1,5 +1,11 @@
 # Lucia — South America long-trip demo
 
+## On-screen card
+
+- Display: LUCIA, 32
+- Tag: LONG-HAUL BACKPACKER
+- Portrait: portrait.png
+
 ## Known context
 
 - Lucia is 25–34 and is preparing a multi-week trip through South America.

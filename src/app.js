@@ -736,12 +736,114 @@ function createAssemblyDraft({ sourceKey, label } = {}) {
   return draft;
 }
 
-function renderCurrentView({ scroll = true } = {}) {
+let viewMotionTimers = [];
+
+function scheduleViewMotion(callback, delay) {
+  const timer = window.setTimeout(callback, delay);
+  viewMotionTimers.push(timer);
+  return timer;
+}
+
+function clearViewMotion() {
+  viewMotionTimers.forEach((timer) => window.clearTimeout(timer));
+  viewMotionTimers = [];
+  elements.canvas.classList.remove("experience-preparing", "experience-revealing");
+  elements.canvas.removeAttribute("aria-busy");
+  elements.canvas.querySelectorAll(".block-collapse-out, .block-expand-in, .block-morph-out, .block-morph-in").forEach((element) => {
+    element.classList.remove("block-collapse-out", "block-expand-in", "block-morph-out", "block-morph-in");
+    element.style.removeProperty("--block-motion-height");
+  });
+}
+
+function profileBodySections() {
+  return [...elements.canvas.querySelectorAll(".shop-page > .section-layout")]
+    .filter((section) => section.dataset.layoutVariant !== "final" && section.dataset.layoutId !== "CTA");
+}
+
+function motionTarget(motion, phase = "after") {
+  if (!motion) return null;
+  if (motion.kind === "hero") return elements.canvas.querySelector(".hero-layout");
+  if (phase === "after" && motion.purpose) {
+    const byPurpose = elements.canvas.querySelector(`[data-block-purpose="${motion.purpose}"]`);
+    if (byPurpose) return byPurpose;
+  }
+  const sections = profileBodySections();
+  const position = phase === "before" ? motion.beforePosition : motion.afterPosition;
+  if (Number.isInteger(position) && position > 0) return sections[position - 1] || null;
+  if (phase === "after" && motion.selector) return elements.canvas.querySelector(motion.selector);
+  return null;
+}
+
+function revealMotionTarget(motion, transition) {
+  if (transition !== state.transition || motion.operation === "remove") return;
+  const target = motionTarget(motion, "after");
+  if (!target) return;
+  const expands = motion.kind === "section" && ["add", "replace"].includes(motion.operation);
+  const className = expands ? "block-expand-in" : "block-morph-in";
+  if (expands) target.style.setProperty("--block-motion-height", `${Math.ceil(target.getBoundingClientRect().height)}px`);
+  target.classList.add(className);
+  scheduleViewMotion(() => {
+    target.classList.remove(className);
+    target.style.removeProperty("--block-motion-height");
+  }, expands ? 900 : 800);
+  scheduleViewMotion(() => target.scrollIntoView({ behavior: "smooth", block: motion.kind === "hero" ? "start" : "center" }), 90);
+}
+
+function runLocalViewMotion({ motion, applyView, transition }) {
+  const previous = motionTarget(motion, "before");
+  const collapses = motion.kind === "section" && ["replace", "remove"].includes(motion.operation);
+  const delay = previous ? (collapses ? 430 : 300) : 0;
+
+  if (previous) {
+    if (collapses) {
+      previous.style.setProperty("--block-motion-height", `${Math.ceil(previous.getBoundingClientRect().height)}px`);
+      previous.classList.add("block-collapse-out");
+    } else {
+      previous.classList.add("block-morph-out");
+    }
+  }
+
+  scheduleViewMotion(() => {
+    if (transition !== state.transition) return;
+    applyView();
+    revealMotionTarget(motion, transition);
+  }, delay);
+}
+
+function runExperiencePreparation({ applyView, transition }) {
+  elements.canvas.setAttribute("aria-busy", "true");
+  elements.canvas.classList.add("experience-preparing");
+  scheduleViewMotion(() => {
+    if (transition !== state.transition) return;
+    applyView();
+    elements.canvas.classList.remove("experience-preparing");
+    elements.canvas.classList.add("experience-revealing");
+    scheduleViewMotion(() => {
+      if (transition !== state.transition) return;
+      elements.canvas.classList.remove("experience-revealing");
+      elements.canvas.removeAttribute("aria-busy");
+    }, 1380);
+  }, 520);
+}
+
+function replayMicroMotion(selector, className, duration = 520) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  elements.canvas.querySelectorAll(selector).forEach((element) => {
+    element.classList.remove(className);
+    void element.offsetWidth;
+    element.classList.add(className);
+    window.setTimeout(() => element.classList.remove(className), duration);
+  });
+}
+
+function renderCurrentView({ scroll = true, motion = null } = {}) {
+  clearViewMotion();
   state.view = keyFromHash();
   const view = views.find((candidate) => candidate.key === state.view);
   const isProfile = Boolean(profiles[state.view]);
   const isShopView = isProfile || state.view === "preview" || state.view === "payment";
-  const shouldAnimate = scroll && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const shouldAnimate = scroll && !reducedMotion;
   const transition = ++state.transition;
 
   document.querySelectorAll("[data-view]").forEach((button) => {
@@ -810,12 +912,17 @@ function renderCurrentView({ scroll = true } = {}) {
     else document.title = `PRSIM | ${translateText(view.label, state.language)}`;
     const activeTab = document.querySelector(`[data-view="${state.view}"]`);
     activeTab?.scrollIntoView({ block: "nearest", inline: "center" });
-    if (isShopView) requestAnimationFrame(scrollProfileIntoView);
+    if (isShopView && (scroll || motion?.type === "prepare")) requestAnimationFrame(scrollProfileIntoView);
     else if (scroll) {
       elements.stage.scrollTop = 0;
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   };
+
+  if (motion && !reducedMotion) {
+    if (motion.type === "prepare") return runExperiencePreparation({ applyView, transition });
+    return runLocalViewMotion({ motion, applyView, transition });
+  }
 
   if (!shouldAnimate) return applyView();
 
@@ -1048,6 +1155,7 @@ function applyToolVariant(variant) {
     applyProfileColorway(activeShopProfile(), variant.color);
     if (state.view === "preview" && state.previewSketch) applySketchExperience();
     syncClassicColorSelector(variant.color);
+    replayMicroMotion(".product-media-image, .gallery-thumb-image", "colorway-swap-in", 520);
   }
   if (["preview", "payment"].includes(state.view) && state.previewScenario !== "classic") syncExperienceUrl();
 }
@@ -1058,6 +1166,7 @@ function applyToolBundle(bundle) {
   if (toggle) {
     toggle.checked = bundle.enabled;
     syncBundleOffer(toggle);
+    replayMicroMotion(".hero-bundle-offer, [data-bundle-cta], .sticky-buy", "commerce-feedback", 480);
   } else if (state.view === "preview") {
     renderCurrentView({ scroll: false });
   }
@@ -1229,7 +1338,7 @@ function syncToolRegistration() {
       const selectedProduct = getProduct(state.toolProductId);
       syncExperienceUrl({ view: "preview" });
       state.toolRegistrationDeferred = true;
-      renderCurrentView({ scroll: false });
+      renderCurrentView({ scroll: false, motion: { type: "prepare" } });
       window.setTimeout(() => {
         state.toolRegistrationDeferred = false;
         syncToolRegistration();
@@ -1256,7 +1365,7 @@ function syncToolRegistration() {
       resetPreviewExperience({ preserveProductChoices: preserve_product_choices });
       syncExperienceUrl({ view: "preview" });
       state.toolRegistrationDeferred = true;
-      renderCurrentView({ scroll: false });
+      renderCurrentView({ scroll: false, motion: { type: "prepare" } });
       window.setTimeout(() => {
         state.toolRegistrationDeferred = false;
         syncToolRegistration();
@@ -1267,7 +1376,10 @@ function syncToolRegistration() {
       state.experienceMutations.heroPurpose = block.purpose;
       state.selectionSource = "experience_block_update";
       syncExperienceUrl();
-      renderCurrentView({ scroll: false });
+      renderCurrentView({
+        scroll: false,
+        motion: { type: "local", kind: "hero", operation: "replace", purpose: block.purpose },
+      });
       return {
         applied: true,
         request,
@@ -1279,11 +1391,32 @@ function syncToolRegistration() {
     onBlocksUpdated({ operation = "auto", purpose, replace_purpose, placement = "best", position, request }) {
       const block = findBlockByPurpose("content", purpose);
       const before = previewProfile().sections.filter((section) => section.id !== "CTA").map((section) => inferBlockForNode(section).purpose);
+      const requestedPosition = Number(position);
+      const explicitPosition = Number.isInteger(requestedPosition) && requestedPosition > 0 ? requestedPosition : null;
+      const existingPosition = before.indexOf(block.purpose) + 1 || null;
+      const replacedPosition = before.indexOf(replace_purpose) + 1 || null;
+      const effectiveOperation = operation === "auto"
+        ? existingPosition ? "prioritize" : before.length >= 5 ? "replace" : "add"
+        : operation;
+      const beforePosition = explicitPosition
+        || (effectiveOperation === "remove" || effectiveOperation === "prioritize" ? existingPosition : null)
+        || (effectiveOperation === "replace" ? replacedPosition || before.length : null);
       state.experienceMutations.operations.push({ operation, purpose: block.purpose, replacePurpose: replace_purpose, placement, position });
       state.selectionSource = "experience_block_update";
       syncExperienceUrl();
-      renderCurrentView({ scroll: false });
       const after = previewProfile().sections.filter((section) => section.id !== "CTA").map((section) => section.blockPurpose || inferBlockForNode(section).purpose);
+      const afterPosition = after.indexOf(block.purpose) + 1 || explicitPosition || null;
+      renderCurrentView({
+        scroll: false,
+        motion: {
+          type: "local",
+          kind: "section",
+          operation: effectiveOperation,
+          purpose: block.purpose,
+          beforePosition,
+          afterPosition,
+        },
+      });
       return {
         applied: true,
         request,
@@ -1296,6 +1429,9 @@ function syncToolRegistration() {
     },
     onCustomerEvidenceShown({ concern, source, evidence, block }) {
       const replacedPreviousEvidence = Boolean(state.experienceMutations.customerEvidence);
+      const currentSections = previewProfile().sections.filter((section) => section.id !== "CTA");
+      const previousEvidencePosition = currentSections.findIndex((section) => section.variant === "customer-evidence") + 1;
+      const previousReviewsPosition = currentSections.findIndex((section) => ["reviews", "comments"].includes(section.variant)) + 1;
       state.experienceMutations.customerEvidence = {
         concern,
         source,
@@ -1314,12 +1450,24 @@ function syncToolRegistration() {
         scheduled: true,
         at: new Date().toISOString(),
       };
-      renderCurrentView({ scroll: false });
+      const evidencePosition = nextProfile.sections.filter((section) => section.id !== "CTA").findIndex((section) => section.variant === "customer-evidence") + 1;
+      renderCurrentView({
+        scroll: false,
+        motion: {
+          type: "local",
+          kind: "section",
+          operation: previousEvidencePosition || previousReviewsPosition ? "replace" : "add",
+          purpose: block.purpose,
+          selector: ".section-customer-evidence",
+          beforePosition: previousEvidencePosition || previousReviewsPosition || null,
+          afterPosition: evidencePosition || null,
+        },
+      });
       window.setTimeout(() => {
         const target = elements.canvas.querySelector(".section-customer-evidence");
         target?.scrollIntoView({ behavior: "smooth", block: "center" });
         if (state.lastNavigation?.section === "reviews") state.lastNavigation.scheduled = false;
-      }, 120);
+      }, 760);
       return {
         applied: true,
         concern,
@@ -1520,6 +1668,7 @@ document.addEventListener("click", (event) => {
     syncBundleOffer(bundleToggle);
     state.bundleOverride = bundleToggle.checked;
     setCommerceBundle(state.previewScenario === "p2" ? "gift_pack" : "organization_pack", bundleToggle.checked);
+    replayMicroMotion(".hero-bundle-offer, [data-bundle-cta], .sticky-buy", "commerce-feedback", 480);
     if (["preview", "payment"].includes(state.view) && state.previewScenario !== "classic") syncExperienceUrl();
     return;
   }

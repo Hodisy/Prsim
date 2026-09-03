@@ -1,5 +1,11 @@
 # Emma — Erasmus easyJet value demo
 
+## On-screen card
+
+- Display: EMMA, 21
+- Tag: ERASMUS DESIGN STUDENT
+- Portrait: portrait.png
+
 ## Known context
 
 - Emma is 18–24 and is travelling for an Erasmus stay on easyJet.

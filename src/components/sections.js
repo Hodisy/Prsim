@@ -3,7 +3,7 @@ import { reviewSourceLabels } from "../data/reviews.js";
 import { comparisonProducts } from "../data/comparison-products.js";
 
 const shell = (node, className, content) => `
-  <section class="layout-block section-layout ${className}" data-layout-id="${esc(node.id)}" data-layout-variant="${esc(node.variant)}">
+  <section class="layout-block section-layout ${className}" data-layout-id="${esc(node.id)}" data-layout-variant="${esc(node.variant)}"${node.blockPurpose ? ` data-block-purpose="${esc(node.blockPurpose)}"` : ""}>
     ${layoutLabel(node)}${content}
   </section>`;
 

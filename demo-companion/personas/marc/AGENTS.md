@@ -1,5 +1,11 @@
 # Marc — Italian rail comfort demo
 
+## On-screen card
+
+- Display: MARC, 63
+- Tag: RAIL TRAVEL ENTHUSIAST
+- Portrait: portrait.png
+
 ## Known context
 
 - Marc is 63 and is taking a leisure train trip through Italy.

@@ -178,64 +178,129 @@ Suggested reply:
 
 ================================================================
 
-## SHOPPER LINES — COPY AND PASTE ONE AT A TIME
+## RECORDING RUN — COPY ONE SHOPPER LINE AT A TIME
 
-These lines are written for the human playing Ana. Wait for the companion and the page to finish updating after each line. Do not paste the next line until the current response has visibly completed.
+This is the complete Ana take. It has six shopper messages, including the required final confirmation. Wait for the agent reply and visible page update after each message.
 
-### 01 — Start
+### 01 — Prepare the experience
+
+**You paste**
 
 > Use the built-in browser to open https://prsim.yafa.sh/#preview. Help me choose the right bag for the Barcelona weekend we discussed, directly on the page.
 
-### 02 — Notice the change
+**Expected WebMCP call**
 
-> Oh—the whole page changed. Why did you show me this version?
+prepare_shopping_experience, once only. It should receive Barcelona, a short city trip, cream, visual-first preference, caution around online color, customer evidence and return reassurance.
 
-### 03 — Ask for visual proof
+**Expected companion reply**
 
-> It looks good here, but cream can be misleading online. Show me how it looks in natural light and in different places.
+> I recommend the Passage 32 in cream. I've prepared the store around your Barcelona weekend, with the visual context and reassurance that matter for this choice.
 
-### 04 — Ask about the real product
+**What must be visible**
 
-> That helps. But does it still look this clean when it is actually packed for three days?
+- The classic page is replaced in place by the Barcelona experience.
+- The cream color is selected.
+- The hero, Look × place selector, photo proof, three-day packing view, Barcelona inspiration, targeted comments and Buy CTA are already present.
+- Do not ask for natural-light images next: the initial Barcelona experience already contains them.
 
-### 05 — Ask for customer evidence
+### 02 — Break the color-confidence lock
 
-> My concern is keeping a cream bag clean. What do people actually say about that?
+**You paste**
 
-### 06 — Prove freedom of choice
+> It looks great, but cream can be hard to keep clean. What do people actually say about that?
+
+**Expected WebMCP call**
+
+show_customer_evidence with the concern in the shopper's words, focus color and source auto.
+
+**Expected companion reply**
+
+> I've shown the most relevant feedback on the cream color. It looks bright and understated, but the base needs more regular cleaning than the darker versions.
+
+**What must be visible**
+
+- A customer-evidence block is inserted or replaces the previous dynamic evidence block.
+- It scrolls into view.
+- Reviews keep their source, rating, verification state and prototype disclosure.
+- The answer gives Ana a real trade-off, not a perfect product claim.
+
+### 03 — Break the return-risk lock
+
+**You paste**
+
+> If it looks different in real life, can I return it easily?
+
+**Expected WebMCP call**
+
+search_shop_policies_and_faqs with topic returns.
+
+**Expected companion reply**
+
+> Returns and exchanges are available for 30 days after delivery, so you can still reconsider the color after seeing it in person.
+
+**What must be visible**
+
+- The page stays on the same Barcelona experience.
+- No new scenario is selected and no generic product grid appears.
+- This is a short factual reassurance moment; it does not need a large page animation.
+
+### 04 — Demonstrate that the recommendation is not a lock-in
+
+**You paste**
 
 > Before I decide, show me the exact same experience with the black bag.
 
-### 07 — Return to the chosen color
+**Expected WebMCP call**
 
-> Black is safer, but cream feels more like the trip. Switch back to cream.
+choose_color with black.
 
-### 08 — Resolve the final risk
+**Expected companion reply**
 
-> If it looks different when it arrives, can I return it easily?
+> Here is the same Barcelona experience with the black version.
 
-### 09 — Signal purchase intent
+**What must be visible**
 
-> Okay. The cream one feels right. I think I’ll take it.
+- The Barcelona story and page order stay unchanged.
+- Hero, contextual photography, color swatches and CTA update to black.
+- This is the clearest proof that PRSIM proposes a color but does not trap the shopper in it.
 
-### 10 — Confirm payment-page opening
+### 05 — Return to cream and signal intent
 
-Only send this after the companion explicitly asks whether to open payment:
+**You paste**
 
-> Yes, continue with the cream version.
+> Black is safer, but cream feels more like the trip. Switch back to cream—I think I’m ready to buy it.
 
-### Optional short version
+**Expected WebMCP call**
 
-Use this shorter sequence if the full take feels too long:
+choose_color with cream. Do not call buy_now yet.
 
-> Use the built-in browser to open https://prsim.yafa.sh/#preview. Help me choose the right bag for the Barcelona weekend we discussed, directly on the page.
+**Expected companion reply**
 
-> It looks good here, but cream can be misleading online. Show me how it looks in natural light and in different places.
+> The cream version is selected again. Would you like me to open the payment page for this version?
 
-> My concern is keeping a cream bag clean. What do people actually say about that?
+**What must be visible**
 
-> If it looks different when it arrives, can I return it easily?
+- Contextual images and CTA return to cream.
+- The agent does not purchase automatically just because Ana said she is ready.
 
-> Okay. The cream one feels right. I think I’ll take it.
+### 06 — Confirm opening payment
 
-> Yes, continue with the cream version.
+**You paste**
+
+> Yes, open the payment page for the cream version.
+
+**Expected WebMCP call**
+
+buy_now with the selected Passage 32, cream and the current bundle state.
+
+**Expected companion reply**
+
+> The payment page is open with the cream version for your review.
+
+**What must be visible**
+
+- The page navigates to payment.
+- Passage 32, cream, price and selected bundle state are visible.
+- The purchase trigger time is fixed as the red reference.
+- The decision clock continues to run; characters change blue when they differ from the frozen reference.
+- Do not say payment succeeded: this prototype opens a payment review, it does not charge Ana.

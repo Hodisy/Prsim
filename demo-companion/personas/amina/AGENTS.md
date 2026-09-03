@@ -1,5 +1,11 @@
 # Amina — family airport demo
 
+## On-screen card
+
+- Display: AMINA, 38
+- Tag: FAMILY TRIP PLANNER
+- Portrait: portrait.png
+
 ## Known context
 
 - Amina is 35–44 and is travelling with two children.
