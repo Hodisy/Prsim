@@ -226,3 +226,5 @@ The video begins on the conventional PORT 70 storefront. The browser companion r
 Ana then states her Barcelona weekend, occupation and visual concern directly in the visible conversation. The companion discovers the live page capabilities and the same storefront adapts around the expressed need. Natural follow-up questions test color confidence and returns without any pre-scripted tool choice or response.
 
 The demonstration shows the companion and storefront collaborating in the same browser session while shopper context remains explicit and product truth and interface authorship remain controlled by the merchant.
+
+Made by [@Yafa](https://github.com/Hodisy)

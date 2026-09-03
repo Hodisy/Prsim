@@ -320,3 +320,5 @@ PRSIM is available under the [MIT License](LICENSE).
 <p align="center">
   <img src="assets/brand/prsim-foundation-footer.png" width="100%" alt="PRSIM theoretical foundation: relevance makes the quality of an argument matter more than its quantity" />
 </p>
+
+Made by [@Yafa](https://github.com/Hodisy)
