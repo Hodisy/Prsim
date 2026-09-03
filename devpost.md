@@ -201,6 +201,14 @@ Finally, content governance matters as much as matching. A personalised page is 
 - WebMCP documentation: https://learn.chatgpt.com/docs/webmcp
 - Research reference: https://doi.org/10.1016/S0065-2601(08)60214-2
 
+### Preset storefronts (no AI companion required)
+
+- [Lucia — visual long-haul travel](https://prsim.yafa.sh/s4#preview)
+- [Kevin — collect or receive today](https://prsim.yafa.sh/s15#preview)
+- [Ryan — Ryanair cabin fit](https://prsim.yafa.sh/s1#preview)
+- [Paul — analytical product proof](https://prsim.yafa.sh/s11#preview)
+- [Sophie — gift, personalisation and delivery](https://prsim.yafa.sh/s2#preview)
+
 ## Demo video description
 
 The video begins on the conventional PORT 70 storefront. The browser companion receives only a generic instruction to discover Website Tools. It has no hidden PRSIM-specific guidance or shopper profile.
