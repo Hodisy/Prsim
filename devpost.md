@@ -209,6 +209,16 @@ Finally, content governance matters as much as matching. A personalised page is 
 - [Paul — analytical product proof](https://prsim.yafa.sh/s11#preview)
 - [Sophie — gift, personalisation and delivery](https://prsim.yafa.sh/s2#preview)
 
+### Merchant studio walkthrough
+
+- [1. Brand](https://prsim.yafa.sh/#brand) — define the merchant’s visual foundation.
+- [2. Layouts](https://prsim.yafa.sh/#library) — inspect the reusable page vocabulary.
+- [3. Assets](https://prsim.yafa.sh/#assets) — browse product and contextual imagery.
+- [4. Blocks](https://prsim.yafa.sh/#blocks) — review reusable proof, delivery and evidence units.
+- [5. Assemblies](https://prsim.yafa.sh/#assemblies) — see approved copy, assets and blocks bound together.
+- [6. Scenarios](https://prsim.yafa.sh/#scenarios) — explore the authored contextual coverage.
+- [7. Foundation](https://prsim.yafa.sh/#foundation) — read the relevance-first rationale.
+
 ## Demo video description
 
 The video begins on the conventional PORT 70 storefront. The browser companion receives only a generic instruction to discover Website Tools. It has no hidden PRSIM-specific guidance or shopper profile.
