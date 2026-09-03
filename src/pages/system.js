@@ -154,7 +154,7 @@ show_customer_evidence({
           </div>
           <blockquote>
             <p>“As personal relevance or thoughtfulness increases, the quality of issue-relevant arguments becomes more important than the quantity of arguments provided.”</p>
-            <footer>« Plus le sujet est personnellement pertinent ou examiné avec attention, plus la qualité des arguments compte davantage que leur quantité. »</footer>
+            <footer>Traduction libre — pas une citation directe : quand un sujet paraît plus personnel ou plus réfléchi, la qualité des arguments compte davantage que leur quantité.</footer>
           </blockquote>
           <div class="prsim-elm-conclusion">
             <p>La pertinence personnelle détermine en grande partie la manière dont un message persuade. PRSIM ne cherche donc pas à <b>tout montrer</b>, mais à montrer <b>ce qui mérite d’être examiné ici</b> : la bonne preuve, le bon récit et la bonne action.</p>
@@ -165,7 +165,7 @@ show_customer_evidence({
           <span>SOURCES</span>
           <a href="https://www.cs.umd.edu/~shankar/cwhitney/Papers/TICS.pdf" target="_blank" rel="noreferrer">Grainger & Whitney · Transposed-letter effect · 2004</a>
           <a href="https://doi.org/10.1111/j.1467-9280.2006.01684.x" target="_blank" rel="noreferrer">Rayner et al. · There is a cost · 2006</a>
-          <a href="https://doi.org/10.1016/S0065-2601(08)60214-2" target="_blank" rel="noreferrer">Petty & Cacioppo · Elaboration Likelihood Model · 1986</a>
+          <a href="https://doi.org/10.1016/S0065-2601(08)60214-2" target="_blank" rel="noreferrer">Petty & Cacioppo · Elaboration Likelihood Model · 1986 · p. 160</a>
         </footer>
       </section>
     </div>`;

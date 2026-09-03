@@ -523,6 +523,7 @@ const en = {
   "PRSIM ne demande donc pas à une IA d’inventer une boutique. Il sélectionne et ordonne la Brand, les layouts, le copy et les assets existants selon le besoin exprimé.": "PRSIM therefore does not ask an AI to invent a storefront. It selects and orders the existing Brand, layouts, copy, and assets according to the expressed need.",
   "FONDEMENT THÉORIQUE": "THEORETICAL FOUNDATION",
   "Plus le sujet est personnellement pertinent ou examiné avec attention, plus la qualité des arguments compte davantage que leur quantité.": "The more personally relevant or carefully considered a subject is, the more argument quality matters than quantity.",
+  "Traduction libre — pas une citation directe : quand un sujet paraît plus personnel ou plus réfléchi, la qualité des arguments compte davantage que leur quantité.": "Plain-language summary — not a direct quotation: as a subject becomes more personally relevant or carefully considered, argument quality matters more than quantity.",
   "La pertinence personnelle détermine en grande partie la manière dont un message persuade. PRSIM ne cherche donc pas à": "Personal relevance largely determines how a message persuades. PRSIM therefore does not try to",
   "tout montrer": "show everything",
   "mais à montrer": "but to show",

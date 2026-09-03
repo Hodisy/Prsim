@@ -11,3 +11,16 @@ demo-companion/JURY_QA_EN.md
 demo-companion/25_SCENARIO_RECORDING_GUIDE.md
 demo-companion/*.pptx
 demo-companion/Codex Image *.png
+
+# Local presentation and video-production workspace. None of these files are
+# required to run the public PRSIM storefront.
+.pnpm-store/
+demo-companion/*.inspect.ndjson
+demo-companion/slides/
+demo-companion/remotion-video/
+
+# Intermediate brand-art sources generated for the private presentation.
+assets/brand/*.html
+assets/brand/prsim-prism-flat.png
+assets/brand/prsim-prism.svg
+assets/brand/prsim-scenarios-mosaic.png
