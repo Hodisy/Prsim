@@ -209,7 +209,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .layout-block.block-morph-in,
   .product-media-image.colorway-swap-in,
   .gallery-thumb-image.colorway-swap-in,
-  .commerce-feedback { animation: none; }
+  .commerce-feedback,
+  .laptop-access-diagram.is-replaying * { animation: none; }
 }
 
 /* Scenario pages open as a site review, not as a dashboard review. */

@@ -278,6 +278,34 @@ const contentDefinitions = [
     tags: ["packing", "organization", "capacity"],
   },
   {
+    id: "block.laptop-access",
+    role: "section",
+    purpose: "laptop_access",
+    label: "Accès ordinateur séparé",
+    description: "Montre comment sortir l’ordinateur sans ouvrir le compartiment vêtements.",
+    sourceProfile: "p22",
+    sourceVariant: "packing",
+    props: {
+      id: "S25",
+      variant: "laptop-access",
+      label: "Laptop access",
+      eyebrow: "SECURITY ACCESS / ONE MOTION",
+      title: "Laptop out. Clothing compartment closed.",
+      body: "Open the dedicated rear access, lift the 16-inch laptop, and keep the three-day load untouched.",
+      media: null,
+      asset: null,
+      assetCaption: null,
+      colorAssets: null,
+      steps: [
+        { number: "01", label: "Open laptop access", note: "Dedicated rear zip" },
+        { number: "02", label: "Lift 16-inch laptop", note: "One direct motion" },
+        { number: "03", label: "Main volume stays closed", note: "Clothing remains packed" },
+      ],
+      proofs: ["Separate access", "Suspended sleeve", "Clothes remain packed"],
+    },
+    tags: ["laptop", "security", "access", "business", "organization"],
+  },
+  {
     id: "block.delivery",
     role: "section",
     purpose: "delivery",
@@ -342,6 +370,7 @@ const shopperQuestions = {
   "block.customer-color": "Que disent les clients de ce coloris ?",
   "block.returns-warranty": "Comment fonctionnent les retours et la garantie ?",
   "block.organization": "Qu’est-ce qui rentre dedans ?",
+  "block.laptop-access": "Puis-je sortir l’ordinateur sans ouvrir les vêtements ?",
   "block.delivery": "Quand puis-je le recevoir ?",
   "block.material-quality": "Comment est-il fabriqué ?",
 };
@@ -349,7 +378,7 @@ const shopperQuestions = {
 function argumentTypeFor(block) {
   if (coreBlockIds.has(block.id)) return block.id === "block.editorial-story" ? "projection" : "foundation";
   if (block.purpose.startsWith("customer_") || ["gift_reassurance", "returns_warranty"].includes(block.purpose)) return "trust";
-  if (block.purpose === "organization" || block.purpose === "delivery" || block.purpose === "urgent_delivery") return "operational";
+  if (["organization", "laptop_access", "delivery", "urgent_delivery"].includes(block.purpose)) return "operational";
   return "rational";
 }
 

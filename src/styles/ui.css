@@ -203,6 +203,36 @@
 @keyframes guided-reveal { from { opacity: 0; transform: translateY(7px) scale(.96); filter: blur(5px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 
 .technical-specs strong { font: 700 23px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }.technical-specs small { color: #666; font-size: 9px; }
+.laptop-access-copy > .ui-only { display: grid; align-content: center; }
+.laptop-access-copy h3 { max-width: 410px; margin: 0 0 18px; font: 400 43px/.98 var(--brand-title-font); letter-spacing: -.045em; }
+.laptop-access-copy > .ui-only > p:not(.eyebrow) { max-width: 390px; margin: 0; color: #5d5d58; font-size: 13px; line-height: 1.55; }
+.laptop-access-proofs { display: flex; flex-wrap: wrap; gap: 7px; margin: 24px 0 22px; }
+.laptop-access-proofs span { padding: 6px 8px; border: 1px solid #777; border-radius: 999px; font: 700 8px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .06em; text-transform: uppercase; }
+.laptop-access-replay { width: max-content; padding: 0 0 4px; color: #111; background: transparent; border: 0; border-bottom: 1px solid #111; cursor: pointer; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+.laptop-access-replay:focus-visible { outline: 2px solid #111; outline-offset: 4px; }
+.laptop-access-step > .ui-only { height: 100%; display: grid; grid-template-rows: 1fr auto; }
+.laptop-access-step svg { width: 100%; min-height: 240px; overflow: visible; color: #111; }
+.laptop-access-step svg * { vector-effect: non-scaling-stroke; }
+.laptop-access-bag, .laptop-access-front-pocket, .laptop-access-laptop rect { fill: #f1f1ed; stroke: currentColor; stroke-width: 1.4; }
+.laptop-access-handle, .laptop-access-main-zip, .laptop-access-rear-zip, .laptop-access-open-arrow, .laptop-access-motion, .laptop-access-laptop path, .laptop-access-packed { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.laptop-access-main-zip { stroke-dasharray: 2 3; }
+.laptop-access-rear-zip { stroke-dasharray: 5 4; }
+.laptop-access-laptop circle { fill: currentColor; }
+.laptop-access-seal { fill: #111; stroke: #111; }
+.laptop-access-check { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.laptop-access-step footer { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; padding: 16px 5px 0; border-top: 1px solid #aaa; }
+.laptop-access-step footer span { grid-row: 1 / 3; font: 400 26px/1 var(--brand-title-font); }
+.laptop-access-step footer strong { font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -.02em; text-transform: uppercase; }
+.laptop-access-step footer small { color: #777; font-size: 9px; }
+.laptop-access-diagram.is-replaying .laptop-access-rear-zip { animation: laptop-zip 1.2s ease-out both; }
+.laptop-access-diagram.is-replaying .laptop-access-open-arrow { animation: laptop-mark .5s .35s ease-out both; }
+.laptop-access-diagram.is-replaying .laptop-access-laptop { animation: laptop-lift 1.1s .55s cubic-bezier(.2,.8,.2,1) both; }
+.laptop-access-diagram.is-replaying .laptop-access-motion { animation: laptop-mark .55s .72s ease-out both; }
+.laptop-access-diagram.is-replaying .laptop-access-seal, .laptop-access-diagram.is-replaying .laptop-access-check { animation: laptop-seal .45s 1.35s cubic-bezier(.2,.8,.2,1) both; transform-origin: 155px 70px; }
+@keyframes laptop-zip { from { stroke-dashoffset: 42; opacity: .25; } to { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes laptop-mark { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes laptop-lift { from { transform: translateY(38px); opacity: .35; } to { transform: translateY(0); opacity: 1; } }
+@keyframes laptop-seal { from { opacity: 0; transform: scale(.45); } to { opacity: 1; transform: scale(1); } }
 .section-heading h3, .section-copy h3, .journal-copy h3, .section-final h3 { max-width: 680px; margin: 0; font: 400 42px/1 Georgia, serif; letter-spacing: -.035em; }
 .section-copy p, .journal-copy p { max-width: 490px; color: #585853; font-size: 14px; line-height: 1.6; }
 .section-copy a { display: inline-flex; align-items: center; gap: 8px; margin-top: 17px; color: inherit; font-size: 11px; font-weight: 750; text-decoration: none; text-transform: uppercase; letter-spacing: .06em; }.section-copy a .icon { width: 16px; }

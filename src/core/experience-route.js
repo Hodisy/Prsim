@@ -49,6 +49,7 @@ const sectionPurposes = Object.freeze([
   "material_quality",
   "editorial_story",
   "product_overview",
+  "laptop_access",
 ]);
 
 const variationSlots = Object.freeze(["weather", "durability", "proof", "utility", "story", "offer"]);

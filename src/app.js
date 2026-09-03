@@ -624,6 +624,9 @@ function previewProfile() {
         bodySections.unshift(existing);
       } else if (mutation.placement === "before_cta") {
         bodySections.push(fresh);
+      } else if (definition.purpose === "laptop_access") {
+        const airlineIndex = bodySections.findIndex((section) => section.blockPurpose === "airline_compatibility" || section.variant === "airline-compare");
+        bodySections.splice(airlineIndex >= 0 ? airlineIndex + 1 : 0, 0, fresh);
       } else {
         bodySections.unshift(fresh);
       }
@@ -1496,6 +1499,17 @@ function syncToolRegistration() {
 }
 
 document.addEventListener("click", (event) => {
+  const laptopReplay = event.target.closest("[data-laptop-replay]");
+  if (laptopReplay) {
+    const diagram = laptopReplay.closest(".section-laptop-access")?.querySelector(".laptop-access-diagram");
+    if (diagram) {
+      diagram.classList.remove("is-replaying");
+      void diagram.offsetWidth;
+      diagram.classList.add("is-replaying");
+    }
+    return;
+  }
+
   const shareExperience = event.target.closest("[data-share-experience]");
   if (shareExperience) {
     shareCurrentExperience();

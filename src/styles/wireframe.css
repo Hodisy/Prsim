@@ -88,6 +88,16 @@
 .packing-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-left: 22px; }
 .packing-items > div { min-height: 100px; display: grid; place-items: center; align-content: center; gap: 5px; border: 1px solid #aaa; background: #fff; }
 .packing-items .wf-only { width: 44px; height: 44px; border: 1px solid #888; background: #e8e8e8; }
+.section-laptop-access { min-height: 540px; display: grid; grid-template-columns: .72fr 1.28fr; padding: 0; }
+.laptop-access-copy { min-width: 0; display: grid; align-content: center; padding: 68px 54px; border-right: 1px solid #999; }
+.laptop-access-diagram { min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; padding: 74px 28px 42px; }
+.laptop-access-step { min-width: 0; padding: 0 12px; border-right: 1px solid #aaa; }
+.laptop-access-step:last-child { border-right: 0; }
+.laptop-access-wire-copy { display: grid; gap: 22px; }
+.laptop-access-wire-diagram { position: relative; min-height: 340px; display: grid; place-items: center; border: 1px solid #999; background: #eee; }
+.laptop-access-wire-diagram span { width: 72%; height: 46%; border: 1px solid #777; border-radius: 12px; background: #f7f7f7; }
+.laptop-access-wire-diagram i { position: absolute; top: 22%; width: 42%; height: 31%; border: 1px solid #777; background: #ddd; }
+.laptop-access-wire-diagram b { position: absolute; left: 12px; bottom: 12px; font-size: 10px; }
 .section-timeline, .section-journey { min-height: 390px; }
 .timeline { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 24px; }
 .section-timeline .timeline { grid-template-columns: repeat(3, 1fr); }
@@ -246,6 +256,12 @@
 .canvas.mobile .section-airport-story { min-height: 850px; }.canvas.mobile .airport-story-media { height: 390px; }.canvas.mobile .airport-story-band { grid-template-columns: 1fr; }
 .canvas.mobile .section-airline-compare { min-height: 700px; }.canvas.mobile .airline-compare-layout { grid-template-columns: 1fr; }.canvas.mobile .airline-compare-now { min-height: 150px; border-right: 0; border-bottom: 1px solid #999; }.canvas.mobile .airline-compare-table .table-row { min-width: 590px; }
 .canvas.mobile .section-packing { height: 930px; min-height: 930px; }.canvas.mobile .packing-grid, .canvas.mobile .section-journal, .canvas.mobile .section-journal.reverse, .canvas.mobile .airline-proof-layout { grid-template-columns: 1fr; }.canvas.mobile .section-journal.reverse .journal-media { order: 0; }.canvas.mobile .packing-media, .canvas.mobile .journal-media, .canvas.mobile .airline-proof-media { min-height: 300px; }.canvas.mobile .packing-items { grid-template-columns: repeat(2, 1fr); padding: 18px 0 0; }
+.canvas.mobile .section-laptop-access { grid-template-columns: 1fr; }
+.canvas.mobile .laptop-access-copy { padding: 58px 28px 34px; border-right: 0; border-bottom: 1px solid #999; }
+.canvas.mobile .laptop-access-diagram { grid-template-columns: 1fr; padding: 22px 20px 34px; }
+.canvas.mobile .laptop-access-step { padding: 14px 0; border-right: 0; border-bottom: 1px solid #aaa; }
+.canvas.mobile .laptop-access-step:last-child { border-bottom: 0; }
+.canvas.mobile .laptop-access-wire-diagram { min-height: 230px; }
 .canvas.mobile .section-commute-proof { min-height: 1230px; }.canvas.mobile .commute-proof-images { grid-template-columns: 1fr; gap: 10px; }.canvas.mobile .commute-proof-image { height: 240px; }.canvas.mobile .commute-proof-rail { grid-template-columns: 1fr; }.canvas.mobile .commute-proof-rail article { min-height: 76px; border-right: 0; border-bottom: 1px solid #999; }.canvas.mobile .commute-proof-rail article:last-child { border-bottom: 0; }
 .canvas.mobile .timeline, .canvas.mobile .section-timeline .timeline { grid-template-columns: 1fr; gap: 18px; }.canvas.mobile .timeline::before { top: 0; bottom: 0; left: 19px; right: auto; border: 0; border-left: 1px solid #777; }.canvas.mobile .timeline > div { grid-template-columns: 38px 1fr; text-align: left; }.canvas.mobile .timeline-dot { margin: 0; }
 .canvas.mobile .section-timeline { height: 590px; min-height: 590px; }.canvas.mobile .section-journey { height: 690px; min-height: 690px; }.canvas.mobile .section-journal, .canvas.mobile .section-airline-card { height: 850px; min-height: 850px; }.canvas.mobile .section-before-after { height: 800px; min-height: 800px; }.canvas.mobile .before-after-grid { grid-template-columns: 1fr; }.canvas.mobile .before-after-grid article { height: 280px; }.canvas.mobile .compare-arrow { transform: rotate(90deg); }

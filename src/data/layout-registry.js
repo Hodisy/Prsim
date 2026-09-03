@@ -24,6 +24,7 @@ const variantFields = {
   reviews: [],
   comments: [],
   packing: [field("items", "collection", "Éléments illustrés")],
+  "laptop-access": [field("steps", "collection", "Étapes du geste"), field("proofs", "list", "Preuves fonctionnelles")],
   mosaic: [field("images", "collection", "Images")],
   "scene-selector": [field("scenes", "collection", "Scènes")],
   "routine-selector": [field("moments", "collection", "Moments")],
@@ -37,6 +38,7 @@ const supplementalLayouts = [
   ["S8", "airport-story", "Récit aéroport", "section"], ["S9", "hotspots", "Points fonctionnels", "section"],
   ["S11", "metrics", "Métriques", "section"], ["S20", "faq", "FAQ", "section"], ["S22", "comments", "Commentaires contextuels", "section"],
   ["S23", "gift-reassurance", "Réassurance cadeau", "section"], ["CTA", "final", "CTA final", "section"],
+  ["S25", "laptop-access", "Accès ordinateur séparé", "section"],
   ["J01", "journal", "Chapitre éditorial 01", "section"], ["J02", "journal", "Chapitre éditorial 02", "section"], ["J03", "journal", "Chapitre éditorial 03", "section"],
 ];
 
@@ -52,7 +54,7 @@ function register(layoutId, variant, label, type) {
     label,
     type,
     fields: [...commonFields, ...(variantFields[variant] || [])],
-    assetSlots: [
+    assetSlots: variant === "laptop-access" ? [] : [
       { key: "asset", label: "Asset principal", accepts: ["product", "context", "editorial", "sketch"] },
       ...(variant === "packing" ? [{ key: "items.*.asset", label: "Illustrations des éléments", accepts: ["icon"] }] : []),
     ],

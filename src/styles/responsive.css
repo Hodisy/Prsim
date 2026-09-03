@@ -436,6 +436,10 @@ body.payment-preview .stage { height: auto; min-height: 100vh; overflow: visible
 .canvas.mobile .payment-product-image { height: 78px; }
 .canvas.mobile .payment-form input { height: 42px; font-size: 12px; }
 .canvas.mobile .payment-submit { height: 48px; font-size: 12px; }
+.canvas.mobile .laptop-access-copy h3 { font-size: 36px; }
+.canvas.mobile .laptop-access-step > .ui-only { grid-template-columns: 132px 1fr; grid-template-rows: 1fr; align-items: center; }
+.canvas.mobile .laptop-access-step svg { min-height: 138px; }
+.canvas.mobile .laptop-access-step footer { border-top: 0; border-left: 1px solid #aaa; padding: 10px 0 10px 16px; }
 
 @media (max-width: 720px) {
   body.preview-home .workspace,

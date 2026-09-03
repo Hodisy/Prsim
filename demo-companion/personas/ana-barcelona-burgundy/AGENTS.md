@@ -21,13 +21,28 @@ Use the Barcelona visual context while preserving the Liberty burgundy preferenc
 
 This persona is used for a recorded, turn-by-turn shopping demonstration. Make the interaction reliable and natural, but never run the whole sequence automatically. Act only on the shopper's latest message, complete the corresponding page action, reply briefly, and wait for the next shopper input.
 
-### Opening the experience
+### First message: open the classic store only
 
-When the shopper asks you to open https://prsim.yafa.sh/#preview and help with the Barcelona weekend:
+When the shopper only says that they found an interesting store and asks you to open `https://prsim.yafa.sh/#preview`:
 
 1. Open that exact URL in the built-in browser if it is not already open.
+2. Do not call `prepare_shopping_experience` yet.
+3. Do not infer a shopping need, recommend a model or transform the page.
+4. Reply briefly that the store is open, then wait while the shopper looks at the classic storefront.
+
+A suitable visible reply is:
+
+> The store is open. Take a look, and tell me what you need when you’re ready.
+
+This first message is deliberately generic. The recording may be forked from this point for any other shopper scenario.
+
+### Second message: prepare Ana's experience
+
+Only when Ana then says that she does not know which bag to choose and provides her Barcelona need:
+
+1. Keep the same browser tab and current page; do not ask for or reopen the URL.
 2. Inspect the website tools exposed by the active page before recommending anything.
-3. If prepare_shopping_experience is available, call it exactly once.
+3. If `prepare_shopping_experience` is available, call it exactly once.
 4. Send only the relevant known context:
    - request: choosing a bag for a Barcelona weekend, with concern that burgundy may look too red online;
    - use_language: en;
@@ -180,17 +195,38 @@ Suggested reply:
 
 ## RECORDING RUN — COPY ONE SHOPPER LINE AT A TIME
 
-This is the complete Ana take. It has six shopper messages, including the required final confirmation. Wait for the agent reply and visible page update after each message.
+This is the complete Ana take. It has seven shopper messages, including the generic store opening and the required final confirmation. Wait for the agent reply and visible page update after each message.
 
-### 01 — Prepare the experience
+### 01 — Open the unmodified store
 
 **You paste**
 
-> Use the built-in browser to open https://prsim.yafa.sh/#preview. Help me choose the right bag for the Barcelona weekend we discussed, directly on the page.
+> Use the built-in browser to open https://prsim.yafa.sh/#preview. I came across this bag shop and it looks interesting. Open it for me so I can have a look.
 
 **Expected WebMCP call**
 
-prepare_shopping_experience, once only. It should receive Barcelona, a short city trip, Liberty burgundy, visual-first preference, caution around online color, customer evidence and return reassurance.
+None. This turn is navigation only. Do not call `prepare_shopping_experience` before Ana expresses a need.
+
+**Expected companion reply**
+
+> The store is open. Take a look, and tell me what you need when you’re ready.
+
+**What must be visible**
+
+- The classic PORT 70 storefront remains completely unchanged.
+- Scroll through enough of the default page to establish the familiar one-size-fits-all ecommerce experience.
+- The voice-over can explain that the page looks polished but still makes every shopper search through the same information.
+- Fork the other persona recordings from this clean opened-store state.
+
+### 02 — Ask for help and prepare Ana's experience
+
+**You paste**
+
+> Okay, it looks nice, but I don’t really know which bag to choose. I’m Ana, 27, a junior interior architect. I’m planning a weekend in Barcelona and prefer Liberty burgundy. Can you help me choose directly on this page?
+
+**Expected WebMCP call**
+
+`prepare_shopping_experience`, once only. It should receive Barcelona, a short city trip, Liberty burgundy, visual-first preference, caution around online color, customer evidence and return reassurance.
 
 **Expected companion reply**
 
@@ -203,7 +239,7 @@ prepare_shopping_experience, once only. It should receive Barcelona, a short cit
 - The hero, Look × place selector, photo proof, three-day packing view, Barcelona inspiration, targeted comments and Buy CTA are already present.
 - Do not ask for natural-light images next: the initial Barcelona experience already contains them.
 
-### 02 — Break the color-confidence lock
+### 03 — Break the color-confidence lock
 
 **You paste**
 
@@ -224,7 +260,7 @@ show_customer_evidence with the concern in the shopper's words, focus color and 
 - Reviews keep their source, rating, verification state and prototype disclosure.
 - The answer gives Ana a real trade-off, not a perfect product claim.
 
-### 03 — Break the return-risk lock
+### 04 — Break the return-risk lock
 
 **You paste**
 
@@ -244,7 +280,7 @@ search_shop_policies_and_faqs with topic returns.
 - No new scenario is selected and no generic product grid appears.
 - This is a short factual reassurance moment; it does not need a large page animation.
 
-### 04 — Demonstrate that the recommendation is not a lock-in
+### 05 — Demonstrate that the recommendation is not a lock-in
 
 **You paste**
 
@@ -264,7 +300,7 @@ choose_color with black.
 - Hero, contextual photography, color swatches and CTA update to black.
 - This is the clearest proof that PRSIM proposes a color but does not trap the shopper in it.
 
-### 05 — Return to Liberty burgundy and signal intent
+### 06 — Return to Liberty burgundy and signal intent
 
 **You paste**
 
@@ -283,7 +319,7 @@ choose_color with liberty-burgundy. Do not call buy_now yet.
 - Contextual images and CTA return to Liberty burgundy.
 - The agent does not purchase automatically just because Ana said she is ready.
 
-### 06 — Confirm opening payment
+### 07 — Confirm opening payment
 
 **You paste**
 

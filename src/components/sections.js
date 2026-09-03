@@ -207,6 +207,60 @@ const packing = (node) => {
   </div>`);
 };
 
+const laptopAccess = (node) => {
+  const steps = node.steps || [
+    { number: "01", label: "Open laptop access", note: "Dedicated rear zip" },
+    { number: "02", label: "Lift 16-inch laptop", note: "One direct motion" },
+    { number: "03", label: "Main volume stays closed", note: "Clothing remains packed" },
+  ];
+  const proofs = node.proofs || ["Separate access", "Suspended sleeve", "Clothes remain packed"];
+  const drawings = [
+    `<svg viewBox="0 0 210 190" role="img" aria-label="Open the dedicated laptop access">
+      <path class="laptop-access-handle" d="M76 49c0-24 58-24 58 0" />
+      <rect class="laptop-access-bag" x="35" y="50" width="140" height="112" rx="18" />
+      <path class="laptop-access-main-zip" d="M48 66h114" />
+      <path class="laptop-access-rear-zip" d="M57 55c22-18 74-18 96 0" />
+      <path class="laptop-access-open-arrow" d="M157 34c18 3 25 14 21 28m0 0-8-10m8 10 10-7" />
+      <rect class="laptop-access-front-pocket" x="55" y="101" width="100" height="45" rx="10" />
+    </svg>`,
+    `<svg viewBox="0 0 210 190" role="img" aria-label="Lift the laptop from its separate sleeve">
+      <path class="laptop-access-handle" d="M76 49c0-24 58-24 58 0" />
+      <rect class="laptop-access-bag" x="35" y="50" width="140" height="112" rx="18" />
+      <path class="laptop-access-main-zip" d="M48 66h114" />
+      <g class="laptop-access-laptop"><rect x="68" y="23" width="74" height="75" rx="5" /><path d="M62 101h86" /><circle cx="105" cy="58" r="3" /></g>
+      <path class="laptop-access-motion" d="M156 104V34m0 0-8 10m8-10 8 10" />
+      <rect class="laptop-access-front-pocket" x="55" y="101" width="100" height="45" rx="10" />
+    </svg>`,
+    `<svg viewBox="0 0 210 190" role="img" aria-label="The main clothing compartment remains closed">
+      <path class="laptop-access-handle" d="M76 49c0-24 58-24 58 0" />
+      <rect class="laptop-access-bag" x="35" y="50" width="140" height="112" rx="18" />
+      <path class="laptop-access-main-zip" d="M48 66h114" />
+      <rect class="laptop-access-front-pocket" x="55" y="101" width="100" height="45" rx="10" />
+      <circle class="laptop-access-seal" cx="155" cy="70" r="17" />
+      <path class="laptop-access-check" d="m146 70 6 6 12-14" />
+      <path class="laptop-access-packed" d="M69 116h72m-67 11h62" />
+    </svg>`,
+  ];
+
+  return shell(node, "section-laptop-access", `
+    <div class="laptop-access-copy">
+      <div class="wf-only laptop-access-wire-copy">${wireLines([48, 92, 73, 84])}<span class="wf-paragraph"></span></div>
+      <div class="ui-only">
+        <p class="eyebrow">${esc(node.eyebrow || "SECURITY ACCESS / ONE MOTION")}</p>
+        <h3>${esc(node.title)}</h3>
+        <p>${esc(node.body || "Open the dedicated rear access, lift the laptop, and keep the three-day load untouched.")}</p>
+        <div class="laptop-access-proofs">${proofs.slice(0, 3).map((proof) => `<span>${esc(proof)}</span>`).join("")}</div>
+        <button type="button" class="laptop-access-replay" data-laptop-replay>Replay the motion</button>
+      </div>
+    </div>
+    <div class="laptop-access-diagram is-replaying">
+      ${steps.slice(0, 3).map((step, index) => `<article class="laptop-access-step">
+        <div class="wf-only laptop-access-wire-diagram"><span></span><i></i><b>${esc(step.number || `0${index + 1}`)}</b></div>
+        <div class="ui-only">${drawings[index]}<footer><span>${esc(step.number || `0${index + 1}`)}</span><strong>${esc(step.label)}</strong><small>${esc(step.note || "")}</small></footer></div>
+      </article>`).join("")}
+    </div>`);
+};
+
 const timeline = (node, journey = false) => {
   const steps = node.steps || (journey ? ["Bureau", "Train", "Rendez-vous", "Hôtel"] : ["Aujourd’hui", "Expédié", "Livré jeudi"]);
   const details = node.details || (journey ? steps.map(() => "Transition sans changer de sac") : ["Commande confirmée", "Suivi envoyé", "Avant l’événement"]);
@@ -341,6 +395,7 @@ export function renderSection(node, profile = { facts: [], quote: "", author: ""
     "product-grid": () => productGrid(node),
     "airport-story": () => airportStory(node),
     packing: () => packing(node),
+    "laptop-access": () => laptopAccess(node),
     timeline: () => timeline(node),
     journey: () => timeline(node, true),
     journal: () => journal(node, profile),

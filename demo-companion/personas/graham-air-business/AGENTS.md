@@ -42,3 +42,26 @@ Call `prepare_shopping_experience` once with English, `air_business`, British Ai
 - The hero stays light and restrained, with the black bag, British Airways allowance and Buy CTA visible without a long scroll.
 - The body prioritises cabin fit, business packing, technical material, measured specifications and comparable frequent-flyer evidence.
 - The color remains changeable; the recommendation is not a lock-in.
+
+================================================================
+
+## RECORDING RUN — FOLLOW-UP TAKE
+
+### You paste
+
+> At security, can I take the laptop out without opening the compartment with my clothes?
+
+### Expected WebMCP call
+
+Call `update_experience_blocks` once with `purpose: laptop_access`, `operation: auto`, `placement: best` and the shopper’s question as `request`. Do not call `prepare_shopping_experience` again and do not replace the hero.
+
+### Expected companion reply
+
+> Yes. I’ve added the dedicated laptop-access sequence: the 16-inch laptop lifts from its separate sleeve while the main clothing compartment stays closed.
+
+### What must be visible
+
+- A three-step technical diagram appears immediately after the British Airways compatibility section.
+- The sequence shows open access, lift laptop and main volume closed.
+- The diagram uses no product photo and can replay its motion.
+- The Buy CTA and selected black color remain unchanged.
