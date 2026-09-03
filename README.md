@@ -52,6 +52,25 @@ flowchart LR
 
 The shopper can always change color, ask for proof, compare formats, inspect policy information, reset the experience or proceed to checkout. Final payment still requires buyer confirmation.
 
+## Explore the prototype
+
+You can inspect PRSIM without an AI companion. Start with the [scenario selector](https://prsim.yafa.sh/#scenarios), then open a prepared storefront directly:
+
+- [Lucia — visual long-haul travel](https://prsim.yafa.sh/s4#preview)
+- [Kevin — collect or receive today](https://prsim.yafa.sh/s15#preview)
+- [Ryan — Ryanair cabin fit](https://prsim.yafa.sh/s1#preview)
+- [Paul — analytical product proof](https://prsim.yafa.sh/s11#preview)
+- [Sophie — gift, personalisation and delivery](https://prsim.yafa.sh/s2#preview)
+
+For the companion flow, open the [WebMCP Preview](https://prsim.yafa.sh/#preview) in a supported browser. The merchant studio is also available in the live prototype:
+
+- [Brand](https://prsim.yafa.sh/#brand) — name, palette, typography and trust cues.
+- [Layouts](https://prsim.yafa.sh/#library) — the reusable page vocabulary.
+- [Assets](https://prsim.yafa.sh/#assets) — product views, swatches and contextual photography.
+- [Blocks](https://prsim.yafa.sh/#blocks) — reusable proof, review, delivery and product-content units.
+- [Assemblies](https://prsim.yafa.sh/#assemblies) — ordered layout instances bound to approved copy, assets and evidence.
+- [Foundation](https://prsim.yafa.sh/#foundation) — the relevance-first rationale behind the system.
+
 ## Fair demo setup
 
 The repository includes one optional [`demo-companion/AGENTS.md`](demo-companion/AGENTS.md). Its only purpose is to remind a browser companion to inspect Website Tools on the active page. It contains no PRSIM-specific tool names, shopper profile, destination, budget, preference, scenario mapping, expected call, or scripted response.
@@ -81,6 +100,12 @@ The current prototype contains:
 - a combinatorial scenario vocabulary spanning context, buying situation, decision style, projection, content preference, tone, age band, requested representation, color and language.
 
 The full combinatorial space is intentionally not hand-authored. PRSIM finds the nearest useful scenario, then applies smaller local variations. Future merchant analytics could show unmet demand clusters and help teams author the next scenarios with the highest value.
+
+### A tailoring workflow, not infinite page generation
+
+A merchant starts with a product truth, a brand and a small set of reusable layouts. From there, the system can be enriched gradually: add new product or contextual photos, connect approved customer-review sources, bind evidence to the relevant blocks, compose an assembly and author the next missing scenario when demand appears in analytics.
+
+The prototype demonstrates this governed content model through local registries and bindings. A production version would connect the same model to a merchant's asset library, catalogue, review provider and analytics stack. The goal is not to make thousands of pages by hand; it is to tailor a finite, approved vocabulary to the shopper's expressed need.
 
 ## WebMCP tool design
 
