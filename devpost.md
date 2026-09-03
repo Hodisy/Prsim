@@ -79,6 +79,10 @@ Without WebMCP, an assistant can describe what a shopper should inspect or provi
 
 *The companion discovers one high-level capability first; focused tools follow once an experience is prepared.*
 
+![Kevin's delivery experience with WebMCP](https://raw.githubusercontent.com/Hodisy/Prsim/main/docs/media/devpost/scenarios/kevin-locker-webmcp.png)
+
+*In ChatGPT Work, the companion can inspect the site’s exposed tools while Kevin’s delivery question resolves directly into nearby locker, pickup and express-delivery choices on the storefront.*
+
 The initial call is intentionally high level. The companion sends purchase context, not component IDs or instructions such as "use this hero" PRSIM owns the presentation decision. Follow-up tools are intentionally narrow so later requests update only the relevant part of the experience.
 
 This division is important:
@@ -160,10 +164,6 @@ Reviews are not merchant copy. We separated customer evidence into its own regis
 - The prototype supports 21 distinct authored scenarios without requiring 21 unrelated implementations
 - The same demo includes adaptive experience tools, standard catalogue/cart concepts and a local checkout lifecycle
 - Prototype claims and customer evidence retain explicit limitations
-
-![Kevin's active-city experience](https://raw.githubusercontent.com/Hodisy/Prsim/main/docs/media/devpost/scenarios/kevin-locker.png)
-
-*A practical city scenario makes secure storage and quick access tangible, rather than burying them in a generic feature list.*
 
 ## What we learned
 
