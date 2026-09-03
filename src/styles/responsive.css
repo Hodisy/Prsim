@@ -70,8 +70,8 @@
 .canvas.mobile .hero-guided .hero-media,
 .canvas.mobile .hero-delivery .hero-media {
   width: 100%;
-  height: 330px !important;
-  min-height: 330px;
+  height: 310px !important;
+  min-height: 310px;
 }
 
 .canvas.mobile .copy-slot,
@@ -118,10 +118,37 @@
 .canvas.mobile .classic-rating-trust { align-items: flex-start; }
 .canvas.mobile .classic-rating-trust .trustpilot-mark { width: 100%; padding: 9px 0 0; border-top: 1px solid #aaa; border-left: 0; }
 
+/* Airline layouts keep the purchase action in the first viewport. */
+.canvas.mobile .hero-airline .hero-media {
+  height: 310px !important;
+  min-height: 310px;
+}
+.canvas.mobile .hero-airline .decision-panel { padding: 38px 20px 24px !important; }
+.canvas.mobile .hero-airline .airline-trust-top { margin-bottom: 9px; }
+.canvas.mobile .hero-airline .airline-row { margin-bottom: 13px; }
+.canvas.mobile .hero-airline .airline-ui h2 {
+  margin-bottom: 11px;
+  font-size: clamp(31px, 9vw, 35px);
+  line-height: .96;
+}
+.canvas.mobile .hero-airline .airline-ui > p {
+  margin-bottom: 13px;
+  font-size: 12px;
+  line-height: 1.42;
+}
+.canvas.mobile .hero-airline .cabin-card {
+  gap: 5px;
+  margin: 0 0 10px;
+  padding: 11px 13px;
+}
+.canvas.mobile .hero-airline .cabin-card strong { font-size: 19px; }
+.canvas.mobile .hero-airline .material-choice.compact { margin: 8px 0 11px; }
+.canvas.mobile .hero-airline .shop-button { min-height: 46px; }
+
 /* Classic PDP keeps the product large and moves thumbnails beneath it. */
 .canvas.mobile .hero-classic { padding: 42px 16px 30px; gap: 28px; }
 .canvas.mobile .classic-gallery { height: auto; display: flex; flex-direction: column-reverse; gap: 10px; }
-.canvas.mobile .classic-gallery > .hero-media { height: 345px !important; min-height: 345px; }
+.canvas.mobile .classic-gallery > .hero-media { height: 330px !important; min-height: 330px; }
 .canvas.mobile .classic-thumbs { grid-template-columns: repeat(4, 1fr); gap: 7px; }
 .canvas.mobile .classic-thumbs button { width: 100%; aspect-ratio: 1; }
 .canvas.mobile .classic-summary { min-height: 0; padding-top: 0; }
@@ -176,8 +203,8 @@
 .canvas.mobile .hero-center .hero-media,
 .canvas.mobile .hero-center-compact .hero-media {
   width: calc(100% - 32px);
-  height: 285px;
-  min-height: 285px;
+  height: 310px;
+  min-height: 310px;
   margin: 0 16px 28px;
 }
 .canvas.mobile .hero-promo-top { grid-row: 1; padding: 16px 16px 0; }

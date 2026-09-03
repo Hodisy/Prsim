@@ -104,6 +104,7 @@ export const airlineRules = {
   easyjet: { personal_item: [45, 36, 20], cabin_bag: [56, 45, 25] },
   air_france: { personal_item: [40, 30, 15], cabin_bag: [55, 35, 25] },
   lufthansa: { personal_item: [40, 30, 10], cabin_bag: [55, 40, 23] },
+  british_airways: { personal_item: [40, 30, 15], cabin_bag: [56, 45, 25] },
 };
 
 export const shopPolicies = {
@@ -117,7 +118,7 @@ export const shopPolicies = {
 
 export const productFacts = [
   {
-    keys: ["cabine", "siège", "siege", "ryanair", "easyjet", "compagnie"],
+    keys: ["cabine", "siège", "siege", "ryanair", "easyjet", "british airways", "compagnie"],
     answer: "La compatibilité dépend du modèle, de la compagnie et du tarif. Le Passage 24 mesure 40 × 20 × 25 cm ; le Passage 32 mesure 44 × 34 × 19 cm.",
     anchor: "airline_compatibility",
   },

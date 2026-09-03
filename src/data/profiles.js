@@ -88,6 +88,15 @@ const cabinPacking = () => [
   packingItem("Câbles", "Poche zippée", "cables"),
 ];
 
+const businessFlightPacking = () => [
+  packingItem("16-inch laptop", "Suspended rear compartment", "laptop"),
+  packingItem("Travel documents", "Body-side pocket", "passport"),
+  packingItem("Two shirts", "Flat-packed for arrival", "shirt"),
+  packingItem("Headphones + cables", "Dedicated zipped pocket", "cables"),
+  packingItem("Wash kit", "Separated from electronics", "pouch"),
+  packingItem("Light layer", "Accessible during the flight", "layers"),
+];
+
 const longTripPacking = () => [
   packingItem("Laptop", "Compartiment suspendu", "laptop"),
   packingItem("Quatre tenues", "Volume principal", "shirt"),
@@ -1022,6 +1031,84 @@ const adaptive = [
     ],
     quote: "Je passe des cours au train du vendredi sans refaire mon sac.", author: "Usage campus · exemple de prototype",
   },
+  {
+    key: "p22", name: "Graham", title: "Graham — 54 · London to Singapore · business", sub: "Premium cabin travel, laptop access and a restrained professional silhouette.", price: "149 €",
+    colorway: "black",
+    productName: "Passage 32 · Black",
+    sequence: ["British Airways cabin fit", "Business packing", "Material quality", "Measured weight", "Frequent-flyer evidence", "CTA"],
+    hero: {
+      id: "H12", variant: "airline", label: "Verified business flight", kicker: "London · Singapore · business travel",
+      title: "One cabin bag, ready for the meeting after landing.",
+      body: "Passage 32 stays within the selected British Airways cabin-bag dimensions, keeps a 16-inch laptop separate and preserves a restrained silhouette from Heathrow to Singapore.",
+      cta: "Buy for this flight · €149", media: "Black Passage 32 on a premium aircraft seat",
+      asset: "./assets/context/graham-business/premium-seat-black.png",
+      colorAssets: {
+        black: "./assets/context/graham-business/premium-seat-black.png",
+        cream: "./assets/context/graham-business/colorways/cream/premium-seat.png",
+        "liberty-blue": "./assets/context/graham-business/colorways/liberty-blue/premium-seat.png",
+        "liberty-burgundy": "./assets/context/graham-business/colorways/liberty-burgundy/premium-seat.png",
+      },
+      assetCaption: "LONDON / SINGAPORE / CABIN BAG",
+      airline: "BRITISH AIRWAYS",
+      dimensions: "56 × 45 × 25 cm",
+      allowanceLabel: "Cabin bag allowance",
+      verifiedLabel: "Verified",
+      verificationNote: "Allowance checked · 3 September 2026",
+      showTrust: true,
+    },
+    sections: [
+      section("S24", "airline-compare", "British Airways cabin fit", "The allowance and the bag, side by side.", {
+        airline: "British Airways", model: "Passage 32", modelDimensions: "44 × 34 × 19 cm",
+        flightLabel: "Your next flight", fitLabel: "Cabin fit checked",
+        airlineColumnLabel: "Airline", allowanceColumnLabel: "Cabin allowance", statusColumnLabel: "Status",
+        currentFlightLabel: "your flight", compatibleLabel: "Compatible",
+        futureHeading: "For this flight, then the next one.",
+        futureNote: "Passage 32 sits within the current 56 × 45 × 25 cm British Airways cabin-bag allowance. The smaller 40 × 30 × 15 cm hand-bag allowance is a separate under-seat category, and partner-airline rules still need checking.",
+      }),
+      section("S10", "packing", "Business packing", "Work stays accessible; the three-day trip stays organised.", {
+        media: "Open black Passage 32 arranged for a long-haul business trip",
+        asset: "./assets/products/72h-black/04-open-interior.png",
+        colorAssets: productColorAssets("04-open-interior.png"),
+        assetCaption: "LAPTOP / DOCUMENTS / 3 DAYS / 32 L",
+        items: businessFlightPacking(),
+      }),
+      section("S1", "split", "Material and construction", "A technical canvas that keeps its line.", {
+        media: "Close view of the technical canvas and reinforced seam",
+        asset: "./assets/products/72h-black/05-macro-fabric-seam.png",
+        colorAssets: {
+          black: "./assets/products/72h-black/05-macro-fabric-seam.png",
+          cream: "./assets/materials/cream-ecru.png",
+          "liberty-blue": "./assets/materials/liberty-blue.png",
+          "liberty-burgundy": "./assets/materials/liberty-burgundy.png",
+        },
+        assetCaption: "TECHNICAL CANVAS / REINFORCED SEAM",
+        body: "Dense matte canvas, reinforced friction zones and replaceable hardware keep the bag professional without turning it into formal luggage.",
+        reverse: true,
+      }),
+      section("S11", "metrics", "Measured for frequent travel", "The useful numbers stay visible.", {
+        metrics: [
+          { value: "1.18 KG", label: "Empty weight before laptop and clothing", note: "STRUCTURE" },
+          { value: "16\"", label: "Laptop in a suspended compartment", note: "WORK" },
+          { value: "32 L", label: "Two to three days in one cabin bag", note: "CAPACITY" },
+        ],
+      }),
+      section("S22", "comments", "Frequent-flyer notes", "Evidence from comparable work trips.", {
+        entries: [
+          { tag: "LONG-HAUL · WORK", quote: "I could take the laptop out at security without opening the clothing compartment.", meta: "Comparable business journey · prototype content" },
+          { tag: "AIRPORT TO MEETING", quote: "It kept a clean shape after the flight and did not read like outdoor luggage in the meeting room.", meta: "Professional use · prototype content" },
+          { tag: "CABIN BAG", quote: "The dimensions were easy to compare before departure, which mattered more than another generic cabin claim.", meta: "Cabin check · prototype content" },
+        ],
+      }),
+      section("CTA", "final", "Final purchase", "Ready for the next long-haul meeting?", { body: "British Airways cabin-bag dimensions · 16-inch laptop · four colours.", cta: "Buy for this flight · €149" }),
+    ],
+    facts: ["British Airways cabin-bag dimensions", "16-inch laptop compartment", "1.18 kg empty"],
+    reviewQuotes: [
+      "I could take the laptop out at security without opening the clothing compartment.",
+      "It kept a clean shape from Heathrow to the meeting room in Singapore.",
+      "The dimensions were visible before departure instead of hidden in a generic cabin claim.",
+    ],
+    quote: "It kept a clean shape from Heathrow to the meeting room in Singapore.", author: "Frequent business traveller · prototype content",
+  },
 ];
 
 const profileSeeds = [classic, ...adaptive];
@@ -1049,6 +1136,7 @@ const colorSelectorByProfile = {
   p19: "swatches",
   p20: "menu",
   p21: "swatches",
+  p22: "links",
 };
 
 profileSeeds.forEach((profile) => {

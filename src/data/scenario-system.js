@@ -65,6 +65,7 @@ export const scenarioSeeds = [
   { key: "p19", code: "FAMILY-SHARED-02", title: "Famille · organisation partagée", family: "Famille", context: "family_trip", buyingFor: "shared", decision: "cautious", projection: "practical", content: "guided_questions", tone: "reassuring", tags: ["family", "children", "shared", "weekend", "documents", "organization", "quick_access"] },
   { key: "p20", code: "COACH-YOUTH-01", title: "Car longue distance · accès sous-siège", family: "Voyage", context: "coach_travel", buyingFor: "self", decision: "rational", projection: "practical", content: "concise", tone: "energetic", tags: ["coach", "bus", "night_bus", "underseat", "quick_access", "young_adult", "essentials"] },
   { key: "p21", code: "CAMPUS-VALUE-01", title: "Campus · budget, laptop et résistance", family: "Études", context: "study", buyingFor: "self", decision: "comparative", projection: "responsible", content: "comparison", tone: "warm", tags: ["campus", "student", "budget", "weight", "durability", "laptop", "weekend"] },
+  { key: "p22", code: "AIR-BUSINESS-01", title: "Business flight · London to Singapore", family: "Work", context: "air_business", buyingFor: "self", decision: "rational", projection: "premium", content: "technical_detail", tone: "restrained", tags: ["british_airways", "london", "singapore", "business", "long_haul", "cabin", "laptop", "black"] },
 ];
 
 const representationByScenario = {
@@ -89,6 +90,7 @@ const representationByScenario = {
   p19: ["45_54", "woman", "liberty_burgundy"],
   p20: ["18_24", "unspecified", "black"],
   p21: ["18_24", "woman", "liberty_blue"],
+  p22: ["45_54", "man", "black"],
 };
 
 export const scenarioColorwaySpecs = Object.freeze({
@@ -144,7 +146,6 @@ scenarioSeeds.forEach((scenario) => {
 
 export const gapCandidates = [
   { context: "public_transit", label: "Métro / bus quotidien", demand: "Sécurité, faible encombrement, ouverture debout" },
-  { context: "air_business", label: "Vol professionnel", demand: "Cabine, laptop et apparence premium" },
   { context: "road_trip", label: "Voiture / road trip", demand: "Transitions coffre, hôtel et ouverture complète" },
   { context: "multimodal", label: "Vélo + train", demand: "Poignées, portage et changement rapide" },
   { context: "office", label: "Bureau quotidien", demand: "Laptop, documents et silhouette compacte" },
@@ -187,6 +188,7 @@ const assetFiles = [
   "editorial/campus/colorways/black/01-campus-walk.png", "editorial/campus/colorways/cream/01-campus-walk.png", "editorial/campus/colorways/liberty-blue/01-campus-walk.png", "editorial/campus/colorways/liberty-burgundy/01-campus-walk.png",
   "editorial/ryan/01-airport-candid-black.png",
   "editorial/ryan/colorways/cream/01-airport-candid.png", "editorial/ryan/colorways/liberty-blue/01-airport-candid.png", "editorial/ryan/colorways/liberty-burgundy/01-airport-candid.png",
+  "context/graham-business/premium-seat-black.png", "context/graham-business/colorways/cream/premium-seat.png", "context/graham-business/colorways/liberty-blue/premium-seat.png", "context/graham-business/colorways/liberty-burgundy/premium-seat.png",
   "editorial/thomas/01-eurostar-platform-consultant.png",
   "materials/cream-ecru.png", "materials/ink-black.png", "materials/liberty-blue.png", "materials/liberty-burgundy.png",
   "products/72h-black/01-hero-three-quarter.png", "products/72h-black/02-front.png", "products/72h-black/03-rear-three-quarter.png", "products/72h-black/04-open-interior.png", "products/72h-black/05-macro-fabric-seam.png", "products/72h-black/06-macro-top-zip.png", "products/72h-black/07-macro-handle.png", "products/72h-black/09-detail-rear-carry.png", "products/72h-black/10-detail-top-construction.png",
@@ -297,6 +299,7 @@ const destinationSignals = [
   { key: "iceland", scenarioKey: "p9", labels: { fr: "Islande", en: "Iceland" }, trip: { fr: "votre voyage en Islande", en: "your trip to Iceland" }, aliases: ["islande", "iceland", "reykjavik"] },
   { key: "dublin", scenarioKey: "p1", labels: { fr: "Dublin", en: "Dublin" }, trip: { fr: "votre séjour à Dublin", en: "your trip to Dublin" }, aliases: ["dublin"] },
   { key: "bangkok", scenarioKey: "p14", labels: { fr: "Bangkok", en: "Bangkok" }, trip: { fr: "votre séjour à Bangkok", en: "your trip to Bangkok" }, aliases: ["bangkok", "thailande", "thailand"] },
+  { key: "singapore", scenarioKey: "p22", labels: { fr: "Singapour", en: "Singapore" }, trip: { fr: "votre déplacement professionnel à Singapour", en: "your business trip to Singapore" }, aliases: ["singapour", "singapore", "changi"] },
 ];
 
 const needSignalAliases = {

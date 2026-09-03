@@ -280,6 +280,7 @@ const airlineCompare = (node) => {
     { name: "easyJet", allowance: "45 × 36 × 20 cm", status: "Compatible" },
     { name: "Air France", allowance: "55 × 35 × 25 cm", status: "Compatible" },
     { name: "Lufthansa", allowance: "55 × 40 × 23 cm", status: "Compatible" },
+    { name: "British Airways", allowance: "56 × 45 × 25 cm", status: "Compatible" },
   ];
   const selectedAirline = (node.airline || "easyJet").toLowerCase();
   const active = airlines.find((airline) => airline.name.toLowerCase() === selectedAirline) || airlines[1];
@@ -287,14 +288,14 @@ const airlineCompare = (node) => {
     <div class="airline-compare-layout">
       <aside class="airline-compare-now">
         <div class="wf-only">${wireLines([50, 84, 67, 45])}</div>
-        <div class="ui-only"><span>Votre prochain vol</span><strong>${esc(active.name)}</strong><b>✓ Format vérifié</b><p>${esc(model)} · ${esc(modelDimensions)}</p></div>
+        <div class="ui-only"><span>${esc(node.flightLabel || "Votre prochain vol")}</span><strong>${esc(active.name)}</strong><b>✓ ${esc(node.fitLabel || "Format vérifié")}</b><p>${esc(model)} · ${esc(modelDimensions)}</p></div>
       </aside>
       <div class="data-table airline-compare-table">
-        <div class="table-row table-head"><span class="ui-only">Compagnie</span><span class="ui-only">Petit bagage</span><span class="ui-only">${esc(model)}</span><span class="ui-only">Statut</span><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i></div>
-        ${airlines.map((airline) => `<div class="table-row ${airline.name.toLowerCase() === selectedAirline ? "selected current-airline" : ""}"><span class="ui-only">${esc(airline.name)}${airline.name.toLowerCase() === selectedAirline ? " · votre vol" : ""}</span><span class="ui-only">${esc(airline.allowance)}</span><span class="ui-only">${esc(modelDimensions)}</span><span class="ui-only">${esc(airline.status)}</span><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i></div>`).join("")}
+        <div class="table-row table-head"><span class="ui-only">${esc(node.airlineColumnLabel || "Compagnie")}</span><span class="ui-only">${esc(node.allowanceColumnLabel || "Gabarit cabine")}</span><span class="ui-only">${esc(model)}</span><span class="ui-only">${esc(node.statusColumnLabel || "Statut")}</span><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i></div>
+        ${airlines.map((airline) => `<div class="table-row ${airline.name.toLowerCase() === selectedAirline ? "selected current-airline" : ""}"><span class="ui-only">${esc(airline.name)}${airline.name.toLowerCase() === selectedAirline ? ` · ${esc(node.currentFlightLabel || "votre vol")}` : ""}</span><span class="ui-only">${esc(airline.allowance)}</span><span class="ui-only">${esc(modelDimensions)}</span><span class="ui-only">${esc(airline.status === "Compatible" ? (node.compatibleLabel || airline.status) : airline.status)}</span><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i><i class="wf-only"></i></div>`).join("")}
       </div>
     </div>
-    <p class="ui-only airline-compare-future"><strong>Pour ce vol, puis les suivants.</strong> ${esc(node.futureNote || "Les formats compatibles restent visibles : vous savez quand garder ce sac, et quel modèle choisir si une compagnie impose un gabarit plus petit.")}</p>`);
+    <p class="ui-only airline-compare-future"><strong>${esc(node.futureHeading || "Pour ce vol, puis les suivants.")}</strong> ${esc(node.futureNote || "Les formats compatibles restent visibles : vous savez quand garder ce sac, et quel modèle choisir si une compagnie impose un gabarit plus petit.")}</p>`);
 };
 
 const cards = (node, profile, kind = "cards") => {

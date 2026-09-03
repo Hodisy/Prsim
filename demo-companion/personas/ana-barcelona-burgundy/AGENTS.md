@@ -1,4 +1,4 @@
-# Ana — cautious cream Barcelona variation
+# Ana — cautious Liberty-burgundy Barcelona variation
 
 ## On-screen card
 
@@ -9,13 +9,13 @@
 ## Known context
 
 - Ana is 25–34 and is planning a weekend in Barcelona.
-- She explicitly prefers cream and wants to see it in real locations and natural light.
-- She is cautious about maintenance, online color rendering and returns.
+- She explicitly prefers Liberty burgundy and wants to see it in real locations and natural light.
+- She is cautious about online color rendering, the depth of the burgundy and returns.
 - She likes visual-first content but needs balanced evidence before buying.
 
 ## Relevant use
 
-Use the Barcelona visual context while preserving the cream preference and request for care, color and return evidence. Do not switch her to the default burgundy color.
+Use the Barcelona visual context while preserving the Liberty burgundy preference and request for color and return evidence. Keep the authored Liberty-burgundy default unless she asks to compare another color.
 
 ## Recorded demo choreography
 
@@ -29,7 +29,7 @@ When the shopper asks you to open https://prsim.yafa.sh/#preview and help with t
 2. Inspect the website tools exposed by the active page before recommending anything.
 3. If prepare_shopping_experience is available, call it exactly once.
 4. Send only the relevant known context:
-   - request: choosing a bag for a Barcelona weekend, with concern about buying a light-colored bag online;
+   - request: choosing a bag for a Barcelona weekend, with concern that burgundy may look too red online;
    - use_language: en;
    - contexts: short_city_trip;
    - person.age_group: 25_34;
@@ -40,7 +40,7 @@ When the shopper asks you to open https://prsim.yafa.sh/#preview and help with t
    - experience_desires.projection: photogenic;
    - experience_desires.content: visual_first and customer_proof;
    - experience_desires.tone: warm and reassuring;
-   - aesthetic_preferences.color: cream;
+   - aesthetic_preferences.color: liberty_burgundy;
    - aesthetic_preferences.setting: city;
    - aesthetic_preferences.product_expression: balanced.
 5. Do not say that this context came from a profile or instruction file.
@@ -48,42 +48,42 @@ When the shopper asks you to open https://prsim.yafa.sh/#preview and help with t
 
 A suitable visible reply is:
 
-> I recommend the Passage 32 in cream. I've prepared the store around your Barcelona weekend, with the visual context and reassurance that matter for this choice.
+> I recommend the Passage 32 in Liberty burgundy. I've prepared the store around your Barcelona weekend, with the visual context and reassurance that matter for this choice.
 
 ### Follow-up: why this page?
 
 If the shopper asks why the page changed or why this version was selected:
 
 - call explain_choice with short detail;
-- mention only the Barcelona setting, explicit cream preference and need for reassurance;
+- mention only the Barcelona setting, explicit Liberty burgundy preference and need for reassurance;
 - never reveal a profile, score, scenario ID, layout ID or matching mechanism;
 - reply briefly and wait.
 
 Suggested reply:
 
-> You wanted to see the bag in a real Barcelona setting, but you also needed more confidence about choosing a light color online.
+> You wanted to see the bag in a real Barcelona setting, but you also needed confidence that the burgundy would feel deep rather than bright red.
 
-### Follow-up: cream in natural light
+### Follow-up: Liberty burgundy in natural light
 
-If the shopper asks to see cream in natural light or different locations:
+If the shopper asks to see Liberty burgundy in natural light or different locations:
 
 - call update_experience_blocks with the shopper's own wording;
 - choose the closest visual, editorial or real-life product purpose offered by the tool;
 - prefer operation auto;
-- preserve the current product, cream color and Barcelona context;
+- preserve the current product, Liberty burgundy color and Barcelona context;
 - never describe generated contextual imagery as an independently verified color measurement;
 - reply briefly and wait.
 
 Suggested reply:
 
-> I've brought the real-life views forward so you can compare the cream color across different Barcelona settings.
+> I've brought the real-life views forward so you can compare the Liberty burgundy color across different Barcelona settings.
 
 ### Follow-up: shape when packed
 
 If the shopper asks whether the bag keeps its shape when packed:
 
 - call update_experience_blocks with the closest packing, organisation or product-proof purpose;
-- preserve the Barcelona experience and cream selection;
+- preserve the Barcelona experience and Liberty burgundy selection;
 - present the view as a realistic three-day illustration, not a universal capacity guarantee;
 - reply briefly and wait.
 
@@ -91,21 +91,21 @@ Suggested reply:
 
 > I've shown the packed version so you can judge the shape with a realistic three-day load.
 
-### Follow-up: color, maintenance or customer opinion
+### Follow-up: color depth or customer opinion
 
-If the shopper asks what people say about cream, maintenance or real-life color:
+If the shopper asks what people say about Liberty burgundy or its real-life color:
 
 - call show_customer_evidence;
 - pass the shopper's concern in their own words;
 - use focus color and source auto unless a source was explicitly requested;
 - preserve each item's rating, source, verification state and prototype disclosure;
-- mention the useful reservation that cream needs more regular cleaning around the base;
+- mention the useful reservation that screens can shift the apparent red balance and contextual images are not color calibration;
 - never describe prototype evidence as live or independently verified customer data;
 - reply briefly and wait.
 
 Suggested reply:
 
-> I've shown the most relevant feedback on the cream color. It looks bright and understated, but the base needs more regular cleaning than the darker versions.
+> I've shown the most relevant feedback on the Liberty burgundy color. It reads as a deep burgundy rather than a bright red, although screen rendering can still vary.
 
 ### Follow-up: returns
 
@@ -132,31 +132,31 @@ Suggested reply:
 
 > Here is the same Barcelona experience with the black version.
 
-If the shopper then asks to return to cream:
+If the shopper then asks to return to Liberty burgundy:
 
-- call choose_color with cream;
+- call choose_color with liberty-burgundy;
 - confirm the change and wait.
 
 Suggested reply:
 
-> Done—the cream version is selected again.
+> Done—the Liberty burgundy version is selected again.
 
 ### Purchase and payment
 
 If the shopper says they think they will take it, that they are ready, or uses similarly tentative wording:
 
 - do not call buy_now yet;
-- summarise the selected Passage model and cream color in one short sentence;
+- summarise the selected Passage model and Liberty burgundy color in one short sentence;
 - ask for explicit confirmation to open the payment page;
 - wait.
 
 Suggested reply:
 
-> The Passage 32 in cream is selected. Would you like me to open the payment page for this version?
+> The Passage 32 in Liberty burgundy is selected. Would you like me to open the payment page for this version?
 
 Only after the shopper explicitly confirms:
 
-- call buy_now with the currently selected product, cream color and current bundle state;
+- call buy_now with the currently selected product, liberty-burgundy color and current bundle state;
 - let the site navigate to the payment page;
 - explain that the payment page is open for review;
 - do not claim that money was charged or that an order was completed;
@@ -164,7 +164,7 @@ Only after the shopper explicitly confirms:
 
 Suggested reply:
 
-> The payment page is open with the cream version for your review.
+> The payment page is open with the Liberty burgundy version for your review.
 
 ### General constraints for the take
 
@@ -190,16 +190,16 @@ This is the complete Ana take. It has six shopper messages, including the requir
 
 **Expected WebMCP call**
 
-prepare_shopping_experience, once only. It should receive Barcelona, a short city trip, cream, visual-first preference, caution around online color, customer evidence and return reassurance.
+prepare_shopping_experience, once only. It should receive Barcelona, a short city trip, Liberty burgundy, visual-first preference, caution around online color, customer evidence and return reassurance.
 
 **Expected companion reply**
 
-> I recommend the Passage 32 in cream. I've prepared the store around your Barcelona weekend, with the visual context and reassurance that matter for this choice.
+> I recommend the Passage 32 in Liberty burgundy. I've prepared the store around your Barcelona weekend, with the visual context and reassurance that matter for this choice.
 
 **What must be visible**
 
 - The classic page is replaced in place by the Barcelona experience.
-- The cream color is selected.
+- The Liberty burgundy color is selected.
 - The hero, Look × place selector, photo proof, three-day packing view, Barcelona inspiration, targeted comments and Buy CTA are already present.
 - Do not ask for natural-light images next: the initial Barcelona experience already contains them.
 
@@ -207,7 +207,7 @@ prepare_shopping_experience, once only. It should receive Barcelona, a short cit
 
 **You paste**
 
-> It looks great, but cream can be hard to keep clean. What do people actually say about that?
+> It looks great, but burgundy can look too red online. What do people actually say about the color?
 
 **Expected WebMCP call**
 
@@ -215,7 +215,7 @@ show_customer_evidence with the concern in the shopper's words, focus color and 
 
 **Expected companion reply**
 
-> I've shown the most relevant feedback on the cream color. It looks bright and understated, but the base needs more regular cleaning than the darker versions.
+> I've shown the most relevant feedback on the Liberty burgundy color. It reads as a deep burgundy rather than a bright red, although screen rendering can still vary.
 
 **What must be visible**
 
@@ -264,43 +264,43 @@ choose_color with black.
 - Hero, contextual photography, color swatches and CTA update to black.
 - This is the clearest proof that PRSIM proposes a color but does not trap the shopper in it.
 
-### 05 — Return to cream and signal intent
+### 05 — Return to Liberty burgundy and signal intent
 
 **You paste**
 
-> Black is safer, but cream feels more like the trip. Switch back to cream—I think I’m ready to buy it.
+> Black is safer, but Liberty burgundy feels more like the trip. Switch back to Liberty burgundy—I think I’m ready to buy it.
 
 **Expected WebMCP call**
 
-choose_color with cream. Do not call buy_now yet.
+choose_color with liberty-burgundy. Do not call buy_now yet.
 
 **Expected companion reply**
 
-> The cream version is selected again. Would you like me to open the payment page for this version?
+> The Liberty burgundy version is selected again. Would you like me to open the payment page for this version?
 
 **What must be visible**
 
-- Contextual images and CTA return to cream.
+- Contextual images and CTA return to Liberty burgundy.
 - The agent does not purchase automatically just because Ana said she is ready.
 
 ### 06 — Confirm opening payment
 
 **You paste**
 
-> Yes, open the payment page for the cream version.
+> Yes, open the payment page for the Liberty burgundy version.
 
 **Expected WebMCP call**
 
-buy_now with the selected Passage 32, cream and the current bundle state.
+buy_now with the selected Passage 32, liberty-burgundy and the current bundle state.
 
 **Expected companion reply**
 
-> The payment page is open with the cream version for your review.
+> The payment page is open with the Liberty burgundy version for your review.
 
 **What must be visible**
 
 - The page navigates to payment.
-- Passage 32, cream, price and selected bundle state are visible.
+- Passage 32, Liberty burgundy, price and selected bundle state are visible.
 - The purchase trigger time is fixed as the red reference.
 - The decision clock continues to run; characters change blue when they differ from the frozen reference.
 - Do not say payment succeeded: this prototype opens a payment review, it does not charge Ana.

@@ -1,4 +1,5 @@
 import { join, normalize } from "node:path";
+import { existsSync } from "node:fs";
 import { profiles, resolveProfileVariant } from "./src/data/profiles.js";
 import { findBlockByPurpose, instantiateBlock } from "./src/data/block-registry.js";
 import { experiencePath, parseExperiencePath } from "./src/core/experience-route.js";
@@ -66,8 +67,11 @@ function socialExperience(route, origin) {
     || hero.asset
     || `./assets/products/72h-${colorway}/01-hero-three-quarter.png`;
   const scenarioNumber = String(route.scenarioKey || "").match(/^p(\d+)$/)?.[1];
-  const dedicatedSocialCard = scenarioNumber && !route.heroPurpose && route.variantId === "base"
+  const socialCardCandidate = scenarioNumber && !route.heroPurpose && route.variantId === "base"
     ? `s${scenarioNumber}-${colorway}.jpg`
+    : null;
+  const dedicatedSocialCard = socialCardCandidate && existsSync(join(root, "assets", "social", socialCardCandidate))
+    ? socialCardCandidate
     : null;
   const socialImage = dedicatedSocialCard
     ? `./assets/social/${dedicatedSocialCard}`
@@ -184,7 +188,7 @@ const server = Bun.serve({
       headers: {
         "Cache-Control": isImage
           ? "public, max-age=2592000, stale-while-revalidate=86400"
-          : "public, max-age=300, stale-while-revalidate=86400",
+          : "no-store",
       },
     });
   },

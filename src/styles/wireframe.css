@@ -14,6 +14,7 @@
 .hero-delivery { min-height: 720px; display: grid; grid-template-columns: .96fr 1.04fr; }
 .hero-delivery .decision-panel { border-left: 1px solid #b9b9b9; }
 .hero-split, .hero-premium, .hero-deadline, .hero-airline, .hero-gift, .hero-social, .hero-technical, .hero-trust, .hero-guided { display: grid; grid-template-columns: 1.03fr .97fr; }
+.hero-airline { min-height: 560px; grid-template-columns: 1.12fr .88fr; }
 .hero-split.reverse, .hero-premium.reverse, .hero-deadline.reverse { grid-template-columns: .97fr 1.03fr; }
 .hero-split.reverse > :first-child, .hero-premium.reverse > :first-child, .hero-deadline.reverse > :first-child { order: 2; }
 .hero-center { min-height: 680px; display: grid; grid-template-rows: minmax(330px, auto) minmax(350px, auto); text-align: center; }
@@ -29,6 +30,7 @@
 .classic-thumbs span { display: block; height: 100%; border: 1px solid #b7b7b7; }
 .classic-summary { position: relative; padding-top: 22px; }
 .copy-slot, .decision-panel, .technical-copy { position: relative; display: grid; align-content: center; padding: 70px 64px; }
+.hero-airline .decision-panel { padding: 52px 48px 38px; }
 .hero-price { min-height: 610px; }
 .price-intro { min-height: 230px; padding: 58px 58px 30px; display: grid; align-content: end; grid-template-columns: 1.1fr .9fr; gap: 60px; }
 .price-intro > .layout-label { grid-column: 1 / -1; }

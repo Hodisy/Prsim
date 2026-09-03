@@ -52,6 +52,9 @@ export function resolveShopperProfile(profile = shopperProfile) {
     profileKey = "p14";
     productId = "passage-36";
     reasons.push("ordinateur utilisé en déplacement", "organisation travail et voyage");
+  } else if (includes(uses, "business") && (travel.transport === "air" || travel.airline === "british_airways")) {
+    profileKey = "p22";
+    reasons.push("déplacement professionnel en avion", "compatibilité cabine et accès laptop");
   } else if (includes(uses, "business") && ["train", "mixed"].includes(travel.transport)) {
     profileKey = "p3";
     reasons.push("déplacement professionnel en train", "apparence et organisation business");

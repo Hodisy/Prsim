@@ -1,4 +1,4 @@
-# PRSIM demo companions — 25 recording contexts
+# PRSIM demo companions — 26 recording contexts
 
 Open a new Codex task from one persona directory so the nearest `AGENTS.md` supplies only that shopper’s stable context. The common behaviour comes from `demo-companion/AGENTS.md`.
 
@@ -27,14 +27,15 @@ Open a new Codex task from one persona directory so the nearest `AGENTS.md` supp
 | 19 | `camille` | Camille | Shared family weekend |
 | 20 | `samir` | Samir | Long-distance night coach |
 | 21 | `ines` | Inès | Campus and weekend value |
+| 22 | `graham-air-business` | Graham | British Airways business flight from London to Singapore |
 
 ## Local-variation takes
 
 | # | Directory | Shopper | Variation demonstrated |
 | --- | --- | --- | --- |
-| 22 | `claire-business-cream` | Claire | Rail business with cream and warmer reassurance |
-| 23 | `noah-japan-black` | Noah | Japan editorial with black and practical proof prioritised |
-| 24 | `ana-barcelona-cream` | Ana | Barcelona visual story with cream and cautious evidence |
-| 25 | `alex-work-sport-burgundy` | Alex | Work plus sport with Liberty burgundy |
+| 23 | `claire-business-cream` | Claire | Rail business with cream and warmer reassurance |
+| 24 | `noah-japan-black` | Noah | Japan editorial with black and practical proof prioritised |
+| 25 | `ana-barcelona-burgundy` | Ana | Barcelona visual story with Liberty burgundy and cautious evidence |
+| 26 | `alex-work-sport-burgundy` | Alex | Work plus sport with Liberty burgundy |
 
 The four variation takes intentionally reuse existing authored assemblies. They demonstrate that the system can change color, tone and local evidence without treating every small difference as a completely separate page.

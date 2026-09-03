@@ -17,8 +17,8 @@ const commonFields = [
 ];
 
 const variantFields = {
-  airline: [field("airline", "text", "Compagnie"), field("dimensions", "text", "Dimensions")],
-  "airline-compare": [field("model", "text", "Modèle"), field("modelDimensions", "text", "Dimensions du modèle"), field("futureNote", "textarea", "Note de compatibilité")],
+  airline: [field("airline", "text", "Compagnie"), field("dimensions", "text", "Dimensions"), field("allowanceLabel", "text", "Type de bagage"), field("verifiedLabel", "text", "Libellé de vérification"), field("verificationNote", "text", "Date de vérification")],
+  "airline-compare": [field("model", "text", "Modèle"), field("modelDimensions", "text", "Dimensions du modèle"), field("flightLabel", "text", "Libellé du vol"), field("fitLabel", "text", "Libellé de compatibilité"), field("futureHeading", "text", "Titre de la note"), field("futureNote", "textarea", "Note de compatibilité")],
   gift: [field("deliveryDate", "text", "Date de livraison"), field("deliveryNote", "text", "Promesse de livraison"), field("giftMessage", "textarea", "Message cadeau")],
   timeline: [field("steps", "list", "Étapes"), field("details", "list", "Détails")],
   reviews: [],

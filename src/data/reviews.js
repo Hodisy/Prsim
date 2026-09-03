@@ -206,7 +206,7 @@ const evidenceFocusDefinitions = Object.freeze({
   durability: { label: "Solidité vécue", title: "La solidité après usage.", summary: "Les mesures produit complétées par des retours d’utilisation.", terms: ["durability", "solid", "structure", "fermeture", "couture", "toile"] },
   weather: { label: "Pluie et protection", title: "Ce qui se passe quand il pleut.", summary: "Des retours concrets, avec la limite entre déperlant et imperméable.", terms: ["weather", "rain", "pluie", "averse", "eau", "housse"] },
   comfort: { label: "Confort réel", title: "Le confort pendant le trajet.", summary: "Portage, stabilité et charge racontés par des usages comparables.", terms: ["comfort", "confort", "bretelle", "dos", "velo", "cycling", "marche"] },
-  cabin: { label: "Retours cabine", title: "Des voyageurs sur les mêmes trajets.", summary: "Les avis complètent les dimensions officielles sans les remplacer.", terms: ["cabin", "cabine", "airline", "compagnie", "ryanair", "easyjet", "air_france", "vol"] },
+  cabin: { label: "Retours cabine", title: "Des voyageurs sur les mêmes trajets.", summary: "Les avis complètent les dimensions officielles sans les remplacer.", terms: ["cabin", "cabine", "airline", "compagnie", "ryanair", "easyjet", "air_france", "british_airways", "vol"] },
   organization: { label: "Organisation vécue", title: "Ce qui reste accessible en mouvement.", summary: "Des retours sur le rangement et les accès au quotidien.", terms: ["organization", "organisation", "poche", "compartiment", "ordinateur", "laptop", "passeport"] },
   gift: { label: "Confiance cadeau", title: "Offert, essayé, parfois échangé.", summary: "Les retours d’acheteurs cadeau, sans masquer les conditions d’échange.", terms: ["gift", "cadeau", "offert", "exchange", "echange", "destinataire"] },
   returns: { label: "Retours clients", title: "Quand le produit ne convient pas.", summary: "Motifs de retour et expérience de remboursement, sans les effacer.", terms: ["returns", "retour", "refund", "rembours", "echange", "exchange"] },
@@ -227,7 +227,7 @@ export function inferCustomerEvidenceFocus(concern = "") {
   const query = normalizeSearch(concern);
   const rules = [
     ["color", /\b(couleur|coloris|noir|creme|bleu|bordeaux|liberty|motif)\b/],
-    ["cabin", /\b(cabine|vol|compagnie|ryanair|easyjet|air france|avion)\b/],
+    ["cabin", /\b(cabine|vol|compagnie|ryanair|easyjet|air france|british airways|avion|flight)\b/],
     ["weather", /\b(pluie|averse|eau|etanche|impermeable|deperlant)\b/],
     ["comfort", /\b(confort|bretelle|dos|velo|marche|porter|portage)\b/],
     ["gift", /\b(cadeau|offrir|destinataire|anniversaire)\b/],

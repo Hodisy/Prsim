@@ -96,7 +96,7 @@ function hasEnoughNeedToResolve(want = {}) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase("fr");
-  return /\b(week[ -]?end|voyage|travel|trip|avion|flight|train|metro|bus|velo|bike|cadeau|gift|bureau|work|photo|pluie|rain|solide|robuste|durable|cabine|cabin|budget|ryanair|easyjet|japon|japan|barcelone|barcelona|dublin|islande|iceland|noir|black|creme|cream|bleu|blue|bordeaux|burgundy|[0-9]+\s*(ans|jours?|days?|€|euros?))\b/.test(request);
+  return /\b(week[ -]?end|voyage|travel|trip|avion|flight|train|metro|bus|velo|bike|cadeau|gift|bureau|work|business|photo|pluie|rain|solide|robuste|durable|cabine|cabin|budget|ryanair|easyjet|british airways|heathrow|singapour|singapore|japon|japan|barcelone|barcelona|dublin|islande|iceland|noir|black|creme|cream|bleu|blue|bordeaux|burgundy|[0-9]+\s*(ans|jours?|days?|€|euros?))\b/.test(request);
 }
 
 function clarificationResult(language) {
@@ -267,7 +267,7 @@ const experienceRequestSchema = objectSchema({
     gender_representation: stringEnum(forestDimensions.genderRepresentations, "Optional requested on-page representation. Used only to choose representative imagery, never to infer product eligibility or a mandatory color."),
   }),
   context_details: objectSchema({
-    airline: stringEnum(["ryanair", "easyjet", "air_france", "lufthansa", "other"]),
+    airline: stringEnum(["ryanair", "easyjet", "air_france", "lufthansa", "british_airways", "other"]),
     airline_if_other: { type: "string" },
     fare: stringEnum(["personal_item", "cabin_bag", "unknown"]),
     destination: { type: "string" },
@@ -529,7 +529,7 @@ export function registerPrsimTools(callbacks = {}, options = {}) {
     {
       name: "check_airline_fit",
       description: "Check a PORT 70 model against a known airline baggage allowance using structured dimensions.",
-      inputSchema: objectSchema({ airline: stringEnum(["ryanair", "easyjet", "air_france", "lufthansa"]), fare: stringEnum(["personal_item", "cabin_bag"]), product_id: { type: "string" }, travel_date: { type: "string", format: "date" } }, ["airline", "fare"]),
+      inputSchema: objectSchema({ airline: stringEnum(["ryanair", "easyjet", "air_france", "lufthansa", "british_airways"]), fare: stringEnum(["personal_item", "cabin_bag"]), product_id: { type: "string" }, travel_date: { type: "string", format: "date" } }, ["airline", "fare"]),
       execute: ({ airline, fare, product_id = getCommerceState().product_id, travel_date }) => {
         const product = getProduct(product_id);
         const allowance = airlineRules[airline]?.[fare];

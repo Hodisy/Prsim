@@ -76,9 +76,9 @@ const airlineHero = (node, profile) => shell(node, "hero-airline", `
     <div class="ui-only airline-ui">
       <p class="eyebrow">${esc(node.kicker)}</p>
       ${node.showTrust ? `<div class="airline-trust-top">${trustpilot()}</div>` : ""}
-      <div class="airline-row"><strong>${esc(node.airline || "AIRLINE")}</strong><span>${"✓"} Vérifié</span></div>
+      <div class="airline-row"><strong>${esc(node.airline || "AIRLINE")}</strong><span>${"✓"} ${esc(node.verifiedLabel || "Vérifié")}</span></div>
       <h2>${esc(node.title)}</h2><p>${esc(node.body)}</p>
-      <div class="cabin-card"><span>Dimension cabine personnelle</span><strong>${esc(node.dimensions || "40 × 20 × 25 cm")}</strong><small>Règle vérifiée · 28 août 2026</small></div>
+      <div class="cabin-card"><span>${esc(node.allowanceLabel || "Dimension cabine personnelle")}</span><strong>${esc(node.dimensions || "40 × 20 × 25 cm")}</strong><small>${esc(node.verificationNote || "Règle vérifiée · 28 août 2026")}</small></div>
       ${node.showTrust ? "" : `<article class="hero-context-review"><span class="context-tag">MÊME COMPAGNIE</span><blockquote>« ${esc(primaryReview(profile).body)} »</blockquote><small>${esc(primaryReview(profile).author)}</small></article>`}
       ${materialChoice({ compact: true, variant: node.colorSelector || "menu" })}
       ${heroBundleOffer(node.bundle)}
