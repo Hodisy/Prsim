@@ -3,8 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="PRSIM — layouts e-commerce adaptatifs en wireframe et UI." />
-    <title>PRSIM | Adaptive Commerce Preview</title>
+    <meta name="description" content="PRSIM is a merchant-governed adaptive storefront where WebMCP lets a shopper's AI companion apply relevant scenarios, evidence, product choices and commerce actions directly to the page." />
+    <meta name="application-name" content="PRSIM" />
+    <meta name="author" content="Yafa" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <title>PRSIM — Merchant-governed adaptive storefronts with WebMCP</title>
+    <link rel="canonical" href="https://prsim.yafa.sh/" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="PRSIM project overview" />
     <link rel="icon" href="./assets/brand/port70-mark.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./src/styles/app.css" />
     <link rel="stylesheet" href="./src/styles/wireframe.css" />
@@ -13,6 +19,30 @@
     <link rel="stylesheet" href="./src/styles/payment.css" />
     <link rel="stylesheet" href="./src/styles/system.css" />
     <link rel="stylesheet" href="./src/styles/responsive.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PRSIM",
+        "description": "A WebMCP-native commerce prototype where a shopper's AI companion adapts the current product page using merchant-approved scenarios, content blocks, evidence and commerce tools.",
+        "url": "https://prsim.yafa.sh/",
+        "codeRepository": "https://github.com/Hodisy/Prsim",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "isAccessibleForFree": true,
+        "creator": {
+          "@type": "Organization",
+          "name": "Yafa"
+        },
+        "featureList": [
+          "WebMCP website tools",
+          "Merchant-governed adaptive storefronts",
+          "Deterministic scenario matching",
+          "Progressive content-block refinement",
+          "Catalogue, variant, cart and checkout operations"
+        ]
+      }
+    </script>
   </head>
   <body>
     <header class="appbar">
@@ -41,8 +71,8 @@
     <main class="workspace">
       <div class="workspace-head">
         <div>
-          <h1 id="view-title"></h1>
-          <p id="view-sub"></p>
+          <h1 id="view-title">PRSIM adaptive commerce preview</h1>
+          <p id="view-sub">Merchant-governed storefronts operated through WebMCP.</p>
         </div>
         <span id="mode-status" class="mode-status"></span>
       </div>
@@ -50,6 +80,16 @@
       <div class="stage">
         <div id="canvas" class="canvas desktop mode-ui" aria-live="polite"></div>
       </div>
+
+      <noscript>
+        <section aria-labelledby="prsim-static-title">
+          <h2 id="prsim-static-title">PRSIM — adaptive storefronts through WebMCP</h2>
+          <p>PRSIM is a working commerce prototype in which a shopper's AI companion can adapt the product page already open in the browser. The website selects from merchant-approved layouts, product facts, imagery, evidence, offers and purchase controls.</p>
+          <p>The experience begins with explicit purchase context, resolves the closest authored shopping scenario, and can then refine individual sections for airline fit, comparison, customer evidence, product questions, color, delivery, bundles, cart and checkout.</p>
+          <p>PRSIM includes 21 commercial scenario seeds, four bag formats, four colorways, a merchant studio and a progressive WebMCP tool surface. It does not generate arbitrary interface or product claims.</p>
+          <p><a href="/llms.txt">Read the structured project overview</a> or <a href="https://github.com/Hodisy/Prsim">inspect the source code on GitHub</a>.</p>
+        </section>
+      </noscript>
     </main>
 
     <script type="module" src="./src/app.js"></script>

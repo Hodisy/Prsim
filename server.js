@@ -86,10 +86,15 @@ function socialExperience(route, origin) {
   const selection = language === "fr"
     ? `Coloris : ${colorLabel}.${bundleEnabled ? ` ${bundleName} sélectionné.` : ""}`
     : `Color: ${colorLabel}.${bundleEnabled ? ` ${bundleName} selected.` : ""}`;
-  const description = `${body} ${selection}`;
+  const isProjectRoot = route.scenarioKey === "classic";
+  const description = isProjectRoot
+    ? "A working WebMCP prototype where a shopper's AI companion adapts the current product page through merchant-governed scenarios, focused content blocks and structured commerce tools."
+    : `${body} ${selection}`;
   return {
     language,
-    title: `PORT 70 | ${heading}`,
+    title: isProjectRoot
+      ? "PRSIM — Merchant-governed adaptive storefronts with WebMCP"
+      : `PORT 70 | ${heading}`,
     description,
     image: absoluteAssetUrl(socialImage, origin),
     imageType: imageContentType(socialImage),
@@ -103,9 +108,8 @@ function socialExperience(route, origin) {
 async function renderExperienceHtml(route, origin) {
   const social = socialExperience(route, origin);
   const meta = `
-    <link rel="canonical" href="${escapeAttribute(social.canonical)}" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="PORT 70" />
+    <meta property="og:site_name" content="PRSIM" />
     <meta property="og:locale" content="${social.language === "fr" ? "fr_FR" : "en_US"}" />
     <meta property="og:url" content="${escapeAttribute(social.canonical)}" />
     <meta property="og:title" content="${escapeAttribute(social.title)}" />
@@ -126,6 +130,7 @@ async function renderExperienceHtml(route, origin) {
     .replace('<html lang="en">', `<html lang="${social.language}">`)
     .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${escapeAttribute(social.description)}" />`)
     .replace(/<title>[^<]*<\/title>/, `<title>${escapeAttribute(social.title)}</title>`)
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${escapeAttribute(social.canonical)}" />`)
     .replace("</head>", `${meta}\n  </head>`);
 }
 
@@ -184,11 +189,17 @@ const server = Bun.serve({
     }
 
     const isImage = relativePath.startsWith("assets/") && /\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(relativePath);
+    const explicitContentType = relativePath.endsWith(".xml")
+      ? "application/xml; charset=utf-8"
+      : relativePath.endsWith(".txt")
+        ? "text/plain; charset=utf-8"
+        : null;
     return new Response(file, {
       headers: {
         "Cache-Control": isImage
           ? "public, max-age=2592000, stale-while-revalidate=86400"
           : "no-store",
+        ...(explicitContentType ? { "Content-Type": explicitContentType } : {}),
       },
     });
   },

@@ -1,0 +1,56 @@
+# PRSIM
+
+> A merchant-governed adaptive commerce prototype built with WebMCP.
+
+PRSIM lets a shopper's AI companion operate the product page already open in the browser. Explicit purchase context is matched to the closest merchant-authored shopping scenario. The website then renders approved layouts, copy, imagery, customer evidence, product facts and commerce controls.
+
+The model does not generate arbitrary interface, product claims, prices or policies. PRSIM owns rendering and state; the merchant owns the available experiences; the shopper retains product choice and purchase confirmation.
+
+## Core interaction model
+
+1. The shopper expresses a need such as a destination, budget, deadline, practical constraint, aesthetic preference or gift context.
+2. `prepare_shopping_experience` resolves the nearest authored scenario and updates the visible storefront.
+3. The broad entry tool is replaced by focused follow-up capabilities.
+4. Later questions can refine one part of the page without regenerating the complete experience.
+
+## Focused experience capabilities
+
+- Change the current hero while preserving product truth.
+- Add, remove, replace or prioritize an authored content block.
+- Show customer evidence with its source and prototype qualification.
+- Answer questions from structured product facts.
+- Verify airline fit and estimate delivery.
+- Select a color or optional bundle.
+- Navigate to relevant information, reset the experience or open payment review.
+
+## Commerce capabilities
+
+PRSIM exposes catalogue, product, variant, policy, cart and order actions comparable to a Shopify MCP storefront. It also includes a local UCP-like checkout lifecycle covering checkout creation, reading, updating, completion and cancellation.
+
+These commerce integrations are local prototype implementations, not connections to a live Shopify store, real inventory or production payment processing.
+
+## Merchant system
+
+The merchant studio demonstrates the content model behind the storefront:
+
+- Brand and product truth
+- Reusable layouts
+- Approved images and customer evidence
+- Purpose-based content blocks
+- Assemblies binding layouts, copy and assets
+- Authored shopping scenarios and coverage analytics
+
+The prototype contains 21 commercial scenario seeds, four bag formats, four colorways and 198 registered visual assets. A separate make-it-yourself experience is an authored non-commercial easter egg.
+
+## Privacy and decision support
+
+The prototype uses only purchase context explicitly present in the current conversation. The active need is session-local and can be reset. Demonstration character names are storytelling devices, not hidden user profiles.
+
+PRSIM is inspired by the Elaboration Likelihood Model by Richard E. Petty and John T. Cacioppo. Its goal is relevance-first decision support: reduce irrelevant cognitive work while keeping product truth, limitations, alternatives and shopper control accessible.
+
+## Project links
+
+- Live application: https://prsim.yafa.sh/#preview
+- Source code and technical documentation: https://github.com/Hodisy/Prsim
+- OpenAI WebMCP documentation: https://learn.chatgpt.com/docs/webmcp
+- Research reference: https://doi.org/10.1016/S0065-2601(08)60214-2

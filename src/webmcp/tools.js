@@ -556,16 +556,6 @@ export function registerPrsimTools(callbacks = {}, options = {}) {
 
     // Shopify-style WebMCP catalog and storefront tools.
     {
-      name: "search_catalog",
-      description: "Search PORT 70 products by text, price, volume, use case and availability.",
-      inputSchema: objectSchema({ query: { type: "string" }, price_max_eur: { type: "number" }, volume_min_l: { type: "number" }, volume_max_l: { type: "number" }, use_case: { type: "string" } }),
-      execute: ({ query = "", price_max_eur = Infinity, volume_min_l = 0, volume_max_l = Infinity, use_case }) => {
-        const term = query.toLocaleLowerCase("fr");
-        const matches = products.filter((product) => (!term || `${product.title} ${product.description}`.toLocaleLowerCase("fr").includes(term)) && product.price_eur <= price_max_eur && product.volume_l >= volume_min_l && product.volume_l <= volume_max_l && (!use_case || product.use_cases.includes(use_case)));
-        return result({ products: matches });
-      },
-    },
-    {
       name: "search_products",
       description: "Search the PORT 70 product catalog by text, price, volume, use case and availability.",
       inputSchema: objectSchema({ query: { type: "string" }, price_max_eur: { type: "number" }, volume_min_l: { type: "number" }, volume_max_l: { type: "number" }, use_case: { type: "string" } }),
